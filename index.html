@@ -109,11 +109,31 @@
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-body">
             <div class="flex justify-between items-center mb-8">
-                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Berberin</h2>
+                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
                 <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
             </div>
             
-            <div id="step2">
+            <div id="step1">
+                <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center cursor-pointer" id="s1" onclick="setService('Qethje', 's1')">
+                    <span class="font-bold">Qethje</span>
+                    <span class="text-gray-500 font-bold">10€</span>
+                </div>
+                <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center cursor-pointer" id="s2" onclick="setService('Qethje + Mjekërr', 's2')">
+                    <span class="font-bold">Qethje + Mjekërr</span>
+                    <span class="text-gray-500 font-bold">15€</span>
+                </div>
+                <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center cursor-pointer" id="s3" onclick="setService('Mjekërr', 's3')">
+                    <span class="font-bold">Mjekërr</span>
+                    <span class="text-gray-500 font-bold">5€</span>
+                </div>
+                <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center cursor-pointer" id="s4" onclick="setService('Fëmijë (Nën 12 vjeç)', 's4')">
+                    <span class="font-bold">Fëmijë (Nën 12 vjeç)</span>
+                    <span class="text-gray-500 font-bold">7€</span>
+                </div>
+                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
+            </div>
+
+            <div id="step2" class="hidden">
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
@@ -132,7 +152,7 @@
     </div>
 
     <script>
-        let booking = { s: 'Qethje Standard', b: '', d: 'Mar 24', t: '' };
+        let booking = { s: '', b: '', d: 'Mar 24', t: '' };
         const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
 
         function switchPage(p) {
@@ -145,22 +165,32 @@
 
         function openBooking() { 
             document.getElementById('bookingModal').classList.add('active'); 
-            goStep(2); 
+            goStep(1); 
         }
 
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
         function goStep(n) {
+            document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step'+n).classList.remove('hidden');
-            document.getElementById('modalTitle').innerText = n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
-            if(n === 3) buildSchedule();
+            
+            if(n == 1) document.getElementById('modalTitle').innerText = 'Zgjedh Shërbimin';
+            else if(n == 2) document.getElementById('modalTitle').innerText = 'Zgjedh Berberin';
+            else if(n == 3) { document.getElementById('modalTitle').innerText = 'Zgjedh Kohën'; buildSchedule(); }
+        }
+
+        function setService(s, id) {
+            booking.s = s;
+            document.querySelectorAll('#step1 div.border-2').forEach(d => { d.style.borderColor = '#e5e7eb'; });
+            document.getElementById(id).style.borderColor = '#111827';
+            document.getElementById('v1').classList.add('active');
         }
 
         function setB(b, id) {
             booking.b = b;
-            document.querySelectorAll('#step2 div').forEach(d => { if(d.id) d.style.borderColor = '#f3f4f6'; });
+            document.querySelectorAll('#step2 div.border-2').forEach(d => { d.style.borderColor = '#e5e7eb'; });
             document.getElementById(id).style.borderColor = '#111827';
             document.getElementById('v2').classList.add('active');
         }
@@ -196,7 +226,7 @@
         function confirmApp() {
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t || !booking.b) return alert("Plotësoni të gjitha fushët!");
+            if(!n || !booking.t || !booking.b || !booking.s) return alert("Plotësoni të gjitha fushët!");
             
             let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
             db.push({ ...booking, name: n, phone: p, id: Date.now() });
