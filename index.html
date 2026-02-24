@@ -1,43 +1,150 @@
-<header>
-<h1>AGONI BARBER</h1>
-<p>Rezervo termin pa pritje</p>
-</header>
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGONI BARBER - Berberhane Profesionale</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">AGONI</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#prices">Prices</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#booking" class="btn-book">Book Now</a></li>
+            </ul>
+            <div class="burger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
 
-<div class="container">
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>AGONI BARBER</h1>
+            <p>Stil dhe Përsosmëri në Çdo Prerje</p>
+            <button class="btn-main">Rezervo Takimin</button>
+        </div>
+    </section>
 
-<div class="card">
-<h3>Shërbimet</h3>
-<p>💈 Qethje - 5€</p>
-<p>💈 Qethje + Rroje - 6€</p>
-<p>💈 Styling - 2€</p>
-</div>
+    <section id="services" class="services">
+        <h2>Shërbimet Tona</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">✂</div>
+                <h3>Haircut</h3>
+                <p>Prerje flokësh sipas stilit tuaj</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🧔</div>
+                <h3>Beard Trim</h3>
+                <p>Rregullim dhe stilim mjekre</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💈</div>
+                <h3>Shave</h3>
+                <p>Rruajtje profesionale me brisk</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💇</div>
+                <h3>Styling</h3>
+                <p>Stilim dhe produkte profesionale</p>
+            </div>
+        </div>
+    </section>
 
-<div class="card">
-<h3>Rezervo Termin</h3>
+    <section id="prices" class="prices">
+        <h2>Çmimet</h2>
+        <div class="price-list">
+            <div class="price-item">
+                <span class="service-name">Haircut</span>
+                <span class="price">€10</span>
+            </div>
+            <div class="price-item">
+                <span class="service-name">Haircut + Beard</span>
+                <span class="price">€15</span>
+            </div>
+            <div class="price-item">
+                <span class="service-name">Beard Trim</span>
+                <span class="price">€5</span>
+            </div>
+            <div class="price-item">
+                <span class="service-name">Kids Haircut</span>
+                <span class="price">€8</span>
+            </div>
+            <div class="price-item">
+                <span class="service-name">Full Service</span>
+                <span class="price">€20</span>
+            </div>
+        </div>
+    </section>
 
-<input type="text" id="name" placeholder="Emri">
-<input type="date" id="date">
+    <section id="gallery" class="gallery">
+        <h2>Galeria</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">Haircut 1</div>
+            <div class="gallery-item">Haircut 2</div>
+            <div class="gallery-item">Haircut 3</div>
+            <div class="gallery-item">Haircut 4</div>
+            <div class="gallery-item">Haircut 5</div>
+            <div class="gallery-item">Haircut 6</div>
+        </div>
+    </section>
 
-<select id="time">
-<option value="">Zgjidh orën</option>
-<option>09:00</option>
-<option>09:30</option>
-<option>10:00</option>
-<option>10:30</option>
-<option>11:00</option>
-<option>11:30</option>
-</select>
+    <section id="contact" class="contact">
+        <h2>Kontakti</h2>
+        <div class="contact-info">
+            <div class="info-item">
+                <strong>Adresa:</strong> Rr. Gjergj Kastrioti, Prishtinë
+            </div>
+            <div class="info-item">
+                <strong>Telefoni:</strong> +383 45 123 456
+            </div>
+            <div class="info-item">
+                <strong>Orari:</strong> 09:00 - 21:00 (Çdo ditë)
+            </div>
+        </div>
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2932.123456!2d21.165462!3d42.662972!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDM5JzQ2LjciTiAyMcKwMDknNTUuNyJF!5e0!3m2!1sen!2s!4v1234567890" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
 
-<button onclick="reserve()">Rezervo Tani</button>
+    <section id="booking" class="booking">
+        <h2>Rezervo Takimin</h2>
+        <form class="booking-form">
+            <input type="text" placeholder="Emri" required>
+            <input type="tel" placeholder="Telefoni" required>
+            <input type="date" required>
+            <select required>
+                <option value="">Zgjidh shërbimin</option>
+                <option>Haircut</option>
+                <option>Haircut + Beard</option>
+                <option>Beard Trim</option>
+                <option>Kids Haircut</option>
+                <option>Full Service</option>
+            </select>
+            <button type="submit" class="btn-main">DËRGO</button>
+        </form>
+    </section>
 
-<p id="message"></p>
-</div>
+    <footer>
+        <p>&copy; 2025 AGONI BARBER. Të gjitha të drejtat e rezervuara.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
 
-</div>
-
-<div class="navbar">
-<div>🏠 Ballina</div>
-<div>💈 Shërbimet</div>
-<div>📅 Terminet</div>
-<div>📞 Kontakt</div>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>
