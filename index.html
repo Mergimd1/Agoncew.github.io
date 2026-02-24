@@ -7,75 +7,98 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f3f4f6; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f3f4f6; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* Faqja Kryesore */
-        .header-black { 
-            background: #111827; 
-            height: 180px; 
+        /* HEADER ORIGJINAL SI NE VIDEO */
+        .video-header { 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074'); 
+            background-size: cover; 
+            background-position: center; 
+            height: 250px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
-            color: white; 
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-        }
-        .main-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 20px; margin-top: -30px; }
-        .action-card { 
-            background: white; border-radius: 20px; padding: 25px 10px; 
-            display: flex; flex-direction: column; align-items: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer;
+            color: white;
+            text-align: center;
         }
 
-        /* Modal & Steps */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 25px; max-height: 90vh; overflow-y: auto; }
-        
-        .item-select { border: 1px solid #eee; border-radius: 15px; padding: 15px; margin-bottom: 10px; cursor: pointer; }
-        .item-select.selected { border: 2px solid #111827; background: #f9fafb; }
+        /* GRIDI QE RRIN MBI FOTO */
+        .home-grid { 
+            display: grid; 
+            grid-template-cols: repeat(2, 1fr); 
+            gap: 15px; 
+            padding: 0 20px; 
+            margin-top: -40px; 
+        }
+        .home-card { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 25px 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .home-card i { font-size: 30px; margin-bottom: 8px; }
 
-        /* Orari */
-        .time-grid { display: grid; grid-template-cols: repeat(3, 1fr); gap: 10px; }
-        .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; text-align: center; font-weight: bold; cursor: pointer; }
-        .time-slot.selected { background: #111827; color: white; }
+        /* ORARI I ZEENE (BUSY) */
+        .time-slot { 
+            padding: 12px; border: 1px solid #ddd; border-radius: 10px; 
+            text-align: center; font-weight: bold; cursor: pointer; 
+        }
         .time-slot.busy { 
             background: #fee2e2; color: #ef4444; border-color: #fecaca; 
-            text-decoration: line-through; cursor: not-allowed; opacity: 0.7;
+            text-decoration: line-through; cursor: not-allowed; opacity: 0.6;
         }
+        .time-slot.selected { background: #111827; color: white; }
+
+        /* NAVIGIMI */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 10px; font-weight: bold; }
+        .nav-item.active { color: #111827; }
+
+        /* MODALI */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; padding: 25px; max-height: 85vh; overflow-y: auto; }
         
-        .vazhdo-btn { background: #ef4444; color: white; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; margin-top: 15px; opacity: 0.5; pointer-events: none; }
+        .vazhdo-btn { background: #ef4444; color: white; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; opacity: 0.5; pointer-events: none; }
         .vazhdo-btn.active { opacity: 1; pointer-events: auto; }
 
-        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #eee; }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 11px; }
-        .nav-btn.active { color: #111827; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div id="home-view">
-        <div class="header-black">
-            <h1 class="text-3xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
-            <p class="text-[10px] tracking-[4px] opacity-60">Rezervo termin pa pritje</p>
-        </div>
-        <div class="main-grid">
-            <div class="action-card" onclick="openBooking()">
-                <i class="fa-regular fa-calendar-check text-2xl mb-2"></i>
+    <header id="main-header" class="video-header">
+        <h1 class="text-3xl font-black italic tracking-tighter">AGONI BARBER</h1>
+        <p class="text-[10px] tracking-[4px] opacity-80 uppercase">Rezervo termin pa pritje</p>
+    </header>
+
+    <main id="view-home">
+        <div class="home-grid">
+            <div class="home-card" onclick="openBooking()">
+                <i class="fa-regular fa-calendar-check text-slate-800"></i>
                 <span class="text-xs font-bold uppercase">Rezervo</span>
             </div>
-            <div class="action-card" onclick="switchTab('membership')">
-                <i class="fa-solid fa-crown text-2xl mb-2 text-amber-500"></i>
+            <div class="home-card" onclick="switchPage('membership')">
+                <i class="fa-solid fa-crown text-amber-500"></i>
                 <span class="text-xs font-bold uppercase">Membership</span>
             </div>
+            <div class="home-card col-span-2 flex-row space-x-4 py-5" style="margin-top: 5px;">
+                <i class="fa-solid fa-cart-shopping text-emerald-500"></i>
+                <span class="text-xs font-bold uppercase">Produktet Tona</span>
+            </div>
         </div>
-        <div class="mx-5 bg-amber-500 text-white p-4 rounded-2xl text-center font-bold text-sm tracking-widest">★ GOLD MEMBER</div>
-    </div>
+        <div class="mx-5 mt-8 bg-amber-500 text-white p-4 rounded-xl text-center font-bold tracking-widest shadow-lg">
+            ★ JU JENI GOLD MEMBER
+        </div>
+    </main>
 
-    <div id="membership-view" class="hidden p-5">
-        <h2 class="text-xl font-bold mb-4">Anëtarësia</h2>
+    <div id="view-membership" class="hidden p-5">
+        <h2 class="text-xl font-bold mb-4">Zgjidh Pakon</h2>
         <div class="bg-slate-900 text-white p-6 rounded-2xl mb-4" onclick="openBooking('Silver Member')">
             <h3 class="font-bold">SILVER MEMBER</h3>
             <p class="text-2xl font-black mt-2">20€</p>
@@ -86,61 +109,160 @@
         </div>
     </div>
 
-    <div id="terminet-view" class="hidden p-5">
+    <div id="view-terminet" class="hidden p-5">
         <div id="login-box" class="text-center py-10">
+            <i class="fa-solid fa-user-lock text-5xl text-gray-200 mb-6"></i>
+            <h3 class="text-gray-400 font-bold mb-6">Hapësira për Berberët</h3>
             <input type="text" id="uID" placeholder="ID" class="w-full p-4 border rounded-xl mb-4 outline-none">
-            <input type="password" id="uPass" placeholder="Password" class="w-full p-4 border rounded-xl mb-6 outline-none">
+            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="w-full p-4 border rounded-xl mb-6 outline-none">
             <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold">KYÇU</button>
         </div>
         <div id="staff-dash" class="hidden">
-            <div class="flex justify-between items-center mb-4"><h2 id="staff-name" class="font-bold"></h2><button onclick="location.reload()" class="text-red-500 text-sm">Dil</button></div>
-            <div id="appointment-list" class="space-y-3"></div>
+            <div class="flex justify-between items-center mb-6"><h2 id="staff-name" class="font-bold"></h2><button onclick="location.reload()" class="text-red-500 text-sm font-bold">Dil</button></div>
+            <div id="list-app" class="space-y-4"></div>
         </div>
     </div>
 
-    <nav class="bottom-bar">
-        <div onclick="switchTab('home')" id="btn-home" class="nav-btn active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Home</span></div>
-        <div onclick="switchTab('terminet')" id="btn-terminet" class="nav-btn"><i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span></div>
+    <nav class="bottom-nav">
+        <div onclick="switchPage('home')" id="nav-home" class="nav-item active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Ballina</span></div>
+        <div class="nav-item"><i class="fa-solid fa-scissors text-xl mb-1"></i><span>Shërbimet</span></div>
+        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item"><i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span></div>
+        <div class="nav-item"><i class="fa-solid fa-phone text-xl mb-1"></i><span>Kontakt</span></div>
     </nav>
 
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-body">
-            <div class="flex justify-between items-center mb-6"><h2 id="modalTitle" class="font-bold">Zgjidh</h2><button onclick="closeModal()" class="text-2xl">&times;</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 id="modalTitle" class="font-bold text-lg">Zgjidh</h2><button onclick="closeModal()" class="text-2xl text-gray-300">&times;</button></div>
             
             <div id="step1">
-                <div class="item-select" onclick="setS('Qethje')"><b>Qethje</b><p class="text-xs">5€ - 35 min</p></div>
-                <div class="item-select" onclick="setS('Styler')"><b>Styler</b><p class="text-xs">2€ - 10 min</p></div>
-                <div class="item-select" onclick="setS('Ngjyrosje')"><b>Ngjyrosje</b><p class="text-xs">10€ - 60 min</p></div>
+                <div class="p-4 border rounded-xl mb-3 cursor-pointer" id="s1" onclick="setS('Qethje', 's1')"><b>Qethje</b><p class="text-xs text-gray-400">5€ - 35 min</p></div>
+                <div class="p-4 border rounded-xl mb-3 cursor-pointer" id="s2" onclick="setS('Styler', 's2')"><b>Styler</b><p class="text-xs text-gray-400">2€ - 10 min</p></div>
+                <div class="p-4 border rounded-xl mb-3 cursor-pointer" id="s3" onclick="setS('Ngjyrosje', 's3')"><b>Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 60 min</p></div>
                 <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
 
             <div id="step2" class="hidden">
-                <div class="item-select font-bold text-center" onclick="setB('Agon Tahiri')">Agon Tahiri</div>
-                <div class="item-select font-bold text-center" onclick="setB('Leonis Gashi')">Leonis Gashi</div>
-                <div class="item-select font-bold text-center" onclick="setB('Dori')">Dori</div>
-                <div class="item-select font-bold text-center" onclick="setB('Enisi')">Enisi</div>
+                <div class="p-4 border rounded-xl mb-3 text-center font-bold cursor-pointer" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
+                <div class="p-4 border rounded-xl mb-3 text-center font-bold cursor-pointer" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
+                <div class="p-4 border rounded-xl mb-3 text-center font-bold cursor-pointer" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
+                <div class="p-4 border rounded-xl mb-3 text-center font-bold cursor-pointer" id="b4" onclick="setB('Enisi', 'b4')">Enisi</div>
                 <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
             </div>
 
             <div id="step3" class="hidden">
-                <div class="flex space-x-2 overflow-x-auto mb-6" id="days-list"></div>
-                <div class="time-grid mb-6" id="times-list"></div>
-                <input type="text" id="custName" placeholder="Emri juaj" class="w-full p-4 border rounded-xl mb-4 outline-none">
-                <input type="tel" id="custPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-xl mb-4 outline-none">
-                <button onclick="finishBooking()" class="w-full bg-emerald-500 text-white py-4 rounded-xl font-bold">KONFIRMO</button>
+                <div class="flex space-x-2 overflow-x-auto mb-6" id="cal-days"></div>
+                <div class="grid grid-cols-3 gap-2 mb-6" id="time-grid"></div>
+                <input type="text" id="cName" placeholder="Emri juaj" class="w-full p-4 border rounded-xl mb-4 outline-none">
+                <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-xl mb-4 outline-none">
+                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-4 rounded-xl font-bold uppercase">Konfirmo</button>
             </div>
         </div>
     </div>
 
     <script>
-        let book = { s: '', b: '', d: '24 Shkurt', t: '' };
-        const staff = { "Agon":"Goni30", "Leonis":"leo12", "Dori":"dori201", "Enis":"nisi99" };
+        let booking = { s: '', b: '', d: '24 Shkurt', t: '' };
+        const users = { "Agon":"Goni30", "Leonis":"leo12", "Dori":"dori201", "Enis":"nisi99" };
 
-        function switchTab(tab) {
-            ['home','membership','terminet'].forEach(t => document.getElementById(t+'-view').classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tab+'-view').classList.remove('hidden');
-            document.getElementById('btn-'+tab).classList.add('active');
+        function switchPage(page) {
+            ['home', 'membership', 'terminet'].forEach(v => document.getElementById('view-'+v).classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('view-'+page).classList.remove('hidden');
+            document.getElementById('nav-'+page).classList.add('active');
+            
+            // Fsheh headerin nese nuk jemi ne home
+            document.getElementById('main-header').style.display = (page === 'home') ? 'flex' : 'none';
+        }
+
+        function openBooking(special = null) {
+            booking.s = special || '';
+            document.getElementById('bookingModal').classList.add('active');
+            goStep(special ? 2 : 1);
+        }
+
+        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
+
+        function goStep(n) {
+            [1,2,3].forEach(s => document.getElementById('step'+s).classList.add('hidden'));
+            document.getElementById('step'+n).classList.remove('hidden');
+            if(n === 3) buildSchedule();
+        }
+
+        function setS(s, id) {
+            booking.s = s;
+            document.querySelectorAll('#step1 div').forEach(d => d.style.borderColor = '#eee');
+            document.getElementById(id).style.borderColor = '#111827';
+            document.getElementById('v1').classList.add('active');
+        }
+
+        function setB(b, id) {
+            booking.b = b;
+            document.querySelectorAll('#step2 div').forEach(d => d.style.borderColor = '#eee');
+            document.getElementById(id).style.borderColor = '#111827';
+            document.getElementById('v2').classList.add('active');
+        }
+
+        function buildSchedule() {
+            // Ditët
+            const days = document.getElementById('cal-days'); days.innerHTML = '';
+            ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26'].forEach(day => {
+                let d = document.createElement('div');
+                d.className = `p-3 rounded-xl bg-gray-100 min-w-[75px] text-center font-bold ${booking.d === day ? 'bg-slate-800 text-white' : ''}`;
+                d.innerText = day;
+                d.onclick = () => { booking.d = day; buildSchedule(); };
+                days.appendChild(d);
+            });
+
+            // Orët e zëna reale
+            const grid = document.getElementById('time-grid'); grid.innerHTML = '';
+            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            
+            for(let h=9; h<=20; h++) {
+                for(let m of ['00', '30']) {
+                    let t = `${h<10?'0'+h:h}:${m}`;
+                    let isBusy = db.some(a => a.b === booking.b && a.d === booking.d && a.t === t);
+                    
+                    let slot = document.createElement('div');
+                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${booking.t === t ? 'selected' : ''}`;
+                    slot.innerText = t;
+                    if(!isBusy) {
+                        slot.onclick = () => { booking.t = t; buildSchedule(); };
+                    }
+                    grid.appendChild(slot);
+                }
+            }
+        }
+
+        function confirmApp() {
+            let n = document.getElementById('cName').value;
+            let p = document.getElementById('cPhone').value;
+            if(!n || !booking.t) return alert("Plotësoni të gjitha fushat!");
+            
+            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            db.push({ ...booking, name: n, phone: p });
+            localStorage.setItem('db_barber', JSON.stringify(db));
+            alert("Rezervimi u krye!");
+            location.reload();
+        }
+
+        function handleLogin() {
+            let id = document.getElementById('uID').value;
+            let pass = document.getElementById('uPass').value;
+            if(users[id] === pass) {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('staff-dash').classList.remove('hidden');
+                document.getElementById('staff-name').innerText = "Berberi: " + id;
+                let mine = JSON.parse(localStorage.getItem('db_barber') || "[]").filter(a => a.b.includes(id));
+                document.getElementById('list-app').innerHTML = mine.map(a => `
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-slate-900 shadow-sm">
+                        <p class="font-bold text-lg">${a.name}</p>
+                        <p class="text-xs text-gray-500">${a.s} | ${a.d} @ ${a.t}</p>
+                    </div>
+                `).join('');
+            } else alert("Gabim!");
+        }
+    </script>
+</body>
+</html>
         }
 
         function openBooking(special = null) {
