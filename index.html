@@ -9,14 +9,15 @@
     <style>
         body { background-color: #f8f9fa; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; margin: 0; }
         
+        /* Header Style */
         .header-bg { 
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070'); 
-            background-size: cover; background-position: center; height: 260px; 
+            background-size: cover; background-position: center; height: 240px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
             border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
         }
 
-        /* Home Grid */
+        /* Home Cards */
         .home-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 0 20px; margin-top: -40px; }
         .home-card { 
             background: white; border-radius: 25px; padding: 30px 10px; 
@@ -24,39 +25,24 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.06); cursor: pointer;
         }
 
-        /* Gold Banner */
-        .gold-banner {
-            background: linear-gradient(90deg, #FF9800, #F44336);
-            margin: 20px; padding: 18px; border-radius: 20px;
-            color: white; font-weight: 800; text-align: center;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
         /* Membership Elements */
         .m-input { width: 100%; padding: 15px; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 12px; outline: none; background: #fff; }
-        .b-opt { border: 1px solid #e2e8f0; padding: 15px; border-radius: 15px; font-weight: bold; text-align: center; cursor: pointer; background: white; transition: 0.2s; }
+        
+        .b-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 10px; }
+        .b-opt { border: 1px solid #e2e8f0; padding: 15px; border-radius: 15px; font-weight: bold; text-align: center; cursor: pointer; background: white; font-size: 14px; }
         .b-opt.selected { border-color: #111827; background: #111827; color: white; }
         
         .d-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
         .d-card { min-width: 70px; padding: 15px 10px; border: 1px solid #e2e8f0; border-radius: 15px; text-align: center; background: white; cursor: pointer; }
         .d-card.active { background: #111827; color: white; border-color: #111827; }
 
-        .gold-plan-box { 
+        /* Gold Plan Card */
+        .gold-plan-card { 
             background: white; border: 2px solid #fbbf24; border-radius: 30px; padding: 25px; 
-            margin-top: 20px; box-shadow: 0 15px 35px rgba(251, 191, 36, 0.15);
+            margin-top: 25px; box-shadow: 0 15px 35px rgba(251, 191, 36, 0.15);
         }
 
-        /* Modal / Booking */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 35px 35px 0 0; padding: 30px; max-height: 85vh; overflow-y: auto; }
-
-        .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; }
-        .time-slot.selected { background: #111827; color: white; }
-
-        /* Navigation */
+        /* Bottom Navigation */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer; }
         .nav-item.active { color: #111827; }
@@ -74,28 +60,28 @@
 
     <main id="view-home">
         <div class="home-grid">
-            <div class="home-card" onclick="openBooking()">
+            <div class="home-card" onclick="alert('Hapet rezervimi...')">
                 <div class="bg-blue-50 p-4 rounded-full mb-3 text-blue-600"><i class="fa-regular fa-calendar-check text-2xl"></i></div>
                 <span class="text-xs font-bold uppercase tracking-wider">Rezervo</span>
             </div>
+            
             <div class="home-card" onclick="switchPage('membership')">
                 <div class="bg-amber-50 p-4 rounded-full mb-3 text-amber-500"><i class="fa-solid fa-crown text-2xl"></i></div>
                 <span class="text-xs font-bold uppercase tracking-wider">Membership</span>
             </div>
+
             <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="alert('Së shpejti...')">
                 <i class="fa-solid fa-cart-shopping text-emerald-500 text-2xl"></i>
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
-
-        <div class="gold-banner">
-            <i class="fa-solid fa-star"></i>
-            <span>Ju jeni Gold Member</span>
-        </div>
     </main>
 
     <div id="view-membership" class="hidden p-6">
-        <h2 class="text-center font-black text-slate-800 mb-8 text-2xl uppercase italic">Membership Mujor</h2>
+        <div class="flex items-center mb-6">
+            <button onclick="switchPage('home')" class="text-xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2 class="font-black text-slate-800 text-xl uppercase italic">Membership Mujor</h2>
+        </div>
         
         <p class="text-[10px] font-bold uppercase text-gray-400 mb-3 ml-2 tracking-widest">Informacioni i Anëtarit</p>
         <input type="text" placeholder="Emri" class="m-input">
@@ -103,58 +89,55 @@
         <input type="tel" placeholder="Numri i Telefonit" class="m-input">
 
         <p class="text-[10px] font-bold uppercase text-gray-400 mt-6 mb-3 text-center tracking-widest">Zgjedh Berberin</p>
-        <div class="grid grid-cols-2 gap-3 mb-6">
-            <div class="b-opt selected" onclick="selectMB(this)">Agon Tahiri</div>
-            <div class="b-opt" onclick="selectMB(this)">Leonis Gashi</div>
-            <div class="b-opt" onclick="selectMB(this)">ENIS</div>
-            <div class="b-opt" onclick="selectMB(this)">Dori</div>
+        <div class="b-grid mb-6">
+            <div class="b-opt selected" onclick="selectItem(this, 'b-opt')">Agon Tahiri</div>
+            <div class="b-opt" onclick="selectItem(this, 'b-opt')">Leonis Gashi</div>
+            <div class="b-opt" onclick="selectItem(this, 'b-opt')">ENIS</div>
+            <div class="b-opt" onclick="selectItem(this, 'b-opt')">Dori</div>
         </div>
 
-        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 text-center tracking-widest">Data e fillimit</p>
+        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 text-center tracking-widest">Datat dhe oret</p>
         <div class="d-scroll no-scrollbar">
-            <div class="d-card active" onclick="selectD(this)"><span>mar</span><b>24</b></div>
-            <div class="d-card" onclick="selectD(this)"><span>mër</span><b>25</b></div>
-            <div class="d-card" onclick="selectD(this)"><span>enj</span><b>26</b></div>
-            <div class="d-card" onclick="selectD(this)"><span>pre</span><b>27</b></div>
-            <div class="d-card" onclick="selectD(this)"><span>sht</span><b>28</b></div>
+            <div class="d-card active" onclick="selectItem(this, 'd-card')"><span>mar</span><b>24</b></div>
+            <div class="d-card" onclick="selectItem(this, 'd-card')"><span>mër</span><b>25</b></div>
+            <div class="d-card" onclick="selectItem(this, 'd-card')"><span>enj</span><b>26</b></div>
+            <div class="d-card" onclick="selectItem(this, 'd-card')"><span>pre</span><b>27</b></div>
         </div>
 
-        <div class="gold-plan-box">
+        <div class="gold-plan-card">
             <h3 class="text-amber-600 font-black text-2xl italic uppercase text-center">PLAN GOLD</h3>
             <p class="text-center text-xs font-bold text-gray-500 mb-6">GOLD MEMBER - 25€ / Muaj</p>
             
-            <p class="text-[11px] font-bold uppercase text-gray-400 mb-4">Përfitimet e përfshira:</p>
-            <ul class="space-y-4 mb-8">
+            <p class="text-[11px] font-bold uppercase text-gray-400 mb-4 tracking-tighter">Përfitimet:</p>
+            <ul class="space-y-3 mb-8">
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-scissors text-amber-500"></i> 3 Qethje në muaj
+                    <i class="fa-solid fa-check text-amber-500"></i> 3 Qethje në muaj
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-droplet text-blue-400"></i> Larje & Masazh koke
+                    <i class="fa-solid fa-check text-amber-500"></i> Zbritje në produkte
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-face-smile text-emerald-500"></i> Maskë fytyre (Black Mask)
+                    <i class="fa-solid fa-check text-amber-500"></i> Termine prioritare
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-bolt text-red-500"></i> Rezervim pa pritje (Prioritar)
+                    <i class="fa-solid fa-check text-amber-500"></i> Rezervim pa pritje
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-tags text-purple-500"></i> Zbritje në produkte
+                    <i class="fa-solid fa-check text-amber-500"></i> Oferta speciale
                 </li>
             </ul>
 
-            <button onclick="alert('Kërkesa u dërgua! Do të njoftoheni së shpejti.')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-black shadow-lg uppercase tracking-widest transition-transform active:scale-95">
-                Bëhu Gold Member - 25€
+            <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-black shadow-lg uppercase tracking-widest active:scale-95 transition-transform">
+                Bëhu Gold Member
             </button>
         </div>
     </div>
 
     <div id="view-terminet" class="hidden p-6">
-        <div id="login-box" class="text-center py-10 bg-white rounded-3xl shadow-sm p-6">
-            <h2 class="text-xl font-bold mb-6 italic uppercase">Hyrja për Staf</h2>
-            <input type="text" placeholder="ID" class="m-input">
-            <input type="password" placeholder="Fjalëkalimi" class="m-input">
-            <button class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase tracking-widest mt-4">Kyçu</button>
-        </div>
+        <h2 class="text-center font-bold text-xl mb-6">Hyrja për Staf</h2>
+        <input type="text" placeholder="ID" class="m-input">
+        <input type="password" placeholder="Fjalëkalimi" class="m-input">
+        <button class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase mt-4">Kyçu</button>
     </div>
 
     <nav class="bottom-nav">
@@ -166,258 +149,39 @@
         </div>
     </nav>
 
-    <div id="bookingModal" class="modal-overlay">
-        <div class="modal-body">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="font-black text-xl uppercase italic">Zgjedh Berberin</h2>
-                <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
-            </div>
-            <div class="grid grid-cols-1 gap-3">
-                <div class="b-opt" onclick="this.classList.toggle('selected')">Agon Tahiri</div>
-                <div class="b-opt" onclick="this.classList.toggle('selected')">Leonis Gashi</div>
-                <div class="b-opt" onclick="this.classList.toggle('selected')">ENIS</div>
-                <div class="b-opt" onclick="this.classList.toggle('selected')">Dori</div>
-                <button onclick="alert('Zgjidhni kohën në hapin tjetër...')" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold mt-4 uppercase">Vazhdo</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         function switchPage(p) {
-            // Fshih të gjitha faqet
+            // Fsheh të gjitha pamjet
             document.getElementById('view-home').classList.add('hidden');
             document.getElementById('view-membership').classList.add('hidden');
             document.getElementById('view-terminet').classList.add('hidden');
             
-            // Shfaq faqen e kërkuar
+            // Shfaq vetëm faqen që duam
             document.getElementById('view-'+p).classList.remove('hidden');
             
-            // Update Navigation
+            // Rregullo menunë poshtë
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(p !== 'membership') {
+            if(p === 'home' || p === 'terminet') {
                 document.getElementById('nav-'+p).classList.add('active');
             }
-            
-            // Header display
+
+            // Shfaq ose fshih header-in me foto
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
+            
+            // Shko në fillim të faqes
             window.scrollTo(0,0);
         }
 
-        function openBooking() { document.getElementById('bookingModal').classList.add('active'); }
-        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
-
-        function selectMB(el) {
-            document.querySelectorAll('.b-opt').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        function selectD(el) {
-            document.querySelectorAll('.d-card').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-        }
-    </script>
-</body>
-</html>
-        </div>
-
-        <div class="gold-plan-card">
-            <h3 class="gold-title">PLAN GOLD</h3>
-            <p class="gold-price">GOLD MEMBER - 25€ / Muaj</p>
-            
-            <p class="font-bold text-xs uppercase mb-3 text-slate-400">Përfitimet:</p>
-            <ul class="benefits-list">
-                <li>3 Qethje në muaj</li>
-                <li>Zbritje në produkte</li>
-                <li>Termine prioritare</li>
-                <li>Rezervim pa pritje</li>
-                <li>Oferta speciale</li>
-            </ul>
-
-            <button onclick="alert('Kërkesa për Membership u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-black shadow-lg uppercase tracking-widest active:scale-95 transition-all">
-                Bëhu Gold Member
-            </button>
-        </div>
-    </div>
-
-    <div id="view-terminet" class="hidden p-6">
-        <div id="login-box" class="text-center py-10">
-            <h2 class="text-xl font-bold mb-6">Hyrja për Staf</h2>
-            <input type="text" id="uID" placeholder="ID" class="member-input">
-            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="member-input">
-            <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase">Kyçu</button>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <div onclick="switchPage('home')" id="nav-home" class="nav-item active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Ballina</span></div>
-        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item"><i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span></div>
-    </nav>
-
-    <script>
-        function switchPage(p) {
-            ['home', 'membership', 'terminet'].forEach(v => { 
-                const el = document.getElementById('view-'+v);
-                if(el) el.classList.add('hidden'); 
+        // Funksion për të zgjedhur berberin ose datën
+        function selectItem(el, className) {
+            document.querySelectorAll('.' + className).forEach(item => {
+                item.classList.remove('selected');
+                item.classList.remove('active');
             });
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-'+p).classList.remove('hidden');
-            if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
-            document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
-        }
-
-        function selectMB(el) {
-            document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        function selectDate(el) {
-            document.querySelectorAll('.date-item').forEach(d => d.classList.remove('selected'));
-            el.classList.add('selected');
+            if(className === 'b-opt') el.classList.add('selected');
+            if(className === 'd-card') el.classList.add('active');
         }
     </script>
 </body>
 </html>
-    <div id="bookingModal" class="modal-overlay">
-        <div class="modal-body">
-            <div class="flex justify-between items-center mb-8">
-                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Berberin</h2>
-                <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
-            </div>
-            
-            <div id="step2">
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
-                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
-            </div>
 
-            <div id="step3" class="hidden">
-                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2 no-scrollbar" id="cal-days"></div>
-                <div class="grid grid-cols-3 gap-3 mb-6" id="time-grid"></div>
-                <input type="text" id="cName" placeholder="Emri juaj" class="w-full p-4 border rounded-2xl mb-3 outline-none">
-                <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-2xl mb-4 outline-none">
-                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg">Konfirmo</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let booking = { s: 'Qethje Standard', b: '', d: 'Mar 24', t: '' };
-        const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
-
-        function switchPage(p) {
-            ['home', 'membership', 'terminet'].forEach(v => { if(document.getElementById('view-'+v)) document.getElementById('view-'+v).classList.add('hidden'); });
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-'+p).classList.remove('hidden');
-            if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
-            document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
-        }
-
-        function openBooking() { 
-            document.getElementById('bookingModal').classList.add('active'); 
-            goStep(2); 
-        }
-
-        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
-
-        function goStep(n) {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.add('hidden');
-            document.getElementById('step'+n).classList.remove('hidden');
-            document.getElementById('modalTitle').innerText = n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
-            if(n === 3) buildSchedule();
-        }
-
-        function setB(b, id) {
-            booking.b = b;
-            document.querySelectorAll('#step2 div').forEach(d => { if(d.id) d.style.borderColor = '#f3f4f6'; });
-            document.getElementById(id).style.borderColor = '#111827';
-            document.getElementById('v2').classList.add('active');
-        }
-
-        function buildSchedule() {
-            const daysContainer = document.getElementById('cal-days'); daysContainer.innerHTML = '';
-            const days = ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'];
-            
-            days.forEach(day => {
-                let d = document.createElement('div');
-                d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
-                d.innerText = day;
-                d.onclick = () => { booking.d = day; buildSchedule(); };
-                daysContainer.appendChild(d);
-            });
-
-            const grid = document.getElementById('time-grid'); grid.innerHTML = '';
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            
-            for(let h=9; h<=20; h++) {
-                for(let m of ['00', '30']) {
-                    let t = `${h<10?'0'+h:h}:${m}`;
-                    let isBusy = db.some(a => a.b === booking.b && a.d === booking.d && a.t === t);
-                    let slot = document.createElement('div');
-                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${booking.t === t ? 'selected' : ''}`;
-                    slot.innerText = t;
-                    if(!isBusy) slot.onclick = () => { booking.t = t; buildSchedule(); };
-                    grid.appendChild(slot);
-                }
-            }
-        }
-
-        function confirmApp() {
-            let n = document.getElementById('cName').value;
-            let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t || !booking.b) return alert("Plotësoni të gjitha fushët!");
-            
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            db.push({ ...booking, name: n, phone: p, id: Date.now() });
-            localStorage.setItem('db_barber', JSON.stringify(db));
-            
-            alert("Rezervimi u krye me sukses!");
-            location.reload();
-        }
-
-        function handleLogin() {
-            let id = document.getElementById('uID').value;
-            let pass = document.getElementById('uPass').value;
-            if(users[id] === pass) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('staff-dash').classList.remove('hidden');
-                document.getElementById('staff-name').innerText = "Berberi: " + id;
-                loadStaffAppointments(id);
-            } else alert("Gabim!");
-        }
-
-        function loadStaffAppointments(barberName) {
-            let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            let mine = all.filter(a => a.b.toLowerCase().includes(barberName.toLowerCase()));
-            const container = document.getElementById('list-app');
-            if(mine.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim.</p>`;
-                return;
-            }
-            container.innerHTML = mine.map(a => `
-                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md mb-4">
-                    <div class="flex justify-between items-start">
-                        <div><b>${a.name}</b><p class="text-xs text-gray-500">${a.s}</p></div>
-                        <div class="text-right"><b>${a.t}</b><p class="text-xs text-gray-400">${a.d}</p></div>
-                    </div>
-                    <div class="flex justify-between mt-3 pt-3 border-t">
-                        <a href="tel:${a.phone}" class="text-blue-600 font-bold">Thirr</a>
-                        <button onclick="deleteApp(${a.id}, '${barberName}')" class="text-red-500 font-bold">Fshije</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function deleteApp(id, barberName) {
-            let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            let filtered = all.filter(a => a.id !== id);
-            localStorage.setItem('db_barber', JSON.stringify(filtered));
-            loadStaffAppointments(barberName);
-        }
-
-        function selectMemberBerber(el) { document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); }
-    </script>
-</body>
-</html>
