@@ -24,6 +24,14 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer;
         }
 
+        /* Membership Styles */
+        .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: white; }
+        .berber-select { border: 1px solid #e5e7eb; padding: 15px; border-radius: 15px; margin-bottom: 8px; font-weight: bold; cursor: pointer; text-align: center; background: white; }
+        .berber-select.selected { border-color: #111827; background: #f9fafb; border-width: 2px; }
+
+        .date-chip { min-width: 65px; height: 75px; border: 1px solid #e5e7eb; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 10px; cursor: pointer; background: white; }
+        .date-chip.selected { background: #111827; color: white; border-color: #111827; }
+
         .service-item {
             padding: 16px; border: 2px solid #f3f4f6; border-radius: 15px; 
             margin-bottom: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
@@ -46,12 +54,13 @@
         .vazhdo-btn.active { opacity: 1; pointer-events: auto; background: #ef4444; }
         
         .hidden { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-24">
 
     <header id="main-header" class="video-header">
-        <h1 class="text-4xl font-black italic tracking-tighter">AGONI BARBER</h1>
+        <h1 class="text-4xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
         <p class="text-[10px] tracking-[5px] opacity-90 uppercase mt-2">Rezervo termin pa pritje</p>
     </header>
 
@@ -70,18 +79,55 @@
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
-        </main>
 
-    <div id="view-membership" class="hidden p-6">
-        <h2 class="text-2xl font-black mb-6">Zgjidh Pakon</h2>
-        <div class="bg-slate-900 text-white p-6 rounded-3xl mb-4 shadow-lg" onclick="openBooking('Silver Member')">
-            <h3 class="font-bold tracking-widest uppercase text-xs">Silver Member</h3>
-            <p class="text-3xl font-black mt-2">20€</p>
+        <div class="px-5 mt-8 space-y-4">
+            <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white p-5 rounded-2xl text-center font-bold shadow-lg">
+                ★ JU JENI GOLD MEMBER
+            </div>
+            <input type="tel" id="homePhoneCheck" placeholder="Nr. Telefonit" class="w-full p-5 bg-white border border-gray-100 rounded-2xl shadow-sm outline-none text-center font-bold text-lg focus:border-emerald-400 transition-all">
+            <button onclick="checkMembership()" class="w-full bg-[#10b981] text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl active:scale-95 transition-transform">
+                Konfirmo
+            </button>
         </div>
-        <div class="bg-amber-500 text-white p-6 rounded-3xl mb-4 shadow-lg" onclick="openBooking('Gold Member')">
-            <h3 class="font-bold tracking-widest uppercase text-xs">Gold Member</h3>
-            <p class="text-3xl font-black mt-2">35€</p>
+    </main>
+
+    <div id="view-membership" class="hidden p-6 bg-white min-h-screen">
+        <h2 class="text-center font-bold text-slate-800 mb-6 text-xl">Membership Mujor</h2>
+        
+        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 ml-1">Informacioni i Anëtarit</p>
+        <input type="text" placeholder="Emri" class="member-input">
+        <input type="text" placeholder="Mbiemri" class="member-input">
+        <input type="tel" placeholder="Numri i Telefonit" class="member-input">
+
+        <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 text-center italic">Zgjedh Berberin</p>
+        <div class="berber-select selected" onclick="selectMemberBerber(this)">Agon Tahiri</div>
+        <div class="berber-select" onclick="selectMemberBerber(this)">Leonis Gashi</div>
+
+        <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 ml-1">Data e Fillimit:</p>
+        <div class="flex overflow-x-auto pb-4 no-scrollbar">
+            <div class="date-chip selected" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">mar</span><b class="text-lg">24</b></div>
+            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">mër</span><b class="text-lg">25</b></div>
+            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">enj</span><b class="text-lg">26</b></div>
+            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">pre</span><b class="text-lg">27</b></div>
+            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">sht</span><b class="text-lg">28</b></div>
         </div>
+
+        <div class="text-center mt-6 p-5 border rounded-2xl">
+            <h3 class="text-[#f0544f] font-black text-2xl uppercase italic tracking-tighter">Plan Gold</h3>
+            <p class="font-bold text-slate-700">GOLD MEMBER - 25€ / Muaj</p>
+            
+            <div class="mt-4 space-y-2 text-sm text-gray-500 text-left px-2 border-t pt-4">
+                <p>• 3 Qethje në muaj</p>
+                <p>• Zbritje në produkte</p>
+                <p>• Termine prioritare</p>
+                <p>• Rezervim pa pritje</p>
+                <p>• Oferta speciale</p>
+            </div>
+        </div>
+
+        <button onclick="alert('Kërkesa për Membership u dërgua me sukses!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-bold mt-6 shadow-lg uppercase tracking-widest">
+            Bëhu Gold Member
+        </button>
     </div>
 
     <div id="view-terminet" class="hidden p-6">
@@ -106,6 +152,142 @@
     </nav>
 
     <div id="bookingModal" class="modal-overlay">
+        <div class="modal-body">
+            <div class="flex justify-between items-center mb-8">
+                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
+                <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
+            </div>
+            
+            <div id="step1">
+                <div class="service-item" id="s1" onclick="setS('Qethje', 's1')">
+                    <div><b class="text-lg">Qethje</b><p class="text-xs text-gray-400">5€ - 30 minuta</p></div>
+                </div>
+                <div class="service-item" id="s2" onclick="setS('Qethje + Rroje', 's2')">
+                    <div><b class="text-lg">Qethje + Rroje</b><p class="text-xs text-gray-400">6€ - 40 minuta</p></div>
+                </div>
+                <div class="service-item" id="s3" onclick="setS('Styler', 's3')">
+                    <div><b class="text-lg">Styler</b><p class="text-xs text-gray-400">2€ - 10 minuta</p></div>
+                </div>
+                <div class="service-item" id="s4" onclick="setS('Ngjyrosje', 's4')">
+                    <div><b class="text-lg">Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 30 minuta</p></div>
+                </div>
+                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
+            </div>
+
+            <div id="step2" class="hidden">
+                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
+                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
+                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
+                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
+                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
+            </div>
+
+            <div id="step3" class="hidden">
+                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2 no-scrollbar" id="cal-days"></div>
+                <div class="grid grid-cols-3 gap-3 mb-6" id="time-grid"></div>
+                <input type="text" id="cName" placeholder="Emri juaj" class="w-full p-4 border rounded-2xl mb-3 outline-none">
+                <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-2xl mb-4 outline-none">
+                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg">Konfirmo Rezervimin</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let booking = { s: '', b: '', d: 'Mar 24', t: '' };
+        const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
+
+        function switchPage(p) {
+            ['home', 'membership', 'terminet'].forEach(v => { if(document.getElementById('view-'+v)) document.getElementById('view-'+v).classList.add('hidden'); });
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('view-'+p).classList.remove('hidden');
+            if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
+            document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
+        }
+
+        // Funksionet për Membership
+        function selectMemberBerber(el) {
+            document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function selectMemberDate(el) {
+            document.querySelectorAll('.date-chip').forEach(d => d.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function checkMembership() {
+            const phone = document.getElementById('homePhoneCheck').value;
+            if(phone) alert("Po verifikojmë statusin Gold për numrin: " + phone);
+            else alert("Shënoni numrin e telefonit!");
+        }
+
+        function openBooking() { document.getElementById('bookingModal').classList.add('active'); goStep(1); }
+        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
+
+        function goStep(n) {
+            [1,2,3].forEach(s => document.getElementById('step'+s).classList.add('hidden'));
+            document.getElementById('step'+n).classList.remove('hidden');
+            document.getElementById('modalTitle').innerText = n==1 ? 'Zgjedh Shërbimin' : n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
+            if(n === 3) buildSchedule();
+        }
+
+        function setS(s, id) {
+            booking.s = s;
+            document.querySelectorAll('.service-item').forEach(d => d.classList.remove('selected'));
+            document.getElementById(id).classList.add('selected');
+            document.getElementById('v1').classList.add('active');
+        }
+
+        function setB(b, id) {
+            booking.b = b;
+            document.querySelectorAll('#step2 div').forEach(d => d.style.borderColor = '#f3f4f6');
+            document.getElementById(id).style.borderColor = '#111827';
+            document.getElementById('v2').classList.add('active');
+        }
+
+        function buildSchedule() {
+            const days = document.getElementById('cal-days'); days.innerHTML = '';
+            ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'].forEach(day => {
+                let d = document.createElement('div');
+                d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
+                d.innerText = day;
+                d.onclick = () => { booking.d = day; buildSchedule(); };
+                days.appendChild(d);
+            });
+
+            const grid = document.getElementById('time-grid'); grid.innerHTML = '';
+            for(let h=9; h<=20; h++) {
+                for(let m of ['00', '30']) {
+                    let t = `${h<10?'0'+h:h}:${m}`;
+                    let slot = document.createElement('div');
+                    slot.className = `time-slot ${booking.t === t ? 'selected' : ''}`;
+                    slot.innerText = t;
+                    slot.onclick = () => { booking.t = t; buildSchedule(); };
+                    grid.appendChild(slot);
+                }
+            }
+        }
+
+        function confirmApp() { alert("Rezervimi u krye!"); location.reload(); }
+
+        function handleLogin() {
+            let id = document.getElementById('uID').value;
+            let pass = document.getElementById('uPass').value;
+            if(users[id] === pass) {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('staff-dash').classList.remove('hidden');
+                document.getElementById('staff-name').innerText = "Berberi: " + id;
+                loadStaffAppointments(id);
+            } else alert("Gabim!");
+        }
+
+        function loadStaffAppointments(barberName) {
+            const container = document.getElementById('list-app');
+            container.innerHTML = `<p class="text-center text-gray-400 py-10 italic">Nuk ka rezervime të reja.</p>`;
+        }
+    </script>
+</body>
+</html>
         <div class="modal-body">
             <div class="flex justify-between items-center mb-8">
                 <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
