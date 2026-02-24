@@ -1,80 +1,46 @@
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agoni Barber</title>
+
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f2f2f2;
+  padding:20px;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+}
+button{
+  padding:10px;
+  background:#e63946;
+  border:none;
+  color:white;
+  border-radius:8px;
+}
+</style>
+</head>
+<body>
+
+<h2>Agoni Barber</h2>
+
+<div class="card">
+<input type="text" id="name" placeholder="Emri">
+<button onclick="test()">Test Button</button>
+<p id="msg"></p>
+</div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAvOR7GVNRjoSHwRlmiJsMptnodnlhTL-k",
-  authDomain: "agonibarber.firebaseapp.com",
-  projectId: "agonibarber",
-  storageBucket: "agonibarber.firebasestorage.app",
-  messagingSenderId: "195737259673",
-  appId: "1:195737259673:web:a129ea0024d0802e173208"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-const dateInput = document.getElementById("date");
-const timeSelect = document.getElementById("time");
-
-const allTimes = [
-"09:00","09:30","10:00","10:30","11:00","11:30",
-"12:00","13:00","14:00","15:00","16:00"
-];
-
-dateInput.addEventListener("change", async function(){
-
-  const selectedDate = dateInput.value;
-
-  const snapshot = await db.collection("appointments")
-  .where("date","==",selectedDate)
-  .get();
-
-  const takenTimes = [];
-
-  snapshot.forEach(doc=>{
-    takenTimes.push(doc.data().time);
-  });
-
-  timeSelect.innerHTML="";
-
-  allTimes.forEach(function(time){
-    if(!takenTimes.includes(time)){
-      const option=document.createElement("option");
-      option.value=time;
-      option.textContent=time;
-      timeSelect.appendChild(option);
-    }
-  });
-
-});
-
-function reserve(){
-
-  const service = document.getElementById("service").value;
-  const date = dateInput.value;
-  const time = timeSelect.value;
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const message = document.getElementById("message");
-
-  if(!date || !name || !phone){
-    message.innerHTML="Plotëso të gjitha fushat!";
-    message.className="message error";
-    return;
-  }
-
-  db.collection("appointments").add({
-    service:service,
-    date:date,
-    time:time,
-    name:name,
-    phone:phone,
-    createdAt:new Date()
-  });
-
-  message.innerHTML="Rezervimi u krye me sukses!";
-  message.className="message success";
-
+function test(){
+  document.getElementById("msg").innerHTML="Butoni po funksionon ✅";
 }
 </script>
+
+</body>
+</html>
