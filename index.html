@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agoni Barber</title>
+    <title>Agoni Barber | Rezervime</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f3f4f6; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f3f4f6; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; margin: 0; }
         
         .video-header { 
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074'); 
@@ -17,32 +17,38 @@
         }
 
         .home-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 0 20px; margin-top: -30px; }
+        
         .home-card { 
             background: white; border-radius: 20px; padding: 25px 10px; 
             display: flex; flex-direction: column; align-items: center; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer;
         }
 
-        /* Membership Inputs */
-        .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: #fff; }
+        /* Membership Styles */
+        .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: #fff; transition: 0.3s; }
+        .member-input:focus { border-color: #111827; }
 
-        /* Berber Select */
         .berber-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .berber-select { border: 1px solid #e5e7eb; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; text-align: center; background: white; }
+        .berber-select { border: 1px solid #e5e7eb; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; text-align: center; background: white; font-size: 14px; }
         .berber-select.selected { border-color: #111827; background: #111827; color: white; }
 
-        /* Date Picker (Siç ishte) */
+        /* Horizontal Date Picker */
         .date-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; }
         .date-item { min-width: 70px; padding: 15px 10px; border: 1px solid #e5e7eb; border-radius: 15px; text-align: center; background: white; cursor: pointer; }
         .date-item.selected { background: #111827; color: white; border-color: #111827; }
         .date-item span { display: block; font-size: 12px; font-weight: bold; opacity: 0.7; }
         .date-item b { font-size: 18px; }
 
-        /* Gold Card */
+        /* Gold Plan Card */
         .gold-plan-card { 
             background: white; border: 2px solid #facc15; border-radius: 25px; padding: 25px; 
             margin-top: 20px; box-shadow: 0 10px 25px rgba(250, 204, 21, 0.1);
         }
+        .gold-title { color: #d97706; font-weight: 900; font-size: 22px; font-style: italic; text-align: center; text-transform: uppercase; }
+        .gold-price { text-align: center; font-weight: bold; font-size: 14px; color: #4b5563; margin-bottom: 15px; }
+        .benefits-list { list-style: none; padding: 0; margin-bottom: 20px; }
+        .benefits-list li { padding: 5px 0; font-size: 14px; color: #374151; display: flex; align-items: center; gap: 10px; }
+        .benefits-list li::before { content: "•"; color: #facc15; font-weight: bold; font-size: 20px; }
 
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 11px; font-weight: bold; cursor: pointer; }
@@ -56,67 +62,77 @@
 
     <header id="main-header" class="video-header">
         <h1 class="text-4xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
+        <p class="text-[10px] tracking-[5px] opacity-90 uppercase mt-2">Rezervo termin pa pritje</p>
     </header>
 
     <main id="view-home">
         <div class="home-grid">
-            <div class="home-card" onclick="alert('Rezervimi Standard po hapet...')">
-                <div class="bg-blue-50 p-4 rounded-full mb-3 text-blue-600"><i class="fa-regular fa-calendar-check text-2xl"></i></div>
-                <span class="text-xs font-bold uppercase tracking-wider">Rezervo</span>
-            </div>
             <div class="home-card" onclick="switchPage('membership')">
                 <div class="bg-amber-50 p-4 rounded-full mb-3 text-amber-500"><i class="fa-solid fa-crown text-2xl"></i></div>
                 <span class="text-xs font-bold uppercase tracking-wider">Membership</span>
             </div>
+            <div class="home-card" onclick="alert('Hapet rezervimi standard...')">
+                <div class="bg-blue-50 p-4 rounded-full mb-3 text-blue-600"><i class="fa-regular fa-calendar-check text-2xl"></i></div>
+                <span class="text-xs font-bold uppercase tracking-wider">Rezervo</span>
+            </div>
+            <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="alert('Së shpejti...')">
+                <i class="fa-solid fa-cart-shopping text-emerald-500 text-2xl"></i>
+                <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
+            </div>
         </div>
     </main>
 
-    <div id="view-membership" class="hidden p-6">
-        <div class="flex items-center mb-6">
-            <button onclick="switchPage('home')" class="text-xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="font-black text-slate-800 text-xl uppercase italic">Membership Mujor</h2>
+    <div id="view-membership" class="hidden p-6 bg-gray-50 min-h-screen">
+        <h2 class="text-center font-black text-slate-800 mb-6 text-2xl uppercase italic">Membership Mujor</h2>
+        
+        <div class="mb-6">
+            <p class="text-[10px] font-bold uppercase text-gray-400 mb-3 ml-2 tracking-widest">Informacioni i Anëtarit</p>
+            <input type="text" placeholder="Emri" class="member-input">
+            <input type="text" placeholder="Mbiemri" class="member-input">
+            <input type="tel" placeholder="Numri i Telefonit" class="member-input">
         </div>
 
-        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 ml-2 tracking-widest">Info</p>
-        <input type="text" placeholder="Emri" class="member-input">
-        <input type="text" placeholder="Mbiemri" class="member-input">
-        <input type="tel" placeholder="Nr. Telefonit" class="member-input">
-
-        <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-2 text-center tracking-widest">Berberi</p>
+        <p class="text-[10px] font-bold uppercase text-gray-400 mb-3 ml-2 tracking-widest text-center">Zgjedh Berberin</p>
         <div class="berber-grid">
-            <div class="berber-select selected" onclick="selectB(this)">Agon Tahiri</div>
-            <div class="berber-select" onclick="selectB(this)">Leonis Gashi</div>
-            <div class="berber-select" onclick="selectB(this)">ENIS</div>
-            <div class="berber-select" onclick="selectB(this)">Dori</div>
+            <div class="berber-select selected" onclick="selectMB(this)">Agon Tahiri</div>
+            <div class="berber-select" onclick="selectMB(this)">Leonis Gashi</div>
+            <div class="berber-select" onclick="selectMB(this)">ENIS</div>
+            <div class="berber-select" onclick="selectMB(this)">Dori</div>
         </div>
 
-        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 text-center tracking-widest">Data dhe Ora</p>
+        <p class="text-[10px] font-bold uppercase text-gray-400 mb-1 ml-2 tracking-widest text-center">Datat dhe oret</p>
         <div class="date-scroll no-scrollbar">
-            <div class="date-item selected" onclick="selectD(this)"><span>mar</span><b>24</b></div>
-            <div class="date-item" onclick="selectD(this)"><span>mër</span><b>25</b></div>
-            <div class="date-item" onclick="selectD(this)"><span>enj</span><b>26</b></div>
-            <div class="date-item" onclick="selectD(this)"><span>pre</span><b>27</b></div>
+            <div class="date-item selected" onclick="selectDate(this)"><span>mar</span><b>24</b></div>
+            <div class="date-item" onclick="selectDate(this)"><span>mër</span><b>25</b></div>
+            <div class="date-item" onclick="selectDate(this)"><span>enj</span><b>26</b></div>
+            <div class="date-item" onclick="selectDate(this)"><span>pre</span><b>27</b></div>
         </div>
 
         <div class="gold-plan-card">
-            <h3 class="text-amber-600 font-black text-xl italic uppercase text-center mb-4">PLAN GOLD - 25€</h3>
-            <ul class="text-sm space-y-2 mb-6 text-slate-600 font-medium">
-                <li>• 3 Qethje në muaj</li>
-                <li>• Zbritje në produkte</li>
-                <li>• Termine prioritare</li>
-                <li>• Rezervim pa pritje</li>
-                <li>• Oferta speciale</li>
+            <h3 class="gold-title">PLAN GOLD</h3>
+            <p class="gold-price">GOLD MEMBER - 25€ / Muaj</p>
+            
+            <p class="font-bold text-xs uppercase mb-3 text-slate-400">Përfitimet:</p>
+            <ul class="benefits-list">
+                <li>3 Qethje në muaj</li>
+                <li>Zbritje në produkte</li>
+                <li>Termine prioritare</li>
+                <li>Rezervim pa pritje</li>
+                <li>Oferta speciale</li>
             </ul>
-            <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-4 rounded-xl font-black uppercase">Bëhu Gold Member</button>
+
+            <button onclick="alert('Kërkesa për Membership u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-black shadow-lg uppercase tracking-widest active:scale-95 transition-all">
+                Bëhu Gold Member
+            </button>
         </div>
     </div>
 
-    <div id="view-terminet" class="hidden p-8">
-        <div class="bg-white rounded-3xl p-8 shadow-sm text-center">
-            <h2 class="font-black text-xl uppercase mb-6">Hyrja për Staf</h2>
-            <input type="text" id="sID" placeholder="ID" class="member-input">
-            <input type="password" id="sPass" placeholder="Fjalëkalimi" class="member-input">
-            <button onclick="checkLogin()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase">Kyçu</button>
+    <div id="view-terminet" class="hidden p-6">
+        <div id="login-box" class="text-center py-10">
+            <h2 class="text-xl font-bold mb-6">Hyrja për Staf</h2>
+            <input type="text" id="uID" placeholder="ID" class="member-input">
+            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="member-input">
+            <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase">Kyçu</button>
         </div>
     </div>
 
@@ -127,33 +143,24 @@
 
     <script>
         function switchPage(p) {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-membership').classList.add('hidden');
-            document.getElementById('view-terminet').classList.add('hidden');
-            document.getElementById('view-'+p).classList.remove('hidden');
+            ['home', 'membership', 'terminet'].forEach(v => { 
+                const el = document.getElementById('view-'+v);
+                if(el) el.classList.add('hidden'); 
+            });
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(p !== 'membership') document.getElementById('nav-'+p).classList.add('active');
+            document.getElementById('view-'+p).classList.remove('hidden');
+            if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
         }
 
-        function selectB(el) {
+        function selectMB(el) {
             document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
         }
 
-        function selectD(el) {
+        function selectDate(el) {
             document.querySelectorAll('.date-item').forEach(d => d.classList.remove('selected'));
             el.classList.add('selected');
-        }
-
-        function checkLogin() {
-            const id = document.getElementById('sID').value;
-            const pass = document.getElementById('sPass').value;
-            if(id === "admin" && pass === "1234") {
-                alert("Mirësevini!");
-            } else {
-                alert("Gabim!");
-            }
         }
     </script>
 </body>
