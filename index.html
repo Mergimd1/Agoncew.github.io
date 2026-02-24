@@ -28,16 +28,20 @@
         .berber-select { border: 1px solid #e5e7eb; padding: 15px; border-radius: 15px; margin-bottom: 8px; font-weight: bold; cursor: pointer; text-align: center; background: white; }
         .berber-select.selected { border-color: #111827; background: #f9fafb; border-width: 2px; }
 
-        .date-chip { min-width: 65px; height: 75px; border: 1px solid #e5e7eb; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 10px; cursor: pointer; background: white; }
-        .date-chip.selected { background: #111827; color: white; border-color: #111827; }
-
-        .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; background: white; }
-        .time-slot.busy { background: #fee2e2; color: #ef4444; border-color: #fecaca; text-decoration: line-through; opacity: 0.6; pointer-events: none; }
-        .time-slot.selected { background: #111827; color: white; }
-
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 25px; max-height: 90vh; overflow-y: auto; }
+
+        /* Stili i ri per Membership Card */
+        .gold-card {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            color: #fbbf24;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
 
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 11px; font-weight: bold; cursor: pointer; }
@@ -46,6 +50,10 @@
         .vazhdo-btn { background: #111827; color: white; width: 100%; padding: 18px; border-radius: 15px; font-weight: bold; margin-top: 10px; opacity: 0.3; pointer-events: none; }
         .vazhdo-btn.active { opacity: 1; pointer-events: auto; background: #ef4444; }
         
+        .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; background: white; }
+        .time-slot.busy { background: #fee2e2; color: #ef4444; border-color: #fecaca; text-decoration: line-through; opacity: 0.6; pointer-events: none; }
+        .time-slot.selected { background: #111827; color: white; }
+
         .hidden { display: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
@@ -74,15 +82,52 @@
         </div>
     </main>
 
-    <div id="view-membership" class="hidden p-6 bg-white min-h-screen">
-        <h2 class="text-center font-bold text-slate-800 mb-6 text-xl">Membership Mujor</h2>
-        <input type="text" placeholder="Emri" class="member-input">
-        <input type="text" placeholder="Mbiemri" class="member-input">
-        <input type="tel" placeholder="Numri i Telefonit" class="member-input">
-        <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 text-center italic">Zgjedh Berberin</p>
-        <div class="berber-select selected" onclick="selectMemberBerber(this)">Agon Tahiri</div>
-        <div class="berber-select" onclick="selectMemberBerber(this)">Leonis Gashi</div>
-        <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-bold mt-6 shadow-lg uppercase tracking-widest">Dërgo Kërkesën</button>
+    <div id="view-membership" class="hidden p-6 bg-gray-50 min-h-screen">
+        <div class="gold-card">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-crown text-4xl mb-2"></i>
+                <h2 class="text-2xl font-black uppercase italic tracking-widest">Gold Member</h2>
+                <div class="h-1 w-20 bg-amber-400 mx-auto mt-1 rounded-full"></div>
+            </div>
+            
+            <div class="space-y-3 mt-6">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-check-circle text-amber-400"></i>
+                    <span class="text-white font-bold text-sm">3 Qethje në muaj</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-check-circle text-amber-400"></i>
+                    <span class="text-white font-bold text-sm">Zbritje në produkte</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-check-circle text-amber-400"></i>
+                    <span class="text-white font-bold text-sm">Termine prioritare</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-check-circle text-amber-400"></i>
+                    <span class="text-white font-bold text-sm">Rezervim pa pritje</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-check-circle text-amber-400"></i>
+                    <span class="text-white font-bold text-sm">Oferta speciale</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-[30px] shadow-sm">
+            <h3 class="text-center font-black uppercase text-gray-400 text-xs tracking-widest mb-6">Aplikoni tani</h3>
+            <input type="text" placeholder="Emri" class="member-input">
+            <input type="text" placeholder="Mbiemri" class="member-input">
+            <input type="tel" placeholder="Numri i Telefonit" class="member-input">
+            
+            <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 text-center italic">Zgjedh Berberin e preferuar</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="berber-select selected" onclick="selectMemberBerber(this)">Agon</div>
+                <div class="berber-select" onclick="selectMemberBerber(this)">Leonis</div>
+            </div>
+
+            <button onclick="alert('Kërkesa për Gold Membership u dërgua!')" class="w-full bg-amber-500 text-white py-5 rounded-2xl font-black mt-6 shadow-lg uppercase tracking-widest">Bëhu Gold Member</button>
+        </div>
     </div>
 
     <div id="view-terminet" class="hidden p-6">
@@ -108,59 +153,36 @@
 
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-body">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-8">
                 <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
                 <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
             </div>
             
             <div id="step1">
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s1" onclick="setService('Qethje', 's1')">
-                    <div>
-                        <span class="font-bold block">Qethje</span>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase"><i class="fa-regular fa-clock"></i> 30 Minuta</span>
-                    </div>
+                    <div><span class="font-bold block">Qethje</span><span class="text-[10px] text-gray-400 font-bold uppercase">30 Min</span></div>
                     <span class="text-slate-800 font-black text-lg">5€</span>
                 </div>
-                
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s2" onclick="setService('Qethje + Rroje', 's2')">
-                    <div>
-                        <span class="font-bold block">Qethje + Rroje</span>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase"><i class="fa-regular fa-clock"></i> 35 Minuta</span>
-                    </div>
+                    <div><span class="font-bold block">Qethje + Rroje</span><span class="text-[10px] text-gray-400 font-bold uppercase">35 Min</span></div>
                     <span class="text-slate-800 font-black text-lg">6€</span>
                 </div>
-                
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s3" onclick="setService('Mjekërr', 's3')">
-                    <div>
-                        <span class="font-bold block">Mjekërr</span>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase"><i class="fa-regular fa-clock"></i> 15 Minuta</span>
-                    </div>
+                    <div><span class="font-bold block">Mjekërr</span><span class="text-[10px] text-gray-400 font-bold uppercase">15 Min</span></div>
                     <span class="text-slate-800 font-black text-lg">4€</span>
                 </div>
-                
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s4" onclick="setService('Frizurë', 's4')">
-                    <div>
-                        <span class="font-bold block">Frizurë</span>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase"><i class="fa-regular fa-clock"></i> 5 Minuta</span>
-                    </div>
+                    <div><span class="font-bold block">Frizurë</span><span class="text-[10px] text-gray-400 font-bold uppercase">5 Min</span></div>
                     <span class="text-slate-800 font-black text-lg">2€</span>
                 </div>
-                
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s5" onclick="setService('Ngjyrosje', 's5')">
-                    <div>
-                        <span class="font-bold block">Ngjyrosje</span>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase"><i class="fa-regular fa-clock"></i> 25 Minuta</span>
-                    </div>
+                    <div><span class="font-bold block">Ngjyrosje</span><span class="text-[10px] text-gray-400 font-bold uppercase">25 Min</span></div>
                     <span class="text-slate-800 font-black text-lg">10€</span>
                 </div>
-
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s6" onclick="setService('Fëmijë (Nën 8 vjeç)', 's6')">
-                    <div>
-                        <span class="font-bold block">Fëmijë (Nën 8 vjeç)</span>
-                    </div>
+                    <div><span class="font-bold block">Fëmijë (Nën 8 vjeç)</span></div>
                     <span class="text-slate-800 font-black text-lg">4€</span>
                 </div>
-
                 <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
 
@@ -194,11 +216,7 @@
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
         }
 
-        function openBooking() { 
-            document.getElementById('bookingModal').classList.add('active'); 
-            goStep(1); 
-        }
-
+        function openBooking() { document.getElementById('bookingModal').classList.add('active'); goStep(1); }
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
         function goStep(n) {
@@ -206,22 +224,21 @@
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step'+n).classList.remove('hidden');
-            
-            if(n == 1) document.getElementById('modalTitle').innerText = 'Zgjedh Shërbimin';
-            else if(n == 2) document.getElementById('modalTitle').innerText = 'Zgjedh Berberin';
-            else if(n == 3) { document.getElementById('modalTitle').innerText = 'Zgjedh Kohën'; buildSchedule(); }
+            if(n==1) document.getElementById('modalTitle').innerText = 'Zgjedh Shërbimin';
+            else if(n==2) document.getElementById('modalTitle').innerText = 'Zgjedh Berberin';
+            else if(n==3) { document.getElementById('modalTitle').innerText = 'Zgjedh Kohën'; buildSchedule(); }
         }
 
         function setService(s, id) {
             booking.s = s;
-            document.querySelectorAll('#step1 div.border-2').forEach(d => { d.style.borderColor = '#e5e7eb'; });
+            document.querySelectorAll('#step1 div.border-2').forEach(d => d.style.borderColor = '#e5e7eb');
             document.getElementById(id).style.borderColor = '#111827';
             document.getElementById('v1').classList.add('active');
         }
 
         function setB(b, id) {
             booking.b = b;
-            document.querySelectorAll('#step2 div.border-2').forEach(d => { d.style.borderColor = '#e5e7eb'; });
+            document.querySelectorAll('#step2 div.border-2').forEach(d => d.style.borderColor = '#e5e7eb');
             document.getElementById(id).style.borderColor = '#111827';
             document.getElementById('v2').classList.add('active');
         }
@@ -229,7 +246,6 @@
         function buildSchedule() {
             const daysContainer = document.getElementById('cal-days'); daysContainer.innerHTML = '';
             const days = ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'];
-            
             days.forEach(day => {
                 let d = document.createElement('div');
                 d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
@@ -237,10 +253,8 @@
                 d.onclick = () => { booking.d = day; buildSchedule(); };
                 daysContainer.appendChild(d);
             });
-
             const grid = document.getElementById('time-grid'); grid.innerHTML = '';
             let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            
             for(let h=9; h<=20; h++) {
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
@@ -258,19 +272,16 @@
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
             if(!n || !booking.t || !booking.b || !booking.s) return alert("Plotësoni të gjitha fushët!");
-            
             let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
             db.push({ ...booking, name: n, phone: p, id: Date.now() });
             localStorage.setItem('db_barber', JSON.stringify(db));
-            
             alert("Rezervimi u krye me sukses!");
             location.reload();
         }
 
         function handleLogin() {
             let id = document.getElementById('uID').value;
-            let pass = document.getElementById('uPass').value;
-            if(users[id] === pass) {
+            if(users[id] === document.getElementById('uPass').value) {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('staff-dash').classList.remove('hidden');
                 document.getElementById('staff-name').innerText = "Berberi: " + id;
@@ -311,3 +322,4 @@
     </script>
 </body>
 </html>
+
