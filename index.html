@@ -9,10 +9,9 @@
     <style>
         body { background-color: #f8f9fa; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; margin: 0; }
         
-        /* Header Style */
         .header-bg { 
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070'); 
-            background-size: cover; background-position: center; height: 240px; 
+            background-size: cover; background-position: center; height: 220px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
             border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
         }
@@ -20,29 +19,38 @@
         /* Home Cards */
         .home-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 0 20px; margin-top: -40px; }
         .home-card { 
-            background: white; border-radius: 25px; padding: 30px 10px; 
+            background: white; border-radius: 25px; padding: 25px 10px; 
             display: flex; flex-direction: column; align-items: center; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.06); cursor: pointer;
         }
 
-        /* Membership Elements */
-        .m-input { width: 100%; padding: 15px; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 12px; outline: none; background: #fff; }
-        
+        /* Inputs & Selectors */
+        .m-input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 10px; outline: none; background: #fff; font-size: 14px; }
+        .m-input:focus { border-color: #111827; }
+
         .b-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 10px; }
-        .b-opt { border: 1px solid #e2e8f0; padding: 15px; border-radius: 15px; font-weight: bold; text-align: center; cursor: pointer; background: white; font-size: 14px; }
+        .b-opt { border: 1px solid #e2e8f0; padding: 12px; border-radius: 15px; font-weight: bold; text-align: center; cursor: pointer; background: white; font-size: 13px; }
         .b-opt.selected { border-color: #111827; background: #111827; color: white; }
         
-        .d-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
-        .d-card { min-width: 70px; padding: 15px 10px; border: 1px solid #e2e8f0; border-radius: 15px; text-align: center; background: white; cursor: pointer; }
-        .d-card.active { background: #111827; color: white; border-color: #111827; }
+        /* Date & Time Scroll */
+        .scroll-x { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
+        .item-card { min-width: 65px; padding: 12px 8px; border: 1px solid #e2e8f0; border-radius: 15px; text-align: center; background: white; cursor: pointer; }
+        .item-card.active { background: #111827; color: white; border-color: #111827; }
+        .item-card span { display: block; font-size: 10px; text-transform: uppercase; font-weight: bold; opacity: 0.6; }
+        .item-card b { font-size: 16px; }
 
-        /* Gold Plan Card */
+        /* Time Grid */
+        .time-grid { display: grid; grid-template-cols: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+        .time-item { padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center; font-weight: bold; font-size: 13px; cursor: pointer; background: white; }
+        .time-item.active { background: #111827; color: white; }
+
+        /* Gold Plan */
         .gold-plan-card { 
             background: white; border: 2px solid #fbbf24; border-radius: 30px; padding: 25px; 
             margin-top: 25px; box-shadow: 0 15px 35px rgba(251, 191, 36, 0.15);
         }
 
-        /* Bottom Navigation */
+        /* Navigation */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer; }
         .nav-item.active { color: #111827; }
@@ -54,41 +62,43 @@
 <body class="pb-28">
 
     <header id="main-header" class="header-bg">
-        <h1 class="text-4xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
-        <p class="text-[10px] tracking-[5px] opacity-90 uppercase mt-2">Rezervo termin pa pritje</p>
+        <h1 class="text-3xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
+        <p class="text-[9px] tracking-[4px] opacity-90 uppercase mt-1">Rezervo termin pa pritje</p>
     </header>
 
     <main id="view-home">
         <div class="home-grid">
-            <div class="home-card" onclick="alert('Hapet rezervimi...')">
+            <div class="home-card" onclick="alert('Rezervimi Standard hapet së shpejti...')">
                 <div class="bg-blue-50 p-4 rounded-full mb-3 text-blue-600"><i class="fa-regular fa-calendar-check text-2xl"></i></div>
-                <span class="text-xs font-bold uppercase tracking-wider">Rezervo</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Rezervo</span>
             </div>
             
             <div class="home-card" onclick="switchPage('membership')">
                 <div class="bg-amber-50 p-4 rounded-full mb-3 text-amber-500"><i class="fa-solid fa-crown text-2xl"></i></div>
-                <span class="text-xs font-bold uppercase tracking-wider">Membership</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Membership</span>
             </div>
 
             <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="alert('Së shpejti...')">
                 <i class="fa-solid fa-cart-shopping text-emerald-500 text-2xl"></i>
-                <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
     </main>
 
     <div id="view-membership" class="hidden p-6">
         <div class="flex items-center mb-6">
-            <button onclick="switchPage('home')" class="text-xl mr-4"><i class="fa-solid fa-arrow-left"></i></button>
+            <button onclick="switchPage('home')" class="text-xl mr-4"><i class="fa-solid fa-arrow-left text-slate-400"></i></button>
             <h2 class="font-black text-slate-800 text-xl uppercase italic">Membership Mujor</h2>
         </div>
         
-        <p class="text-[10px] font-bold uppercase text-gray-400 mb-3 ml-2 tracking-widest">Informacioni i Anëtarit</p>
-        <input type="text" placeholder="Emri" class="m-input">
-        <input type="text" placeholder="Mbiemri" class="m-input">
-        <input type="tel" placeholder="Numri i Telefonit" class="m-input">
+        <div class="mb-6">
+            <p class="text-[9px] font-bold uppercase text-gray-400 mb-2 ml-1 tracking-widest">Të dhënat personale</p>
+            <input type="text" placeholder="Emri" class="m-input">
+            <input type="text" placeholder="Mbiemri" class="m-input">
+            <input type="tel" placeholder="Numri i Telefonit" class="m-input">
+        </div>
 
-        <p class="text-[10px] font-bold uppercase text-gray-400 mt-6 mb-3 text-center tracking-widest">Zgjedh Berberin</p>
+        <p class="text-[9px] font-bold uppercase text-gray-400 mb-2 text-center tracking-widest">Zgjedh Berberin</p>
         <div class="b-grid mb-6">
             <div class="b-opt selected" onclick="selectItem(this, 'b-opt')">Agon Tahiri</div>
             <div class="b-opt" onclick="selectItem(this, 'b-opt')">Leonis Gashi</div>
@@ -96,48 +106,68 @@
             <div class="b-opt" onclick="selectItem(this, 'b-opt')">Dori</div>
         </div>
 
-        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 text-center tracking-widest">Datat dhe oret</p>
-        <div class="d-scroll no-scrollbar">
-            <div class="d-card active" onclick="selectItem(this, 'd-card')"><span>mar</span><b>24</b></div>
-            <div class="d-card" onclick="selectItem(this, 'd-card')"><span>mër</span><b>25</b></div>
-            <div class="d-card" onclick="selectItem(this, 'd-card')"><span>enj</span><b>26</b></div>
-            <div class="d-card" onclick="selectItem(this, 'd-card')"><span>pre</span><b>27</b></div>
+        <p class="text-[9px] font-bold uppercase text-gray-400 mb-1 text-center tracking-widest">Zgjedh Datën</p>
+        <div class="scroll-x no-scrollbar">
+            <div class="item-card active" onclick="selectItem(this, 'item-card')"><span>mar</span><b>24</b></div>
+            <div class="item-card" onclick="selectItem(this, 'item-card')"><span>mër</span><b>25</b></div>
+            <div class="item-card" onclick="selectItem(this, 'item-card')"><span>enj</span><b>26</b></div>
+            <div class="item-card" onclick="selectItem(this, 'item-card')"><span>pre</span><b>27</b></div>
+            <div class="item-card" onclick="selectItem(this, 'item-card')"><span>sht</span><b>28</b></div>
+        </div>
+
+        <p class="text-[9px] font-bold uppercase text-gray-400 mt-4 mb-2 text-center tracking-widest">Zgjedh Orarin</p>
+        <div class="time-grid mb-6">
+            <div class="time-item active" onclick="selectItem(this, 'time-item')">09:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">10:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">11:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">13:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">14:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">15:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">16:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">17:00</div>
+            <div class="time-item" onclick="selectItem(this, 'time-item')">18:00</div>
         </div>
 
         <div class="gold-plan-card">
             <h3 class="text-amber-600 font-black text-2xl italic uppercase text-center">PLAN GOLD</h3>
-            <p class="text-center text-xs font-bold text-gray-500 mb-6">GOLD MEMBER - 25€ / Muaj</p>
+            <p class="text-center text-[10px] font-bold text-gray-400 mb-6 tracking-widest">PREMIUM MEMBER - 25€ / Muaj</p>
             
-            <p class="text-[11px] font-bold uppercase text-gray-400 mb-4 tracking-tighter">Përfitimet:</p>
             <ul class="space-y-3 mb-8">
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-check text-amber-500"></i> 3 Qethje në muaj
+                    <i class="fa-solid fa-circle-check text-amber-500"></i> 3 Qethje në muaj
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-check text-amber-500"></i> Zbritje në produkte
+                    <i class="fa-solid fa-circle-check text-amber-500"></i> Zbritje në produkte
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-check text-amber-500"></i> Termine prioritare
+                    <i class="fa-solid fa-circle-check text-amber-500"></i> Termine prioritare
                 </li>
                 <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-check text-amber-500"></i> Rezervim pa pritje
-                </li>
-                <li class="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                    <i class="fa-solid fa-check text-amber-500"></i> Oferta speciale
+                    <i class="fa-solid fa-circle-check text-amber-500"></i> Rezervim pa pritje
                 </li>
             </ul>
 
-            <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-black shadow-lg uppercase tracking-widest active:scale-95 transition-transform">
+            <button onclick="alert('Kërkesa u dërgua me sukses!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-black shadow-lg uppercase tracking-widest active:scale-95 transition-transform">
                 Bëhu Gold Member
             </button>
         </div>
     </div>
 
-    <div id="view-terminet" class="hidden p-6">
-        <h2 class="text-center font-bold text-xl mb-6">Hyrja për Staf</h2>
-        <input type="text" placeholder="ID" class="m-input">
-        <input type="password" placeholder="Fjalëkalimi" class="m-input">
-        <button class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase mt-4">Kyçu</button>
+    <div id="view-terminet" class="hidden p-8">
+        <div class="bg-white rounded-[35px] shadow-sm p-8 text-center mt-10">
+            <div class="bg-slate-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-user-lock text-slate-400 text-3xl"></i>
+            </div>
+            <h2 class="font-black text-slate-800 text-xl uppercase italic mb-6 tracking-tight">Hyrja për Staf</h2>
+            
+            <input type="text" id="staffID" placeholder="ID e Stafit" class="m-input">
+            <input type="password" id="staffPass" placeholder="Fjalëkalimi" class="m-input">
+            
+            <button onclick="loginStaff()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest mt-4 shadow-xl active:scale-95 transition-all">
+                Kyçu
+            </button>
+            <p class="text-[10px] text-gray-400 mt-6 uppercase font-bold tracking-widest">Vetëm për personelin e autorizuar</p>
+        </div>
     </div>
 
     <nav class="bottom-nav">
@@ -145,7 +175,7 @@
             <i class="fa-solid fa-house text-xl mb-1"></i><span>Ballina</span>
         </div>
         <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item">
-            <i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span>
+            <i class="fa-regular fa-calendar-days text-xl mb-1"></i><span>Terminet</span>
         </div>
     </nav>
 
@@ -156,32 +186,43 @@
             document.getElementById('view-membership').classList.add('hidden');
             document.getElementById('view-terminet').classList.add('hidden');
             
-            // Shfaq vetëm faqen që duam
-            document.getElementById('view-'+p).classList.remove('hidden');
+            // Shfaq faqen e zgjedhur
+            const targetPage = document.getElementById('view-'+p);
+            if(targetPage) targetPage.classList.remove('hidden');
             
-            // Rregullo menunë poshtë
+            // Rregullo menunë e navigimit
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(p === 'home' || p === 'terminet') {
-                document.getElementById('nav-'+p).classList.add('active');
+                const navBtn = document.getElementById('nav-'+p);
+                if(navBtn) navBtn.classList.add('active');
             }
 
-            // Shfaq ose fshih header-in me foto
+            // Shfaq header-in vetëm në Ballinë
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
             
-            // Shko në fillim të faqes
             window.scrollTo(0,0);
         }
 
-        // Funksion për të zgjedhur berberin ose datën
         function selectItem(el, className) {
             document.querySelectorAll('.' + className).forEach(item => {
                 item.classList.remove('selected');
                 item.classList.remove('active');
             });
             if(className === 'b-opt') el.classList.add('selected');
-            if(className === 'd-card') el.classList.add('active');
+            else el.classList.add('active');
+        }
+
+        function loginStaff() {
+            const id = document.getElementById('staffID').value;
+            const pass = document.getElementById('staffPass').value;
+            
+            if(id === "admin" && pass === "1234") {
+                alert("Mirësevini! Duke hapur listën e termineve...");
+                // Këtu mund të hapësh një faqe tjetër me listën e termineve
+            } else {
+                alert("ID ose Fjalëkalimi i pasaktë!");
+            }
         }
     </script>
 </body>
 </html>
-
