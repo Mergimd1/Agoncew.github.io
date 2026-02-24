@@ -1,42 +1,22 @@
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agoni Barber</title>
+<header>
+<h1>AGONI BARBER</h1>
+<p>Rezervo termin pa pritje</p>
+</header>
 
-<style>
-body{
-  font-family:Arial;
-  margin:0;
-  background:#f2f2f2;
-  padding:20px;
-}
-.card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  margin-top:20px;
-}
-button{
-  padding:10px;
-  background:#e63946;
-  border:none;
-  color:white;
-  border-radius:8px;
-}
-.message{
-  margin-top:10px;
-}
-</style>
-</head>
-<body>
-
-<h2>Agoni Barber</h2>
+<div class="container">
 
 <div class="card">
-<input type="text" id="name" placeholder="Emri"><br><br>
-<input type="date" id="date"><br><br>
+<h3>Shërbimet</h3>
+<p>💈 Qethje - 5€</p>
+<p>💈 Qethje + Rroje - 6€</p>
+<p>💈 Styling - 2€</p>
+</div>
+
+<div class="card">
+<h3>Rezervo Termin</h3>
+
+<input type="text" id="name" placeholder="Emri">
+<input type="date" id="date">
 
 <select id="time">
 <option value="">Zgjidh orën</option>
@@ -44,63 +24,20 @@ button{
 <option>09:30</option>
 <option>10:00</option>
 <option>10:30</option>
-</select><br><br>
+<option>11:00</option>
+<option>11:30</option>
+</select>
 
-<button onclick="reserve()">Rezervo</button>
+<button onclick="reserve()">Rezervo Tani</button>
 
-<p id="message" class="message"></p>
+<p id="message"></p>
 </div>
 
-<!-- Firebase v8 Stable -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</div>
 
-<script>
-try {
-
-  var firebaseConfig = {
-    apiKey: "AIzaSyAvOR7GVNRjoSHwRlmiJsMptnodnlhTL-k",
-    authDomain: "agonibarber.firebaseapp.com",
-    projectId: "agonibarber"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  var db = firebase.firestore();
-
-  function reserve(){
-
-    var name = document.getElementById("name").value;
-    var date = document.getElementById("date").value;
-    var time = document.getElementById("time").value;
-    var message = document.getElementById("message");
-
-    if(!name || !date || !time){
-      message.innerHTML="Plotëso të gjitha fushat!";
-      message.style.color="red";
-      return;
-    }
-
-    db.collection("appointments").add({
-      name:name,
-      date:date,
-      time:time,
-      createdAt:new Date()
-    })
-    .then(function(){
-      message.innerHTML="Rezervimi u ruajt me sukses!";
-      message.style.color="green";
-    })
-    .catch(function(error){
-      message.innerHTML="Gabim: "+error.message;
-      message.style.color="red";
-    });
-
-  }
-
-} catch(e) {
-  console.log("Firebase error:", e);
-}
-</script>
-
-</body>
-</html>
+<div class="navbar">
+<div>🏠 Ballina</div>
+<div>💈 Shërbimet</div>
+<div>📅 Terminet</div>
+<div>📞 Kontakt</div>
+</div>
