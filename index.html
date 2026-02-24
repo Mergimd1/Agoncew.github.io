@@ -1,189 +1,85 @@
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agoni Barber - Booking System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .app-bg { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=500'); background-size: cover; background-position: center; height: 180px; }
-        .card { background: white; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s; cursor: pointer; border: 1px solid #eee; }
-        .card:active { transform: scale(0.96); }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: flex-end; justify-content: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; width: 100%; max-width: 500px; border-top-left-radius: 25px; border-top-right-radius: 25px; max-height: 90vh; overflow-y: auto; padding-bottom: 30px; }
-        .time-slot { border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; font-weight: 500; }
-        .time-slot.selected { background: #1e293b; color: white; border-color: #1e293b; }
-        .gold-footer { background: #f59e0b; color: white; width: 100%; padding: 18px; text-align: center; font-weight: bold; font-size: 14px; border-radius: 20px 20px 0 0; }
-        .service-item { border: 2px solid #f3f4f6; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .service-item.selected { border-color: #1e293b; background: #f8fafc; }
-    </style>
-</head>
-<body class="pb-24">
+<script type="module">
 
-    <div class="app-bg flex flex-col items-center justify-center text-white text-center">
-        <h1 class="text-3xl font-black tracking-tighter">AGONI BARBER</h1>
-        <p class="text-xs opacity-80 uppercase tracking-widest mt-1">Rezervo termin online</p>
-    </div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    <div class="p-5 grid grid-cols-2 gap-4 -mt-8">
-        <div class="card p-6 flex flex-col items-center space-y-3" onclick="startBooking()">
-            <i class="fa-regular fa-calendar-plus text-3xl text-slate-800"></i>
-            <span class="font-bold text-gray-700 text-sm">Rezervo</span>
-        </div>
-        <div class="card p-6 flex flex-col items-center space-y-3" onclick="openLogin()">
-            <i class="fa-solid fa-user-tie text-3xl text-blue-600"></i>
-            <span class="font-bold text-gray-700 text-sm">Panel i Berberit</span>
-        </div>
-    </div>
+const firebaseConfig = {
+  apiKey: "AIzaSyAvOR7GVNRjoSHwRlmiJsMptnodnlhTL-k",
+  authDomain: "agonibarber.firebaseapp.com",
+  projectId: "agonibarber",
+  storageBucket: "agonibarber.firebasestorage.app",
+  messagingSenderId: "195737259673",
+  appId: "1:195737259673:web:a129ea0024d0802e173208"
+};
 
-    <div id="bookingModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="stepTitle" class="text-xl font-extrabold text-slate-800">Zgjidh Shërbimin</h2>
-                <button onclick="closeModal('bookingModal')" class="text-3xl text-gray-400">&times;</button>
-            </div>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-            <div id="step1" class="step">
-                <div class="service-item" onclick="selectService('Qethje', 5, 30)">
-                    <div class="flex justify-between font-bold"><span>Qethje</span> <span>5€</span></div>
-                    <div class="text-xs text-gray-500">Kohëzgjatja: 30 min</div>
-                </div>
-                <div class="service-item" onclick="selectService('Qethje + Rroje', 6, 40)">
-                    <div class="flex justify-between font-bold"><span>Qethje + Rroje</span> <span>6€</span></div>
-                    <div class="text-xs text-gray-500">Kohëzgjatja: 40 min</div>
-                </div>
-                <div class="service-item" onclick="selectService('Ngjyrosje', 10, 60)">
-                    <div class="flex justify-between font-bold"><span>Ngjyrosje</span> <span>10€</span></div>
-                    <div class="text-xs text-gray-500">Kohëzgjatja: 60 min</div>
-                </div>
-                <div class="service-item" onclick="selectService('Rregullim Flokësh', 2, 10)">
-                    <div class="flex justify-between font-bold"><span>Rregullim Flokësh</span> <span>2€</span></div>
-                    <div class="text-xs text-gray-500">Kohëzgjatja: 10 min</div>
-                </div>
-            </div>
+const dateInput = document.getElementById("date");
+const timeSelect = document.getElementById("time");
 
-            <div id="step2" class="step hidden space-y-3">
-                <div class="service-item" onclick="selectBarber('Agon Tahiri') font-bold">Agon Tahiri</div>
-                <div class="service-item" onclick="selectBarber('Leonis Gashi') font-bold">Leonis Gashi</div>
-                <div class="service-item" onclick="selectBarber('Enisi') font-bold">Enisi</div>
-                <div class="service-item" onclick="selectBarber('Dori') font-bold">Dori</div>
-            </div>
+const allTimes = [
+"09:00","09:30","10:00","10:30","11:00","11:30",
+"12:00","13:00","14:00","15:00","16:00"
+];
 
-            <div id="step3" class="step hidden">
-                <div class="grid grid-cols-3 gap-2 mb-6" id="timeGrid">
-                    </div>
-                <input id="clientName" type="text" placeholder="Emri juaj" class="w-full border p-4 rounded-xl mb-3 outline-none focus:border-slate-800">
-                <button onclick="finalConfirm()" class="w-full bg-slate-800 text-white font-bold py-4 rounded-xl uppercase tracking-widest">Përfundo Rezervimin</button>
-            </div>
-        </div>
-    </div>
+dateInput.addEventListener("change", async () => {
 
-    <div id="loginModal" class="modal">
-        <div class="modal-content p-8">
-            <h2 class="text-2xl font-bold mb-6 text-center">Kyçja e Berberit</h2>
-            <input id="loginID" type="text" placeholder="ID e Berberit" class="w-full border p-4 rounded-xl mb-3">
-            <input id="loginPass" type="password" placeholder="Fjalëkalimi" class="w-full border p-4 rounded-xl mb-6">
-            <button onclick="checkLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl uppercase">Kyçu</button>
-            <button onclick="closeModal('loginModal')" class="w-full mt-2 text-gray-500 py-2">Mbyll</button>
-        </div>
-    </div>
+  const selectedDate = dateInput.value;
 
-    <div class="fixed bottom-0 left-0 right-0">
-        <div class="gold-footer">★ JU JENI GOLD MEMBER</div>
-    </div>
+  const q = query(
+    collection(db,"appointments"),
+    where("date","==",selectedDate)
+  );
 
-    <script>
-        let bookingData = { service: '', price: 0, duration: 0, barber: '', time: '', client: '' };
-        const barbers = {
-            "Agon": "Goni32",
-            "Leonis": "321123",
-            "enis": "311211",
-            "Dori": "332233"
-        };
+  const querySnapshot = await getDocs(q);
 
-        function startBooking() {
-            showStep(1);
-            openModal('bookingModal');
-        }
+  const takenTimes = [];
+  querySnapshot.forEach(doc=>{
+    takenTimes.push(doc.data().time);
+  });
 
-        function showStep(s) {
-            document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
-            document.getElementById('step' + s).classList.remove('hidden');
-            if(s === 1) document.getElementById('stepTitle').innerText = "Zgjidh Shërbimin";
-            if(s === 2) document.getElementById('stepTitle').innerText = "Zgjidh Berberin";
-            if(s === 3) {
-                document.getElementById('stepTitle').innerText = "Zgjidh Kohën";
-                generateTimes();
-            }
-        }
+  timeSelect.innerHTML="";
 
-        function selectService(name, price, duration) {
-            bookingData.service = name;
-            bookingData.price = price;
-            bookingData.duration = duration;
-            showStep(2);
-        }
+  allTimes.forEach(time=>{
+    if(!takenTimes.includes(time)){
+      const option=document.createElement("option");
+      option.value=time;
+      option.textContent=time;
+      timeSelect.appendChild(option);
+    }
+  });
 
-        function selectBarber(name) {
-            bookingData.barber = name;
-            showStep(3);
-        }
+});
 
-        function generateTimes() {
-            const grid = document.getElementById('timeGrid');
-            grid.innerHTML = '';
-            for(let h = 9; h <= 20; h++) {
-                for(let m of ['00', '30']) {
-                    let t = `${h < 10 ? '0'+h : h}:${m}`;
-                    let div = document.createElement('div');
-                    div.className = 'time-slot';
-                    div.innerText = t;
-                    div.onclick = function() {
-                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                        this.classList.add('selected');
-                        bookingData.time = t;
-                    };
-                    grid.appendChild(div);
-                }
-            }
-        }
+window.reserve = async function(){
 
-        function finalConfirm() {
-            bookingData.client = document.getElementById('clientName').value;
-            if(!bookingData.client || !bookingData.time) return alert("Plotësoni emrin dhe zgjidhni kohën!");
-            
-            // Ruajmë porosinë në memorien e telefonit (Local Storage)
-            let appointments = JSON.parse(localStorage.getItem('appointments') || "[]");
-            appointments.push(bookingData);
-            localStorage.setItem('appointments', JSON.stringify(appointments));
+  const service = document.getElementById("service").value;
+  const date = dateInput.value;
+  const time = timeSelect.value;
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const message = document.getElementById("message");
 
-            alert(`Sukses! ${bookingData.client}, rezervimi u krye për ${bookingData.service} me ${bookingData.barber} në orën ${bookingData.time}.`);
-            location.reload();
-        }
+  if(!date || !name || !phone){
+    message.innerHTML="Plotëso të gjitha fushat!";
+    message.className="message error";
+    return;
+  }
 
-        function openLogin() { openModal('loginModal'); }
+  await addDoc(collection(db,"appointments"),{
+    service,
+    date,
+    time,
+    name,
+    phone,
+    createdAt:new Date()
+  });
 
-        function checkLogin() {
-            const id = document.getElementById('loginID').value;
-            const pass = document.getElementById('loginPass').value;
+  message.innerHTML="Rezervimi u krye me sukses!";
+  message.className="message success";
 
-            if(barbers[id] && barbers[id] === pass) {
-                alert("Mirëseerdhe " + id + "!");
-                // Këtu mund të shfaqim listën e terminëve për këtë berber
-                let all = JSON.parse(localStorage.getItem('appointments') || "[]");
-                let mine = all.filter(a => a.barber.includes(id));
-                console.log("Terminet e tu:", mine);
-                alert("Keni " + mine.length + " terminë të rinj. Shih 'Console' për detaje (për këtë demo).");
-            } else {
-                alert("ID ose Password gabim!");
-            }
-        }
+  dateInput.dispatchEvent(new Event("change"));
+}
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    </script>
-</body>
-</html>
+</script>
