@@ -70,10 +70,7 @@
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
-        <div class="mx-5 mt-8 bg-gradient-to-r from-amber-400 to-amber-600 text-white p-5 rounded-2xl text-center font-bold tracking-widest shadow-xl">
-            <i class="fa-solid fa-star mr-2"></i> JU JENI GOLD MEMBER
-        </div>
-    </main>
+        </main>
 
     <div id="view-membership" class="hidden p-6">
         <h2 class="text-2xl font-black mb-6">Zgjidh Pakon</h2>
@@ -152,7 +149,6 @@
     <script>
         let booking = { s: '', b: '', d: 'Mar 24', t: '' };
         
-        // Llogarite e stafit
         const users = { 
             "Agon": "Goni30", 
             "Leonis": "leo12", 
@@ -254,7 +250,7 @@
             }
 
             container.innerHTML = mine.map(a => `
-                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md">
+                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md mb-4">
                     <div class="flex justify-between items-start mb-3">
                         <div><b>${a.name}</b><p class="text-xs text-gray-500">${a.s}</p></div>
                         <div class="text-right"><b>${a.t}</b><p class="text-xs text-gray-400">${a.d}</p></div>
@@ -273,151 +269,6 @@
             let filtered = all.filter(a => a.id !== id);
             localStorage.setItem('db_barber', JSON.stringify(filtered));
             loadStaffAppointments(barberName);
-        }
-    </script>
-</body>
-</html>
-        </div>
-        <div id="staff-dash" class="hidden">
-            <div class="flex justify-between items-center mb-6"><h2 id="staff-name" class="font-bold text-xl text-slate-800"></h2><button onclick="location.reload()" class="text-red-500 font-bold">Dil</button></div>
-            <div id="list-app" class="space-y-4"></div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <div onclick="switchPage('home')" id="nav-home" class="nav-item active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Ballina</span></div>
-        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item"><i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span></div>
-    </nav>
-
-    <div id="bookingModal" class="modal-overlay">
-        <div class="modal-body">
-            <div class="flex justify-between items-center mb-8">
-                <h2 id="modalTitle" class="font-black text-xl uppercase tracking-tighter">Zgjedh Shërbimin</h2>
-                <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
-            </div>
-            
-            <div id="step1">
-                <div class="service-item" id="s1" onclick="setS('Qethje', 's1')">
-                    <div><b class="text-lg">Qethje</b><p class="text-xs text-gray-400">5€ - 30 minuta</p></div>
-                    <i class="fa-solid fa-chevron-right text-gray-300"></i>
-                </div>
-                <div class="service-item" id="s2" onclick="setS('Qethje + Rroje', 's2')">
-                    <div><b class="text-lg">Qethje + Rroje</b><p class="text-xs text-gray-400">6€ - 40 minuta</p></div>
-                    <i class="fa-solid fa-chevron-right text-gray-300"></i>
-                </div>
-                <div class="service-item" id="s3" onclick="setS('Styler', 's3')">
-                    <div><b class="text-lg">Styler</b><p class="text-xs text-gray-400">2€ - 10 minuta</p></div>
-                    <i class="fa-solid fa-chevron-right text-gray-300"></i>
-                </div>
-                <div class="service-item" id="s4" onclick="setS('Ngjyrosje', 's4')">
-                    <div><b class="text-lg">Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 30 minuta</p></div>
-                    <i class="fa-solid fa-chevron-right text-gray-300"></i>
-                </div>
-                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
-            </div>
-
-            <div id="step2" class="hidden">
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold text-lg" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold text-lg" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
-                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
-            </div>
-
-            <div id="step3" class="hidden">
-                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2" id="cal-days"></div>
-                <div class="grid grid-cols-3 gap-3 mb-6" id="time-grid"></div>
-                <input type="text" id="cName" placeholder="Emri juaj" class="w-full p-4 border rounded-2xl mb-3 outline-none focus:border-slate-900">
-                <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-2xl mb-4 outline-none focus:border-slate-900">
-                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg">Konfirmo Rezervimin</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let booking = { s: '', b: '', d: 'Mar 24', t: '' };
-        const users = { "Agon":"Goni30", "Leonis":"leo12" };
-
-        function switchPage(p) {
-            ['home', 'membership', 'terminet'].forEach(v => { if(document.getElementById('view-'+v)) document.getElementById('view-'+v).classList.add('hidden'); });
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-'+p).classList.remove('hidden');
-            document.getElementById('nav-'+p).classList.add('active');
-            document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
-        }
-
-        function openBooking(special = null) {
-            booking.s = special || '';
-            document.getElementById('bookingModal').classList.add('active');
-            goStep(special ? 2 : 1);
-        }
-
-        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
-
-        function goStep(n) {
-            [1,2,3].forEach(s => document.getElementById('step'+s).classList.add('hidden'));
-            document.getElementById('step'+n).classList.remove('hidden');
-            document.getElementById('modalTitle').innerText = n==1 ? 'Zgjedh Shërbimin' : n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
-            if(n === 3) buildSchedule();
-        }
-
-        function setS(s, id) {
-            booking.s = s;
-            document.querySelectorAll('.service-item').forEach(d => d.classList.remove('selected'));
-            document.getElementById(id).classList.add('selected');
-            document.getElementById('v1').classList.add('active');
-        }
-
-        function setB(b, id) {
-            booking.b = b;
-            document.querySelectorAll('#step2 div').forEach(d => d.style.borderColor = '#f3f4f6');
-            document.getElementById(id).style.borderColor = '#111827';
-            document.getElementById('v2').classList.add('active');
-        }
-
-        function buildSchedule() {
-            const days = document.getElementById('cal-days'); days.innerHTML = '';
-            ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'].forEach(day => {
-                let d = document.createElement('div');
-                d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
-                d.innerText = day;
-                d.onclick = () => { booking.d = day; buildSchedule(); };
-                days.appendChild(d);
-            });
-
-            const grid = document.getElementById('time-grid'); grid.innerHTML = '';
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            for(let h=9; h<=20; h++) {
-                for(let m of ['00', '30']) {
-                    let t = `${h<10?'0'+h:h}:${m}`;
-                    let isBusy = db.some(a => a.b === booking.b && a.d === booking.d && a.t === t);
-                    let slot = document.createElement('div');
-                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${booking.t === t ? 'selected' : ''}`;
-                    slot.innerText = t;
-                    if(!isBusy) slot.onclick = () => { booking.t = t; buildSchedule(); };
-                    grid.appendChild(slot);
-                }
-            }
-        }
-
-        function confirmApp() {
-            let n = document.getElementById('cName').value;
-            let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t) return alert("Plotësoni të dhënat!");
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            db.push({ ...booking, name: n, phone: p });
-            localStorage.setItem('db_barber', JSON.stringify(db));
-            alert("Rezervimi u krye me sukses!"); location.reload();
-        }
-
-        function handleLogin() {
-            let id = document.getElementById('uID').value;
-            let pass = document.getElementById('uPass').value;
-            if(users[id] === pass) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('staff-dash').classList.remove('hidden');
-                document.getElementById('staff-name').innerText = "Mirësevejen, " + id;
-                let mine = JSON.parse(localStorage.getItem('db_barber') || "[]").filter(a => a.b.includes(id));
-                document.getElementById('list-app').innerHTML = mine.map(a => `<div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md"><b>${a.name}</b><br><small class="text-gray-500">${a.s} | ${a.d} @ ${a.t}</small><br><a href="tel:${a.phone}" class="text-blue-600 font-bold">${a.phone}</a></div>`).join('');
-            } else alert("ID ose Fjalëkalimi i gabuar!");
         }
     </script>
 </body>
