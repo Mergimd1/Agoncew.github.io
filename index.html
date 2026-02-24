@@ -24,7 +24,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer;
         }
 
-        /* Membership Styles */
         .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: white; }
         .berber-select { border: 1px solid #e5e7eb; padding: 15px; border-radius: 15px; margin-bottom: 8px; font-weight: bold; cursor: pointer; text-align: center; background: white; }
         .berber-select.selected { border-color: #111827; background: #f9fafb; border-width: 2px; }
@@ -73,40 +72,17 @@
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
-        </main>
+    </main>
 
     <div id="view-membership" class="hidden p-6 bg-white min-h-screen">
         <h2 class="text-center font-bold text-slate-800 mb-6 text-xl">Membership Mujor</h2>
-        <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 ml-1">Informacioni i Anëtarit</p>
         <input type="text" placeholder="Emri" class="member-input">
         <input type="text" placeholder="Mbiemri" class="member-input">
         <input type="tel" placeholder="Numri i Telefonit" class="member-input">
-
         <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 text-center italic">Zgjedh Berberin</p>
         <div class="berber-select selected" onclick="selectMemberBerber(this)">Agon Tahiri</div>
         <div class="berber-select" onclick="selectMemberBerber(this)">Leonis Gashi</div>
-
-        <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 ml-1">Data e Fillimit:</p>
-        <div class="flex overflow-x-auto pb-4 no-scrollbar">
-            <div class="date-chip selected" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">mar</span><b class="text-lg">24</b></div>
-            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">mër</span><b class="text-lg">25</b></div>
-            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">enj</span><b class="text-lg">26</b></div>
-            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">pre</span><b class="text-lg">27</b></div>
-            <div class="date-chip" onclick="selectMemberDate(this)"><span class="text-[10px] uppercase">sht</span><b class="text-lg">28</b></div>
-        </div>
-
-        <div class="text-center mt-6 p-5 border rounded-2xl">
-            <h3 class="text-[#f0544f] font-black text-2xl uppercase italic tracking-tighter">Plan Gold</h3>
-            <p class="font-bold text-slate-700">GOLD MEMBER - 25€ / Muaj</p>
-            <div class="mt-4 space-y-2 text-sm text-gray-500 text-left px-2 border-t pt-4">
-                <p>• 3 Qethje në muaj</p>
-                <p>• Zbritje në produkte</p>
-                <p>• Termine prioritare</p>
-                <p>• Rezervim pa pritje</p>
-                <p>• Oferta speciale</p>
-            </div>
-        </div>
-        <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-bold mt-6 shadow-lg uppercase tracking-widest">Bëhu Gold Member</button>
+        <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-bold mt-6 shadow-lg uppercase tracking-widest">Dërgo Kërkesën</button>
     </div>
 
     <div id="view-terminet" class="hidden p-6">
@@ -150,13 +126,13 @@
                 <div class="grid grid-cols-3 gap-3 mb-6" id="time-grid"></div>
                 <input type="text" id="cName" placeholder="Emri juaj" class="w-full p-4 border rounded-2xl mb-3 outline-none">
                 <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-2xl mb-4 outline-none">
-                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg">Konfirmo Rezervimin</button>
+                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg">Konfirmo</button>
             </div>
         </div>
     </div>
 
     <script>
-        let booking = { s: 'Shërbim Standard', b: '', d: 'Mar 24', t: '' };
+        let booking = { s: 'Qethje Standard', b: '', d: 'Mar 24', t: '' };
         const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
 
         function switchPage(p) {
@@ -169,7 +145,7 @@
 
         function openBooking() { 
             document.getElementById('bookingModal').classList.add('active'); 
-            goStep(2); // Fillojmë direkt nga zgjedhja e berberit
+            goStep(2); 
         }
 
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
@@ -184,35 +160,52 @@
 
         function setB(b, id) {
             booking.b = b;
-            document.querySelectorAll('#step2 div').forEach(d => d.style.borderColor = '#f3f4f6');
+            document.querySelectorAll('#step2 div').forEach(d => { if(d.id) d.style.borderColor = '#f3f4f6'; });
             document.getElementById(id).style.borderColor = '#111827';
             document.getElementById('v2').classList.add('active');
         }
 
         function buildSchedule() {
-            const days = document.getElementById('cal-days'); days.innerHTML = '';
-            ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'].forEach(day => {
+            const daysContainer = document.getElementById('cal-days'); daysContainer.innerHTML = '';
+            const days = ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'];
+            
+            days.forEach(day => {
                 let d = document.createElement('div');
                 d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
                 d.innerText = day;
                 d.onclick = () => { booking.d = day; buildSchedule(); };
-                days.appendChild(d);
+                daysContainer.appendChild(d);
             });
 
             const grid = document.getElementById('time-grid'); grid.innerHTML = '';
+            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            
             for(let h=9; h<=20; h++) {
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
+                    let isBusy = db.some(a => a.b === booking.b && a.d === booking.d && a.t === t);
                     let slot = document.createElement('div');
-                    slot.className = `time-slot ${booking.t === t ? 'selected' : ''}`;
+                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${booking.t === t ? 'selected' : ''}`;
                     slot.innerText = t;
-                    slot.onclick = () => { booking.t = t; buildSchedule(); };
+                    if(!isBusy) slot.onclick = () => { booking.t = t; buildSchedule(); };
                     grid.appendChild(slot);
                 }
             }
         }
 
-        function confirmApp() { alert("Rezervimi u krye!"); location.reload(); }
+        function confirmApp() {
+            let n = document.getElementById('cName').value;
+            let p = document.getElementById('cPhone').value;
+            if(!n || !booking.t || !booking.b) return alert("Plotësoni të gjitha fushët!");
+            
+            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            db.push({ ...booking, name: n, phone: p, id: Date.now() });
+            localStorage.setItem('db_barber', JSON.stringify(db));
+            
+            alert("Rezervimi u krye me sukses!");
+            location.reload();
+        }
+
         function handleLogin() {
             let id = document.getElementById('uID').value;
             let pass = document.getElementById('uPass').value;
@@ -220,10 +213,41 @@
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('staff-dash').classList.remove('hidden');
                 document.getElementById('staff-name').innerText = "Berberi: " + id;
+                loadStaffAppointments(id);
             } else alert("Gabim!");
         }
+
+        function loadStaffAppointments(barberName) {
+            let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            let mine = all.filter(a => a.b.toLowerCase().includes(barberName.toLowerCase()));
+            const container = document.getElementById('list-app');
+            if(mine.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim.</p>`;
+                return;
+            }
+            container.innerHTML = mine.map(a => `
+                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md mb-4">
+                    <div class="flex justify-between items-start">
+                        <div><b>${a.name}</b><p class="text-xs text-gray-500">${a.s}</p></div>
+                        <div class="text-right"><b>${a.t}</b><p class="text-xs text-gray-400">${a.d}</p></div>
+                    </div>
+                    <div class="flex justify-between mt-3 pt-3 border-t">
+                        <a href="tel:${a.phone}" class="text-blue-600 font-bold">Thirr</a>
+                        <button onclick="deleteApp(${a.id}, '${barberName}')" class="text-red-500 font-bold">Fshije</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteApp(id, barberName) {
+            let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            let filtered = all.filter(a => a.id !== id);
+            localStorage.setItem('db_barber', JSON.stringify(filtered));
+            loadStaffAppointments(barberName);
+        }
+
         function selectMemberBerber(el) { document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); }
-        function selectMemberDate(el) { document.querySelectorAll('.date-chip').forEach(d => d.classList.remove('selected')); el.classList.add('selected'); }
     </script>
 </body>
 </html>
+
