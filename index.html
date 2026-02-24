@@ -1,46 +1,46 @@
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agoni Barber</title>
-
-<style>
-body{
-  font-family:Arial;
-  margin:0;
-  background:#f2f2f2;
-  padding:20px;
-}
-.card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-}
-button{
-  padding:10px;
-  background:#e63946;
-  border:none;
-  color:white;
-  border-radius:8px;
-}
-</style>
-</head>
-<body>
-
-<h2>Agoni Barber</h2>
-
-<div class="card">
-<input type="text" id="name" placeholder="Emri">
-<button onclick="test()">Test Button</button>
-<p id="msg"></p>
-</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
-function test(){
-  document.getElementById("msg").innerHTML="Butoni po funksionon ✅";
+var firebaseConfig = {
+  apiKey: "AIzaSyAvOR7GVNRjoSHwRlmiJsMptnodnlhTL-k",
+  authDomain: "agonibarber.firebaseapp.com",
+  projectId: "agonibarber",
+  storageBucket: "agonibarber.firebasestorage.app",
+  messagingSenderId: "195737259673",
+  appId: "1:195737259673:web:a129ea0024d0802e173208"
+};
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+
+function reserve(){
+
+  var name = document.getElementById("name").value;
+  var date = document.getElementById("date").value;
+  var time = document.getElementById("time").value;
+  var message = document.getElementById("message");
+
+  if(!name || !date || !time){
+    message.innerHTML="Plotëso të gjitha fushat!";
+    message.style.color="red";
+    return;
+  }
+
+  db.collection("appointments").add({
+    name:name,
+    date:date,
+    time:time,
+    createdAt:new Date()
+  })
+  .then(function(){
+    message.innerHTML="Rezervimi u ruajt me sukses!";
+    message.style.color="green";
+  })
+  .catch(function(error){
+    message.innerHTML="Gabim: "+error;
+    message.style.color="red";
+  });
+
 }
 </script>
-
-</body>
-</html>
