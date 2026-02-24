@@ -3,85 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agoni Barber - Full App</title>
+    <title>Agoni Barber</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .active-tab { color: #1e293b; border-top: 3px solid #1e293b; }
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
+        body { background-color: #f8f9fa; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+        .nav-item.active { color: #1e293b; border-top: 3px solid #1e293b; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; max-height: 85vh; overflow-y: auto; }
-        .option-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .option-card { border: 1px solid #eee; border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer; }
         .option-card.selected { border: 2px solid #1e293b; background: #f1f5f9; }
-        .time-box { padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center; cursor: pointer; font-size: 14px; }
+        .time-box { padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center; cursor: pointer; }
         .time-box.busy { background: #fee2e2; color: #ef4444; border-color: #fecaca; cursor: not-allowed; }
         .time-box.selected { background: #1e293b; color: white; }
         .date-item { min-width: 65px; padding: 10px; border-radius: 12px; text-align: center; cursor: pointer; background: #f3f4f6; }
         .date-item.active { background: #1e293b; color: white; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body class="pb-24">
 
-    <div id="page-title" class="p-6 text-center bg-white border-b">
-        <h1 class="text-2xl font-black tracking-tighter italic">AGONI BARBER</h1>
-        <p class="text-xs text-gray-400 uppercase tracking-widest">Rezervo termin pa pritje</p>
+    <div class="p-6 text-center bg-white border-b">
+        <h1 class="text-2xl font-black italic">AGONI BARBER</h1>
+        <p class="text-[10px] text-gray-400 uppercase tracking-[3px]">Rezervo termin pa pritje</p>
     </div>
 
-    <main id="main-content" class="p-4">
-        <div id="view-home" class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white p-8 rounded-2xl shadow-sm border flex flex-col items-center justify-center space-y-3 cursor-pointer" onclick="openBooking()">
-                    <i class="fa-regular fa-calendar-check text-3xl text-slate-800"></i>
-                    <span class="font-bold text-sm">Rezervo Termin</span>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border flex flex-col items-center justify-center space-y-3">
-                    <i class="fa-solid fa-star text-3xl text-red-500"></i>
-                    <span class="font-bold text-sm">Membership</span>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border flex flex-col items-center justify-center space-y-3">
-                    <i class="fa-solid fa-cart-shopping text-3xl text-emerald-500"></i>
-                    <span class="font-bold text-sm">Produktet</span>
-                </div>
+    <main id="view-home" class="p-4 space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border flex flex-col items-center justify-center space-y-3" onclick="openBooking()">
+                <i class="fa-regular fa-calendar-check text-3xl text-slate-800"></i>
+                <span class="font-bold text-sm">Rezervo Termin</span>
             </div>
-            <div class="bg-orange-400 text-white p-4 rounded-xl font-bold text-center tracking-widest mt-10">
-                ★ JU JENI GOLD MEMBER
+            <div class="bg-white p-8 rounded-2xl shadow-sm border flex flex-col items-center justify-center space-y-3">
+                <i class="fa-solid fa-star text-3xl text-red-500"></i>
+                <span class="font-bold text-sm">Membership</span>
             </div>
-        </div>
-
-        <div id="view-terminet" class="hidden">
-            <div id="login-section" class="flex flex-col items-center justify-center py-10 space-y-6">
-                <div class="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-20 opacity-50">
-                </div>
-                <p class="text-gray-500 text-center px-10">Ju lutem kyçuni për të parë terminet tuaja</p>
-                <button onclick="showLoginModal()" class="bg-slate-800 text-white px-10 py-3 rounded-xl font-bold">Kyçu</button>
-            </div>
-            <div id="admin-dashboard" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-bold text-xl" id="welcome-berber">Mirëseerdhe!</h2>
-                    <button onclick="logout()" class="text-red-500 text-sm font-bold">Dil</button>
-                </div>
-                <div id="appointments-list" class="space-y-4">
-                    </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border flex flex-col items-center justify-center space-y-3">
+                <i class="fa-solid fa-cart-shopping text-3xl text-emerald-500"></i>
+                <span class="font-bold text-sm">Produktet</span>
             </div>
         </div>
     </main>
 
+    <main id="view-terminet" class="hidden p-4">
+        <div id="login-section" class="flex flex-col items-center justify-center py-20 space-y-6 text-center">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-user-lock text-3xl text-gray-300"></i>
+            </div>
+            <p class="text-gray-500">Ju lutem kyçuni për të parë terminet tuaja</p>
+            <button onclick="showLogin()" class="bg-slate-800 text-white px-12 py-3 rounded-xl font-bold">Kyçu</button>
+        </div>
+
+        <div id="dashboard" class="hidden space-y-4">
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border">
+                <span id="user-display" class="font-bold"></span>
+                <button onclick="logout()" class="text-red-500 font-bold text-sm">Dil</button>
+            </div>
+            <div id="list-terminet" class="space-y-4"></div>
+        </div>
+    </main>
+
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center py-3 z-50">
-        <div onclick="switchView('home')" class="flex flex-col items-center space-y-1 cursor-pointer transition-all" id="nav-home">
+        <div onclick="switchPage('home')" id="nav-home" class="nav-item active flex flex-col items-center space-y-1">
             <i class="fa-solid fa-house text-xl"></i>
             <span class="text-[10px] font-bold">Ballina</span>
         </div>
-        <div class="flex flex-col items-center space-y-1 text-gray-400 cursor-pointer">
+        <div class="nav-item flex flex-col items-center space-y-1 text-gray-300">
             <i class="fa-solid fa-scissors text-xl"></i>
             <span class="text-[10px] font-bold">Shërbimet</span>
         </div>
-        <div onclick="switchView('terminet')" class="flex flex-col items-center space-y-1 text-gray-400 cursor-pointer transition-all" id="nav-terminet">
+        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item flex flex-col items-center space-y-1 text-gray-400">
             <i class="fa-regular fa-clock text-xl"></i>
             <span class="text-[10px] font-bold">Terminet</span>
         </div>
-        <div class="flex flex-col items-center space-y-1 text-gray-400 cursor-pointer">
+        <div class="nav-item flex flex-col items-center space-y-1 text-gray-400">
             <i class="fa-solid fa-address-book text-xl"></i>
             <span class="text-[10px] font-bold">Kontakt</span>
         </div>
@@ -90,49 +86,37 @@
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-content p-6">
             <div class="flex justify-between items-center mb-6">
-                <h2 id="modalTitle" class="font-bold text-lg text-slate-800">Zgjidh Shërbimin</h2>
+                <h2 id="stepTitle" class="font-bold text-lg">Zgjidh Shërbimin</h2>
                 <button onclick="closeModal('bookingModal')" class="text-2xl text-gray-300">&times;</button>
             </div>
 
             <div id="step1">
-                <div class="option-card" onclick="setService('Qethje', '5€', 35)">
+                <div class="option-card" onclick="selectService('Qethje', '5€')">
                     <div class="flex justify-between font-bold"><span>Qethje</span><span>5€</span></div>
                     <p class="text-xs text-gray-400">35 minuta</p>
                 </div>
-                <div class="option-card" onclick="setService('Qethje + Rroje', '6€', 40)">
+                <div class="option-card" onclick="selectService('Qethje + Rroje', '6€')">
                     <div class="flex justify-between font-bold"><span>Qethje + Rroje</span><span>6€</span></div>
                     <p class="text-xs text-gray-400">40 minuta</p>
                 </div>
-                <div class="option-card" onclick="setService('Styler', '2€', 10)">
-                    <div class="flex justify-between font-bold"><span>Styler</span><span>2€</span></div>
-                    <p class="text-xs text-gray-400">10 minuta</p>
-                </div>
-                <div class="option-card" onclick="setService('Ngjyrosje', '10€', 60)">
-                    <div class="flex justify-between font-bold"><span>Ngjyrosje</span><span>10€</span></div>
-                    <p class="text-xs text-gray-400">60 minuta</p>
-                </div>
-                <button id="btnVazhdo1" disabled class="w-full bg-red-500 text-white py-4 rounded-xl mt-4 opacity-50 font-bold" onclick="goStep(2)">Vazhdo</button>
+                <button id="btn1" disabled class="w-full bg-red-500 text-white py-4 rounded-xl mt-4 opacity-50 font-bold" onclick="showStep(2)">Vazhdo</button>
             </div>
 
             <div id="step2" class="hidden">
-                <div class="option-card text-center font-bold" onclick="setBarber('Agon Tahiri')">Agon Tahiri</div>
-                <div class="option-card text-center font-bold" onclick="setBarber('Leonis Gashi')">Leonis Gashi</div>
-                <div class="option-card text-center font-bold" onclick="setBarber('Enisi')">Enisi</div>
-                <div class="option-card text-center font-bold" onclick="setBarber('Dori')">Dori</div>
-                <button id="btnVazhdo2" disabled class="w-full bg-red-500 text-white py-4 rounded-xl mt-4 opacity-50 font-bold" onclick="goStep(3)">Vazhdo</button>
+                <div class="option-card text-center font-bold" onclick="selectBerber('Agon Tahiri')">Agon Tahiri</div>
+                <div class="option-card text-center font-bold" onclick="selectBerber('Leonis Gashi')">Leonis Gashi</div>
+                <div class="option-card text-center font-bold" onclick="selectBerber('Dori')">Dori</div>
+                <div class="option-card text-center font-bold" onclick="selectBerber('Enisi')">Enisi</div>
+                <button id="btn2" disabled class="w-full bg-red-500 text-white py-4 rounded-xl mt-4 opacity-50 font-bold" onclick="showStep(3)">Vazhdo</button>
             </div>
 
             <div id="step3" class="hidden">
-                <p class="text-xs font-bold text-gray-500 mb-2">Ditët e disponueshme:</p>
-                <div class="flex space-x-2 overflow-x-auto mb-6 pb-2" id="calendar-days">
-                    </div>
-                <p class="text-xs font-bold text-gray-500 mb-2">Orët (e kuqe = e zënë):</p>
-                <div class="grid grid-cols-3 gap-2 mb-6" id="time-grid">
-                    </div>
+                <div class="flex space-x-2 overflow-x-auto mb-6 pb-2" id="cal-days"></div>
+                <div class="grid grid-cols-3 gap-2 mb-6" id="time-grid"></div>
                 <div class="space-y-3">
-                    <input type="text" id="custName" placeholder="Emri juaj" class="w-full border p-3 rounded-xl outline-none focus:ring-1 focus:ring-slate-800">
-                    <input type="tel" id="custPhone" placeholder="Numri i telefonit" class="w-full border p-3 rounded-xl outline-none focus:ring-1 focus:ring-slate-800">
-                    <button onclick="saveBooking()" class="w-full bg-emerald-500 text-white py-4 rounded-xl font-bold uppercase tracking-wider">Konfirmo Terminin</button>
+                    <input type="text" id="cName" placeholder="Emri juaj" class="w-full border p-4 rounded-xl outline-none border-gray-200">
+                    <input type="tel" id="cPhone" placeholder="Numri i telefonit" class="w-full border p-4 rounded-xl outline-none border-gray-200">
+                    <button onclick="finalConfirm()" class="w-full bg-emerald-500 text-white py-4 rounded-xl font-bold uppercase">Konfirmo Terminin</button>
                 </div>
             </div>
         </div>
@@ -140,178 +124,149 @@
 
     <div id="loginModal" class="modal-overlay">
         <div class="modal-content p-8">
-            <div class="flex justify-between mb-6">
-                <h2 class="font-bold text-xl">Mirëseveni në AGONI BARBER</h2>
-                <button onclick="closeModal('loginModal')" class="text-2xl">&times;</button>
+            <div class="flex justify-between mb-4">
+                <h2 class="font-bold text-xl">Mirëseveni</h2>
+                <button onclick="closeModal('loginModal')" class="text-2xl text-gray-300">&times;</button>
             </div>
-            <p class="text-gray-400 text-sm mb-6">Rezervo termin pa pritje</p>
-            <input type="text" id="userID" placeholder="ID e përdoruesit" class="w-full border p-4 rounded-xl mb-4 outline-none">
-            <input type="password" id="userPass" placeholder="Fjalëkalimi" class="w-full border p-4 rounded-xl mb-6 outline-none">
-            <button onclick="doLogin()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-bold">KYÇU</button>
+            <p class="text-gray-400 text-sm mb-6">Kyçuni si berber për të parë terminet</p>
+            <input type="text" id="uID" placeholder="ID e përdoruesit" class="w-full border p-4 rounded-xl mb-4 outline-none">
+            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="w-full border p-4 rounded-xl mb-6 outline-none">
+            <button onclick="loginProcess()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-bold">KYÇU</button>
         </div>
     </div>
 
     <script>
-        let booking = { service: '', price: '', barber: '', date: '', time: '' };
-        let currentBerber = null;
+        let data = { s: '', b: '', d: '23 Shkurt', t: '' };
+        const users = { "Agon":"Goni30", "Leonis":"leo12", "Dori":"dori201", "Enis":"nisi99" };
 
-        // Kredencialet e sakta
-        const accounts = {
-            "Agon": "Goni30",
-            "Leonis": "leo12",
-            "Dori": "dori201",
-            "Enis": "nisi99"
-        };
-
-        // NAVIGIMI
-        function switchView(view) {
+        function switchPage(page) {
             document.getElementById('view-home').classList.add('hidden');
             document.getElementById('view-terminet').classList.add('hidden');
-            document.getElementById('nav-home').classList.remove('active-tab');
-            document.getElementById('nav-terminet').classList.remove('active-tab');
-
-            if(view === 'home') {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active', 'text-slate-800'));
+            
+            if(page === 'home') {
                 document.getElementById('view-home').classList.remove('hidden');
-                document.getElementById('nav-home').classList.add('active-tab');
+                document.getElementById('nav-home').classList.add('active');
             } else {
                 document.getElementById('view-terminet').classList.remove('hidden');
-                document.getElementById('nav-terminet').classList.add('active-tab');
-                if(currentBerber) showDashboard();
+                document.getElementById('nav-terminet').classList.add('active');
             }
         }
 
-        // BOOKING LOGIC
-        function openBooking() {
-            document.getElementById('bookingModal').classList.add('active');
-            goStep(1);
+        function openBooking() { 
+            document.getElementById('bookingModal').classList.add('active'); 
+            showStep(1);
         }
 
-        function goStep(n) {
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function showStep(n) {
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step' + n).classList.remove('hidden');
-            
-            if(n === 1) document.getElementById('modalTitle').innerText = "Zgjidh Shërbimin";
-            if(n === 2) document.getElementById('modalTitle').innerText = "Zgjidh Berberin";
-            if(n === 3) {
-                document.getElementById('modalTitle').innerText = "Zgjidh Datën dhe Orën";
-                buildCalendar();
-            }
+
+            const titles = ["", "Zgjidh Shërbimin", "Zgjidh Berberin", "Zgjidh Datën dhe Orën"];
+            document.getElementById('stepTitle').innerText = titles[n];
+
+            if(n === 3) initCalendar();
         }
 
-        function setService(name, price, mins) {
-            booking.service = name; booking.price = price;
+        function selectService(name, price) {
+            data.s = name;
             document.querySelectorAll('#step1 .option-card').forEach(c => c.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-            document.getElementById('btnVazhdo1').disabled = false;
-            document.getElementById('btnVazhdo1').style.opacity = "1";
+            document.getElementById('btn1').disabled = false;
+            document.getElementById('btn1').classList.remove('opacity-50');
         }
 
-        function setBarber(name) {
-            booking.barber = name;
+        function selectBerber(name) {
+            data.b = name;
             document.querySelectorAll('#step2 .option-card').forEach(c => c.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-            document.getElementById('btnVazhdo2').disabled = false;
-            document.getElementById('btnVazhdo2').style.opacity = "1";
+            document.getElementById('btn2').disabled = false;
+            document.getElementById('btn2').classList.remove('opacity-50');
         }
 
-        function buildCalendar() {
-            const cal = document.getElementById('calendar-days');
+        function initCalendar() {
+            const cal = document.getElementById('cal-days');
             cal.innerHTML = '';
-            const ditet = ['Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'];
-            for(let i = 0; i < 6; i++) {
-                let d = 23 + i;
-                let div = document.createElement('div');
-                div.className = `date-item ${i === 0 ? 'active' : ''}`;
-                div.innerHTML = `<p class="text-[10px] uppercase">${ditet[i] || 'Ditë'}</p><p class="font-bold">${d}</p>`;
-                div.onclick = function() {
-                    document.querySelectorAll('.date-item').forEach(el => el.classList.remove('active'));
+            ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26'].forEach((day, i) => {
+                let d = document.createElement('div');
+                d.className = `date-item ${i===0?'active':''}`;
+                d.innerText = day;
+                d.onclick = function() {
+                    document.querySelectorAll('.date-item').forEach(x => x.classList.remove('active'));
                     this.classList.add('active');
-                    booking.date = `2026-02-${d}`;
-                    generateTimes();
+                    data.d = day;
                 };
-                cal.appendChild(div);
-            }
-            booking.date = "2026-02-23";
-            generateTimes();
-        }
+                cal.appendChild(d);
+            });
 
-        function generateTimes() {
             const grid = document.getElementById('time-grid');
             grid.innerHTML = '';
-            const busy = ["10:00", "11:30"]; // Shembull per te kuqe
-            for(let h = 9; h <= 18; h++) {
-                for(let m of ['00', '30']) {
-                    let t = `${h < 10 ? '0'+h : h}:${m}`;
-                    let isBusy = busy.includes(t);
-                    let div = document.createElement('div');
-                    div.className = `time-box ${isBusy ? 'busy' : ''}`;
-                    div.innerText = t;
-                    if(!isBusy) {
-                        div.onclick = function() {
-                            document.querySelectorAll('.time-box').forEach(b => b.classList.remove('selected'));
-                            this.classList.add('selected');
-                            booking.time = t;
-                        };
-                    }
-                    grid.appendChild(div);
+            const busy = ["10:00", "11:30"];
+            ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00"].forEach(t => {
+                let tb = document.createElement('div');
+                tb.className = `time-box ${busy.includes(t)?'busy':''}`;
+                tb.innerText = t;
+                if(!busy.includes(t)) {
+                    tb.onclick = function() {
+                        document.querySelectorAll('.time-box').forEach(x => x.classList.remove('selected'));
+                        this.classList.add('selected');
+                        data.t = t;
+                    };
                 }
-            }
+                grid.appendChild(tb);
+            });
         }
 
-        function saveBooking() {
-            let name = document.getElementById('custName').value;
-            let phone = document.getElementById('custPhone').value;
-            if(!name || !booking.time) return alert("Plotësoni të gjitha fushat!");
+        function finalConfirm() {
+            let n = document.getElementById('cName').value;
+            let p = document.getElementById('cPhone').value;
+            if(!n || !data.t) return alert("Ju lutem plotësoni emrin dhe zgjidhni orën!");
             
-            let data = { ...booking, name, phone, status: 'Konfirmuar' };
-            let list = JSON.parse(localStorage.getItem('appointments') || "[]");
-            list.push(data);
-            localStorage.setItem('appointments', JSON.stringify(list));
+            let appointments = JSON.parse(localStorage.getItem('db_terminet') || "[]");
+            appointments.push({ ...data, name: n, phone: p });
+            localStorage.setItem('db_terminet', JSON.stringify(appointments));
             
-            alert("Sukses! Termini u rezervua.");
+            alert("Termini u rezervua!");
             location.reload();
         }
 
-        // LOGIN SYSTEM
-        function showLoginModal() { document.getElementById('loginModal').classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function showLogin() { document.getElementById('loginModal').classList.add('active'); }
 
-        function doLogin() {
-            let id = document.getElementById('userID').value;
-            let pass = document.getElementById('userPass').value;
-            if(accounts[id] && accounts[id] === pass) {
-                currentBerber = id;
-                closeModal('loginModal');
-                showDashboard();
+        function loginProcess() {
+            let id = document.getElementById('uID').value;
+            let pass = document.getElementById('uPass').value;
+            if(users[id] && users[id] === pass) {
+                document.getElementById('loginModal').classList.remove('active');
+                loadDashboard(id);
             } else {
-                alert("ID ose Fjalëkalimi i gabuar!");
+                alert("Kredencialet e gabuara!");
             }
         }
 
-        function showDashboard() {
+        function loadDashboard(barber) {
             document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('admin-dashboard').classList.remove('hidden');
-            document.getElementById('welcome-berber').innerText = "Përshëndetje, " + currentBerber;
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('user-display').innerText = "Mirëseerdhe, " + barber;
             
-            let list = JSON.parse(localStorage.getItem('appointments') || "[]");
-            let filtered = list.filter(a => a.barber.includes(currentBerber));
-            let container = document.getElementById('appointments-list');
-            container.innerHTML = filtered.length ? '' : '<p class="text-center text-gray-400 py-10">Nuk ka terminë.</p>';
+            let all = JSON.parse(localStorage.getItem('db_terminet') || "[]");
+            let mine = all.filter(a => a.b.includes(barber));
+            let list = document.getElementById('list-terminet');
+            list.innerHTML = mine.length ? '' : '<p class="text-center py-10 text-gray-400">Nuk ka terminë.</p>';
             
-            filtered.forEach((a, index) => {
-                container.innerHTML += `
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 relative">
-                        <span class="absolute top-4 right-4 bg-orange-100 text-orange-500 text-[10px] font-bold px-2 py-1 rounded-full italic">${a.status}</span>
-                        <h3 class="font-bold text-lg">${a.name}</h3>
-                        <p class="text-sm text-gray-500">${a.service}</p>
-                        <p class="text-sm text-gray-500">${a.date} - ${a.time}</p>
-                        <p class="text-sm text-gray-500">Tel: ${a.phone}</p>
-                        <p class="font-bold text-red-500 mt-2">${a.price}</p>
-                        <div class="flex space-x-2 mt-4">
-                            <button class="flex-1 bg-emerald-500 text-white py-2 rounded-lg text-sm font-bold">Përfundo</button>
-                            <button class="flex-1 bg-red-500 text-white py-2 rounded-lg text-sm font-bold">Anulo</button>
+            mine.forEach(a => {
+                list.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl border shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-lg">${a.name}</h4>
+                                <p class="text-sm text-gray-500">${a.s} - ${a.d} @ ${a.t}</p>
+                                <p class="text-xs text-blue-500 font-bold mt-1">${a.phone}</p>
+                            </div>
+                            <span class="bg-orange-100 text-orange-600 text-[10px] px-2 py-1 rounded font-bold uppercase">Konfirmuar</span>
                         </div>
                     </div>
                 `;
@@ -319,107 +274,6 @@
         }
 
         function logout() { location.reload(); }
-
-        // Inicializimi
-        switchView('home');
-    </script>
-</body>
-</html>
-                        <div class="bg-gray-100 p-3 rounded-lg text-center min-w-[70px]">
-                            <p class="text-[10px] uppercase">Mër</p><p class="font-bold">25</p>
-                        </div>
-                    </div>
-                    
-                    <div class="time-grid" id="orariContainer">
-                        </div>
-
-                    <div class="mt-4 space-y-3">
-                        <input type="text" id="clientName" placeholder="Emri juaj" class="w-full border p-3 rounded-lg outline-none focus:ring-1 focus:ring-slate-400">
-                        <input type="tel" id="clientPhone" placeholder="Numri i telefonit" class="w-full border p-3 rounded-lg outline-none focus:ring-1 focus:ring-slate-400">
-                        <button onclick="confirmAll()" class="w-full bg-emerald-500 text-white font-bold py-4 rounded-lg shadow-lg uppercase text-sm">Konfirmo Terminin</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="gold-bar">★ JU JENI GOLD MEMBER</div>
-
-    <script>
-        let bookingData = { service: '', barber: '', time: '' };
-
-        function openBooking() {
-            document.getElementById('bookingModal').classList.add('active');
-            goStep(1);
-        }
-
-        function closeModal() {
-            document.getElementById('bookingModal').classList.remove('active');
-        }
-
-        function goStep(n) {
-            document.querySelectorAll('.step').forEach(s => s.classList.add('hidden'));
-            if(n === 1) {
-                document.getElementById('stepSherbimi').classList.remove('hidden');
-                document.getElementById('modalTitle').innerText = "Zgjidh Shërbimin";
-            } else if(n === 2) {
-                document.getElementById('stepBerberi').classList.remove('hidden');
-                document.getElementById('modalTitle').innerText = "Zgjidh Berberin";
-            } else if(n === 3) {
-                document.getElementById('stepOra').classList.remove('hidden');
-                document.getElementById('modalTitle').innerText = "Zgjidh Datën dhe Orën";
-                generateTimes();
-            }
-        }
-
-        function selectSherbim(el, name, price, time) {
-            document.querySelectorAll('#stepSherbimi .option-item').forEach(i => i.classList.remove('selected'));
-            el.classList.add('selected');
-            bookingData.service = name;
-            document.getElementById('btnVazhdo1').classList.add('active');
-        }
-
-        function selectBerber(el, name) {
-            document.querySelectorAll('#stepBerberi .option-item').forEach(i => i.classList.remove('selected'));
-            el.classList.add('selected');
-            bookingData.barber = name;
-            document.getElementById('btnVazhdo2').classList.add('active');
-        }
-
-        function generateTimes() {
-            const container = document.getElementById('orariContainer');
-            container.innerHTML = '';
-            // Oraret fiktive per te treguar te zetat (busy)
-            const busyTimes = ["10:00", "11:30", "14:00", "16:30"];
-            
-            for(let h = 9; h <= 18; h++) {
-                for(let m of ['00', '30']) {
-                    const t = h + ":" + m;
-                    const isBusy = busyTimes.includes(t);
-                    const div = document.createElement('div');
-                    div.className = `time-box ${isBusy ? 'busy' : ''}`;
-                    div.innerText = t;
-                    if(!isBusy) {
-                        div.onclick = function() {
-                            document.querySelectorAll('.time-box').forEach(b => b.classList.remove('selected'));
-                            this.classList.add('selected');
-                            bookingData.time = t;
-                        };
-                    }
-                    container.appendChild(div);
-                }
-            }
-        }
-
-        function confirmAll() {
-            const name = document.getElementById('clientName').value;
-            if(!name || !bookingData.time) {
-                alert("Ju lutem plotësoni të gjitha fushat!");
-                return;
-            }
-            alert("Sukses!\nTermini u rezervua me sukses.\nShërbimi: " + bookingData.service + "\nBerberi: " + bookingData.barber + "\nOra: " + bookingData.time);
-            closeModal();
-        }
     </script>
 </body>
 </html>
