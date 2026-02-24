@@ -24,15 +24,9 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer;
         }
 
-        .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: white; }
-        .berber-select { border: 1px solid #e5e7eb; padding: 15px; border-radius: 15px; margin-bottom: 8px; font-weight: bold; cursor: pointer; text-align: center; background: white; }
-        .berber-select.selected { border-color: #111827; background: #f9fafb; border-width: 2px; }
-
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 25px; max-height: 90vh; overflow-y: auto; }
-
-        /* Stili i ri per Membership Card */
+        .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: white; font-weight: bold; }
+        
+        /* Gold Card Style */
         .gold-card {
             background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
             color: #fbbf24;
@@ -43,16 +37,23 @@
             border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
+        .berber-select { border: 1px solid #e5e7eb; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; text-align: center; background: white; transition: 0.2s; }
+        .berber-select.selected { border-color: #fbbf24; background: #fffbeb; color: #b45309; box-shadow: 0 0 0 2px #fbbf24; }
+
+        .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; background: white; }
+        .time-slot.selected { background: #111827; color: white; border-color: #111827; }
+        .time-slot.busy { background: #fee2e2; color: #ef4444; border-color: #fecaca; text-decoration: line-through; opacity: 0.6; pointer-events: none; }
+
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 11px; font-weight: bold; cursor: pointer; }
         .nav-item.active { color: #111827; }
 
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 25px; max-height: 90vh; overflow-y: auto; }
+
         .vazhdo-btn { background: #111827; color: white; width: 100%; padding: 18px; border-radius: 15px; font-weight: bold; margin-top: 10px; opacity: 0.3; pointer-events: none; }
         .vazhdo-btn.active { opacity: 1; pointer-events: auto; background: #ef4444; }
-        
-        .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; background: white; }
-        .time-slot.busy { background: #fee2e2; color: #ef4444; border-color: #fecaca; text-decoration: line-through; opacity: 0.6; pointer-events: none; }
-        .time-slot.selected { background: #111827; color: white; }
 
         .hidden { display: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -87,46 +88,35 @@
             <div class="text-center mb-4">
                 <i class="fa-solid fa-crown text-4xl mb-2"></i>
                 <h2 class="text-2xl font-black uppercase italic tracking-widest">Gold Member</h2>
-                <div class="h-1 w-20 bg-amber-400 mx-auto mt-1 rounded-full"></div>
             </div>
-            
-            <div class="space-y-3 mt-6">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-check-circle text-amber-400"></i>
-                    <span class="text-white font-bold text-sm">3 Qethje në muaj</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-check-circle text-amber-400"></i>
-                    <span class="text-white font-bold text-sm">Zbritje në produkte</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-check-circle text-amber-400"></i>
-                    <span class="text-white font-bold text-sm">Termine prioritare</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-check-circle text-amber-400"></i>
-                    <span class="text-white font-bold text-sm">Rezervim pa pritje</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-check-circle text-amber-400"></i>
-                    <span class="text-white font-bold text-sm">Oferta speciale</span>
-                </div>
+            <div class="grid grid-cols-2 gap-2 text-[11px] font-bold uppercase">
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>3 Qethje / muaj</span></div>
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Zbritje Produkte</span></div>
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Prioritet</span></div>
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Pa pritje</span></div>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-[30px] shadow-sm">
-            <h3 class="text-center font-black uppercase text-gray-400 text-xs tracking-widest mb-6">Aplikoni tani</h3>
-            <input type="text" placeholder="Emri" class="member-input">
-            <input type="text" placeholder="Mbiemri" class="member-input">
-            <input type="tel" placeholder="Numri i Telefonit" class="member-input">
-            
-            <p class="text-[10px] font-bold uppercase text-gray-400 mt-4 mb-3 text-center italic">Zgjedh Berberin e preferuar</p>
-            <div class="grid grid-cols-2 gap-2">
-                <div class="berber-select selected" onclick="selectMemberBerber(this)">Agon</div>
-                <div class="berber-select" onclick="selectMemberBerber(this)">Leonis</div>
+        <div class="bg-white p-5 rounded-[25px] shadow-sm mb-6">
+            <h3 class="text-center font-black uppercase text-gray-400 text-[10px] tracking-widest mb-4">Të dhënat tuaja</h3>
+            <input type="text" id="mName" placeholder="Emri & Mbiemri" class="member-input">
+            <input type="tel" id="mPhone" placeholder="Numri i Telefonit" class="member-input">
+
+            <p class="text-[10px] font-black uppercase text-gray-400 mt-4 mb-3 text-center italic">Zgjedh Berberin Preferuar</p>
+            <div class="grid grid-cols-2 gap-2 mb-6">
+                <div class="berber-select" onclick="selectMB('Agon Tahiri', this)">Agon</div>
+                <div class="berber-select" onclick="selectMB('Leonis Gashi', this)">Leonis</div>
+                <div class="berber-select" onclick="selectMB('Dori', this)">Dori</div>
+                <div class="berber-select" onclick="selectMB('Enis', this)">Enis</div>
             </div>
 
-            <button onclick="alert('Kërkesa për Gold Membership u dërgua!')" class="w-full bg-amber-500 text-white py-5 rounded-2xl font-black mt-6 shadow-lg uppercase tracking-widest">Bëhu Gold Member</button>
+            <div id="membership-schedule" class="hidden border-t pt-4">
+                <p class="text-[10px] font-black uppercase text-gray-400 mb-3 text-center italic">Cakto terminin e parë</p>
+                <div class="flex space-x-3 overflow-x-auto mb-4 pb-2 no-scrollbar" id="m-cal-days"></div>
+                <div class="grid grid-cols-3 gap-2" id="m-time-grid"></div>
+            </div>
+
+            <button onclick="confirmGold()" class="w-full bg-amber-500 text-white py-5 rounded-2xl font-black mt-6 shadow-lg uppercase tracking-widest">Bëhu Gold Member</button>
         </div>
     </div>
 
@@ -153,11 +143,10 @@
 
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-body">
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-between items-center mb-6">
                 <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
                 <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
             </div>
-            
             <div id="step1">
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s1" onclick="setService('Qethje', 's1')">
                     <div><span class="font-bold block">Qethje</span><span class="text-[10px] text-gray-400 font-bold uppercase">30 Min</span></div>
@@ -185,7 +174,6 @@
                 </div>
                 <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
-
             <div id="step2" class="hidden">
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
@@ -193,7 +181,6 @@
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
                 <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
             </div>
-
             <div id="step3" class="hidden">
                 <div class="flex space-x-3 overflow-x-auto mb-6 pb-2 no-scrollbar" id="cal-days"></div>
                 <div class="grid grid-cols-3 gap-3 mb-6" id="time-grid"></div>
@@ -206,10 +193,11 @@
 
     <script>
         let booking = { s: '', b: '', d: 'Mar 24', t: '' };
+        let mBooking = { s: 'Membership Gold', b: '', d: 'Mar 24', t: '' };
         const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
 
         function switchPage(p) {
-            ['home', 'membership', 'terminet'].forEach(v => { if(document.getElementById('view-'+v)) document.getElementById('view-'+v).classList.add('hidden'); });
+            ['home', 'membership', 'terminet'].forEach(v => document.getElementById('view-'+v).classList.add('hidden'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('view-'+p).classList.remove('hidden');
             if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
@@ -220,13 +208,17 @@
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
         function goStep(n) {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.add('hidden');
+            ['step1', 'step2', 'step3'].forEach(s => document.getElementById(s).classList.add('hidden'));
             document.getElementById('step'+n).classList.remove('hidden');
-            if(n==1) document.getElementById('modalTitle').innerText = 'Zgjedh Shërbimin';
-            else if(n==2) document.getElementById('modalTitle').innerText = 'Zgjedh Berberin';
-            else if(n==3) { document.getElementById('modalTitle').innerText = 'Zgjedh Kohën'; buildSchedule(); }
+            if(n==3) buildSchedule('cal-days', 'time-grid', booking);
+        }
+
+        function selectMB(berber, el) {
+            mBooking.b = berber;
+            document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('membership-schedule').classList.remove('hidden');
+            buildSchedule('m-cal-days', 'm-time-grid', mBooking);
         }
 
         function setService(s, id) {
@@ -243,26 +235,26 @@
             document.getElementById('v2').classList.add('active');
         }
 
-        function buildSchedule() {
-            const daysContainer = document.getElementById('cal-days'); daysContainer.innerHTML = '';
+        function buildSchedule(calId, gridId, obj) {
+            const daysContainer = document.getElementById(calId); daysContainer.innerHTML = '';
             const days = ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'];
             days.forEach(day => {
                 let d = document.createElement('div');
-                d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
+                d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${obj.d === day ? 'bg-slate-900 text-white' : ''}`;
                 d.innerText = day;
-                d.onclick = () => { booking.d = day; buildSchedule(); };
+                d.onclick = () => { obj.d = day; buildSchedule(calId, gridId, obj); };
                 daysContainer.appendChild(d);
             });
-            const grid = document.getElementById('time-grid'); grid.innerHTML = '';
+            const grid = document.getElementById(gridId); grid.innerHTML = '';
             let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
             for(let h=9; h<=20; h++) {
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
-                    let isBusy = db.some(a => a.b === booking.b && a.d === booking.d && a.t === t);
+                    let isBusy = db.some(a => a.b === obj.b && a.d === obj.d && a.t === t);
                     let slot = document.createElement('div');
-                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${booking.t === t ? 'selected' : ''}`;
+                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${obj.t === t ? 'selected' : ''}`;
                     slot.innerText = t;
-                    if(!isBusy) slot.onclick = () => { booking.t = t; buildSchedule(); };
+                    if(!isBusy) slot.onclick = () => { obj.t = t; buildSchedule(calId, gridId, obj); };
                     grid.appendChild(slot);
                 }
             }
@@ -272,11 +264,24 @@
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
             if(!n || !booking.t || !booking.b || !booking.s) return alert("Plotësoni të gjitha fushët!");
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            db.push({ ...booking, name: n, phone: p, id: Date.now() });
-            localStorage.setItem('db_barber', JSON.stringify(db));
+            saveToDb(booking, n, p);
             alert("Rezervimi u krye me sukses!");
             location.reload();
+        }
+
+        function confirmGold() {
+            let n = document.getElementById('mName').value;
+            let p = document.getElementById('mPhone').value;
+            if(!n || !p || !mBooking.b || !mBooking.t) return alert("Plotësoni emrin, zgjedhni berberin dhe orarin!");
+            saveToDb(mBooking, n, p);
+            alert("Urime! Tani jeni Gold Member. Termini i parë u rezervua!");
+            location.reload();
+        }
+
+        function saveToDb(obj, name, phone) {
+            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
+            db.push({ ...obj, name: name, phone: phone, id: Date.now() });
+            localStorage.setItem('db_barber', JSON.stringify(db));
         }
 
         function handleLogin() {
@@ -293,14 +298,10 @@
             let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
             let mine = all.filter(a => a.b.toLowerCase().includes(barberName.toLowerCase()));
             const container = document.getElementById('list-app');
-            if(mine.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim.</p>`;
-                return;
-            }
-            container.innerHTML = mine.map(a => `
+            container.innerHTML = mine.length ? mine.map(a => `
                 <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md mb-4">
                     <div class="flex justify-between items-start">
-                        <div><b>${a.name}</b><p class="text-xs text-gray-500">${a.s}</p></div>
+                        <div><b>${a.name}</b><p class="text-[10px] text-gray-500 font-bold uppercase">${a.s}</p></div>
                         <div class="text-right"><b>${a.t}</b><p class="text-xs text-gray-400">${a.d}</p></div>
                     </div>
                     <div class="flex justify-between mt-3 pt-3 border-t">
@@ -308,18 +309,14 @@
                         <button onclick="deleteApp(${a.id}, '${barberName}')" class="text-red-500 font-bold">Fshije</button>
                     </div>
                 </div>
-            `).join('');
+            `).join('') : `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim.</p>`;
         }
 
         function deleteApp(id, barberName) {
             let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            let filtered = all.filter(a => a.id !== id);
-            localStorage.setItem('db_barber', JSON.stringify(filtered));
+            localStorage.setItem('db_barber', JSON.stringify(all.filter(a => a.id !== id)));
             loadStaffAppointments(barberName);
         }
-
-        function selectMemberBerber(el) { document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); }
     </script>
 </body>
 </html>
-
