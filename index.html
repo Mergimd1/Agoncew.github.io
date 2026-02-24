@@ -32,12 +32,6 @@
         .date-chip { min-width: 65px; height: 75px; border: 1px solid #e5e7eb; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 10px; cursor: pointer; background: white; }
         .date-chip.selected { background: #111827; color: white; border-color: #111827; }
 
-        .service-item {
-            padding: 16px; border: 2px solid #f3f4f6; border-radius: 15px; 
-            margin-bottom: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-        }
-        .service-item.selected { border-color: #111827; background-color: #f9fafb; }
-
         .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; background: white; }
         .time-slot.busy { background: #fee2e2; color: #ef4444; border-color: #fecaca; text-decoration: line-through; opacity: 0.6; pointer-events: none; }
         .time-slot.selected { background: #111827; color: white; }
@@ -79,21 +73,10 @@
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
-
-        <div class="px-5 mt-8 space-y-4">
-            <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white p-5 rounded-2xl text-center font-bold shadow-lg">
-                ★ JU JENI GOLD MEMBER
-            </div>
-            <input type="tel" id="homePhoneCheck" placeholder="Nr. Telefonit" class="w-full p-5 bg-white border border-gray-100 rounded-2xl shadow-sm outline-none text-center font-bold text-lg focus:border-emerald-400 transition-all">
-            <button onclick="checkMembership()" class="w-full bg-[#10b981] text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl active:scale-95 transition-transform">
-                Konfirmo
-            </button>
-        </div>
-    </main>
+        </main>
 
     <div id="view-membership" class="hidden p-6 bg-white min-h-screen">
         <h2 class="text-center font-bold text-slate-800 mb-6 text-xl">Membership Mujor</h2>
-        
         <p class="text-[10px] font-bold uppercase text-gray-400 mb-2 ml-1">Informacioni i Anëtarit</p>
         <input type="text" placeholder="Emri" class="member-input">
         <input type="text" placeholder="Mbiemri" class="member-input">
@@ -115,7 +98,6 @@
         <div class="text-center mt-6 p-5 border rounded-2xl">
             <h3 class="text-[#f0544f] font-black text-2xl uppercase italic tracking-tighter">Plan Gold</h3>
             <p class="font-bold text-slate-700">GOLD MEMBER - 25€ / Muaj</p>
-            
             <div class="mt-4 space-y-2 text-sm text-gray-500 text-left px-2 border-t pt-4">
                 <p>• 3 Qethje në muaj</p>
                 <p>• Zbritje në produkte</p>
@@ -124,10 +106,7 @@
                 <p>• Oferta speciale</p>
             </div>
         </div>
-
-        <button onclick="alert('Kërkesa për Membership u dërgua me sukses!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-bold mt-6 shadow-lg uppercase tracking-widest">
-            Bëhu Gold Member
-        </button>
+        <button onclick="alert('Kërkesa u dërgua!')" class="w-full bg-[#f0544f] text-white py-5 rounded-2xl font-bold mt-6 shadow-lg uppercase tracking-widest">Bëhu Gold Member</button>
     </div>
 
     <div id="view-terminet" class="hidden p-6">
@@ -154,27 +133,11 @@
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-body">
             <div class="flex justify-between items-center mb-8">
-                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
+                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Berberin</h2>
                 <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
             </div>
             
-            <div id="step1">
-                <div class="service-item" id="s1" onclick="setS('Qethje', 's1')">
-                    <div><b class="text-lg">Qethje</b><p class="text-xs text-gray-400">5€ - 30 minuta</p></div>
-                </div>
-                <div class="service-item" id="s2" onclick="setS('Qethje + Rroje', 's2')">
-                    <div><b class="text-lg">Qethje + Rroje</b><p class="text-xs text-gray-400">6€ - 40 minuta</p></div>
-                </div>
-                <div class="service-item" id="s3" onclick="setS('Styler', 's3')">
-                    <div><b class="text-lg">Styler</b><p class="text-xs text-gray-400">2€ - 10 minuta</p></div>
-                </div>
-                <div class="service-item" id="s4" onclick="setS('Ngjyrosje', 's4')">
-                    <div><b class="text-lg">Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 30 minuta</p></div>
-                </div>
-                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
-            </div>
-
-            <div id="step2" class="hidden">
+            <div id="step2">
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
                 <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
@@ -193,7 +156,7 @@
     </div>
 
     <script>
-        let booking = { s: '', b: '', d: 'Mar 24', t: '' };
+        let booking = { s: 'Shërbim Standard', b: '', d: 'Mar 24', t: '' };
         const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
 
         function switchPage(p) {
@@ -204,38 +167,19 @@
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
         }
 
-        // Funksionet për Membership
-        function selectMemberBerber(el) {
-            document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
+        function openBooking() { 
+            document.getElementById('bookingModal').classList.add('active'); 
+            goStep(2); // Fillojmë direkt nga zgjedhja e berberit
         }
 
-        function selectMemberDate(el) {
-            document.querySelectorAll('.date-chip').forEach(d => d.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        function checkMembership() {
-            const phone = document.getElementById('homePhoneCheck').value;
-            if(phone) alert("Po verifikojmë statusin Gold për numrin: " + phone);
-            else alert("Shënoni numrin e telefonit!");
-        }
-
-        function openBooking() { document.getElementById('bookingModal').classList.add('active'); goStep(1); }
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
         function goStep(n) {
-            [1,2,3].forEach(s => document.getElementById('step'+s).classList.add('hidden'));
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
             document.getElementById('step'+n).classList.remove('hidden');
-            document.getElementById('modalTitle').innerText = n==1 ? 'Zgjedh Shërbimin' : n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
+            document.getElementById('modalTitle').innerText = n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
             if(n === 3) buildSchedule();
-        }
-
-        function setS(s, id) {
-            booking.s = s;
-            document.querySelectorAll('.service-item').forEach(d => d.classList.remove('selected'));
-            document.getElementById(id).classList.add('selected');
-            document.getElementById('v1').classList.add('active');
         }
 
         function setB(b, id) {
@@ -269,7 +213,6 @@
         }
 
         function confirmApp() { alert("Rezervimi u krye!"); location.reload(); }
-
         function handleLogin() {
             let id = document.getElementById('uID').value;
             let pass = document.getElementById('uPass').value;
@@ -277,181 +220,10 @@
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('staff-dash').classList.remove('hidden');
                 document.getElementById('staff-name').innerText = "Berberi: " + id;
-                loadStaffAppointments(id);
             } else alert("Gabim!");
         }
-
-        function loadStaffAppointments(barberName) {
-            const container = document.getElementById('list-app');
-            container.innerHTML = `<p class="text-center text-gray-400 py-10 italic">Nuk ka rezervime të reja.</p>`;
-        }
-    </script>
-</body>
-</html>
-        <div class="modal-body">
-            <div class="flex justify-between items-center mb-8">
-                <h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2>
-                <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
-            </div>
-            
-            <div id="step1">
-                <div class="service-item" id="s1" onclick="setS('Qethje', 's1')">
-                    <div><b class="text-lg">Qethje</b><p class="text-xs text-gray-400">5€ - 30 minuta</p></div>
-                </div>
-                <div class="service-item" id="s2" onclick="setS('Qethje + Rroje', 's2')">
-                    <div><b class="text-lg">Qethje + Rroje</b><p class="text-xs text-gray-400">6€ - 40 minuta</p></div>
-                </div>
-                <div class="service-item" id="s3" onclick="setS('Styler', 's3')">
-                    <div><b class="text-lg">Styler</b><p class="text-xs text-gray-400">2€ - 10 minuta</p></div>
-                </div>
-                <div class="service-item" id="s4" onclick="setS('Ngjyrosje', 's4')">
-                    <div><b class="text-lg">Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 30 minuta</p></div>
-                </div>
-                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
-            </div>
-
-            <div id="step2" class="hidden">
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
-                <div class="p-5 border-2 rounded-2xl mb-4 text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
-                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
-            </div>
-
-            <div id="step3" class="hidden">
-                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2" id="cal-days"></div>
-                <div class="grid grid-cols-3 gap-3 mb-6" id="time-grid"></div>
-                <input type="text" id="cName" placeholder="Emri juaj" class="w-full p-4 border rounded-2xl mb-3 outline-none focus:border-slate-900">
-                <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-2xl mb-4 outline-none focus:border-slate-900">
-                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg">Konfirmo Rezervimin</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let booking = { s: '', b: '', d: 'Mar 24', t: '' };
-        
-        const users = { 
-            "Agon": "Goni30", 
-            "Leonis": "leo12", 
-            "Dori": "dori201", 
-            "Enis": "nisi99" 
-        };
-
-        function switchPage(p) {
-            ['home', 'membership', 'terminet'].forEach(v => { if(document.getElementById('view-'+v)) document.getElementById('view-'+v).classList.add('hidden'); });
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-'+p).classList.remove('hidden');
-            document.getElementById('nav-'+p).classList.add('active');
-            document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
-        }
-
-        function openBooking(special = null) {
-            booking.s = special || '';
-            document.getElementById('bookingModal').classList.add('active');
-            goStep(special ? 2 : 1);
-        }
-
-        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
-
-        function goStep(n) {
-            [1,2,3].forEach(s => document.getElementById('step'+s).classList.add('hidden'));
-            document.getElementById('step'+n).classList.remove('hidden');
-            document.getElementById('modalTitle').innerText = n==1 ? 'Zgjedh Shërbimin' : n==2 ? 'Zgjedh Berberin' : 'Zgjedh Kohën';
-            if(n === 3) buildSchedule();
-        }
-
-        function setS(s, id) {
-            booking.s = s;
-            document.querySelectorAll('.service-item').forEach(d => d.classList.remove('selected'));
-            document.getElementById(id).classList.add('selected');
-            document.getElementById('v1').classList.add('active');
-        }
-
-        function setB(b, id) {
-            booking.b = b;
-            document.querySelectorAll('#step2 div').forEach(d => d.style.borderColor = '#f3f4f6');
-            document.getElementById(id).style.borderColor = '#111827';
-            document.getElementById('v2').classList.add('active');
-        }
-
-        function buildSchedule() {
-            const days = document.getElementById('cal-days'); days.innerHTML = '';
-            ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26', 'Pre 27'].forEach(day => {
-                let d = document.createElement('div');
-                d.className = `p-4 rounded-2xl bg-gray-100 min-w-[85px] text-center font-bold ${booking.d === day ? 'bg-slate-900 text-white' : ''}`;
-                d.innerText = day;
-                d.onclick = () => { booking.d = day; buildSchedule(); };
-                days.appendChild(d);
-            });
-
-            const grid = document.getElementById('time-grid'); grid.innerHTML = '';
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            for(let h=9; h<=20; h++) {
-                for(let m of ['00', '30']) {
-                    let t = `${h<10?'0'+h:h}:${m}`;
-                    let isBusy = db.some(a => a.b === booking.b && a.d === booking.d && a.t === t);
-                    let slot = document.createElement('div');
-                    slot.className = `time-slot ${isBusy ? 'busy' : ''} ${booking.t === t ? 'selected' : ''}`;
-                    slot.innerText = t;
-                    if(!isBusy) slot.onclick = () => { booking.t = t; buildSchedule(); };
-                    grid.appendChild(slot);
-                }
-            }
-        }
-
-        function confirmApp() {
-            let n = document.getElementById('cName').value;
-            let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t) return alert("Plotësoni të dhënat!");
-            let db = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            db.push({ ...booking, name: n, phone: p, id: Date.now() });
-            localStorage.setItem('db_barber', JSON.stringify(db));
-            alert("Rezervimi u krye!"); location.reload();
-        }
-
-        function handleLogin() {
-            let id = document.getElementById('uID').value;
-            let pass = document.getElementById('uPass').value;
-            if(users[id] === pass) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('staff-dash').classList.remove('hidden');
-                document.getElementById('staff-name').innerText = "Berberi: " + id;
-                loadStaffAppointments(id);
-            } else alert("Gabim!");
-        }
-
-        function loadStaffAppointments(barberName) {
-            let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            let mine = all.filter(a => a.b.toLowerCase().includes(barberName.toLowerCase()));
-            const container = document.getElementById('list-app');
-            
-            if(mine.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim për momentin.</p>`;
-                return;
-            }
-
-            container.innerHTML = mine.map(a => `
-                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-md mb-4">
-                    <div class="flex justify-between items-start mb-3">
-                        <div><b>${a.name}</b><p class="text-xs text-gray-500">${a.s}</p></div>
-                        <div class="text-right"><b>${a.t}</b><p class="text-xs text-gray-400">${a.d}</p></div>
-                    </div>
-                    <div class="flex justify-between items-center pt-3 border-t">
-                        <a href="tel:${a.phone}" class="text-blue-600 font-bold"><i class="fa-solid fa-phone"></i> Thirr</a>
-                        <button onclick="deleteApp(${a.id}, '${barberName}')" class="text-red-500 font-bold"><i class="fa-solid fa-trash"></i> Fshije</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function deleteApp(id, barberName) {
-            if(!confirm("A e keni përfunduar këtë termin?")) return;
-            let all = JSON.parse(localStorage.getItem('db_barber') || "[]");
-            let filtered = all.filter(a => a.id !== id);
-            localStorage.setItem('db_barber', JSON.stringify(filtered));
-            loadStaffAppointments(barberName);
-        }
+        function selectMemberBerber(el) { document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); }
+        function selectMemberDate(el) { document.querySelectorAll('.date-chip').forEach(d => d.classList.remove('selected')); el.classList.add('selected'); }
     </script>
 </body>
 </html>
