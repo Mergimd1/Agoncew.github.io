@@ -7,272 +7,295 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f3f4f6; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
-        /* Headeri fiks si ne video */
-        .app-header { 
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070'); 
-            background-size: cover; 
-            background-position: center; 
-            height: 220px; 
+        body { background-color: #f3f4f6; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* Faqja Kryesore - Foto 1 */
+        .header-black { 
+            background: #111827; 
+            height: 200px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
-            color: white;
+            color: white; 
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
         }
-        /* Kartelat e menuse kryesore */
-        .menu-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 20px; margin-top: -30px; }
-        .menu-card { 
+        .main-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 20px; margin-top: -40px; }
+        .action-card { 
             background: white; 
-            border-radius: 15px; 
+            border-radius: 20px; 
             padding: 30px 10px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
             cursor: pointer;
         }
-        .menu-card i { font-size: 32px; margin-bottom: 10px; }
-        
-        /* Navigimi poshte */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-t: 1px solid #eee; display: flex; justify-content: space-around; padding: 12px; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 10px; font-weight: bold; }
-        .nav-item.active { color: #1f2937; border-top: 2px solid #1f2937; padding-top: 2px; }
+        .action-card i { font-size: 35px; margin-bottom: 12px; }
 
-        /* Modalet */
+        /* Modal & Steps */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; padding: 25px; max-height: 85vh; overflow-y: auto; }
+        .modal-body { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 25px; max-height: 90vh; overflow-y: auto; }
         
-        .option-item { border: 1px solid #f0f0f0; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; }
-        .option-item.selected { border: 2px solid #1f2937; background: #f9fafb; }
+        .item-select { border: 1px solid #eee; border-radius: 15px; padding: 15px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .item-select.selected { border: 2px solid #111827; background: #f9fafb; }
+
+        /* Orari - Foto 2 */
+        .time-grid { display: grid; grid-template-cols: repeat(3, 1fr); gap: 10px; }
+        .time-slot { 
+            padding: 12px; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 10px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .time-slot.selected { background: #111827; color: white; border-color: #111827; }
+        .time-slot.busy { 
+            background: #fee2e2; 
+            color: #ef4444; 
+            border-color: #fecaca; 
+            text-decoration: line-through; 
+            cursor: not-allowed; 
+            position: relative;
+        }
         
-        .gold-banner { background: #f59e0b; color: white; padding: 15px; text-align: center; font-weight: bold; border-radius: 15px; margin: 20px; }
+        .vazhdo-btn { background: #ef4444; color: white; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; margin-top: 20px; opacity: 0.5; pointer-events: none; }
+        .vazhdo-btn.active { opacity: 1; pointer-events: auto; }
+
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 11px; font-weight: bold; }
+        .nav-btn.active { color: #111827; }
+
         .hidden { display: none !important; }
     </style>
 </head>
-<body>
+<body class="pb-24">
 
-    <div id="header-bg" class="app-header">
-        <h1 class="text-3xl font-bold tracking-tighter">AGONI BARBER</h1>
-        <p class="text-xs opacity-80 uppercase tracking-widest mt-1">Rezervo termin pa pritje</p>
-    </div>
+    <div id="home-view">
+        <div class="header-black">
+            <h1 class="text-3xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
+            <p class="text-[10px] tracking-[4px] opacity-60">Rezervo termin pa pritje</p>
+        </div>
 
-    <div id="view-home">
-        <div class="menu-grid">
-            <div class="menu-card" onclick="openBooking()">
+        <div class="main-grid">
+            <div class="action-card" onclick="openBooking()">
                 <i class="fa-regular fa-calendar-check text-slate-800"></i>
-                <span class="text-sm font-bold">Rezervo Termin</span>
+                <span class="text-sm font-extrabold uppercase">Rezervo</span>
             </div>
-            <div class="menu-card" onclick="switchPage('membership')">
+            <div class="action-card" onclick="switchTab('membership')">
                 <i class="fa-solid fa-crown text-amber-500"></i>
-                <span class="text-sm font-bold">Membership</span>
+                <span class="text-sm font-extrabold uppercase">Membership</span>
             </div>
-            <div class="menu-card">
-                <i class="fa-solid fa-cart-shopping text-emerald-500"></i>
-                <span class="text-sm font-bold">Produktet</span>
+            <div class="action-card col-span-2 flex-row space-x-4 py-6">
+                <i class="fa-solid fa-cart-shopping text-emerald-500 !mb-0"></i>
+                <span class="text-sm font-extrabold uppercase">Produktet tona</span>
             </div>
         </div>
-        <div class="gold-banner">
+
+        <div class="mx-5 mt-4 bg-amber-500 text-white p-4 rounded-2xl text-center font-bold tracking-widest">
             ★ JU JENI GOLD MEMBER
         </div>
     </div>
 
-    <div id="view-membership" class="hidden p-5">
-        <h2 class="text-xl font-bold mb-4">Zgjidh Pakon</h2>
-        <div class="bg-slate-800 text-white p-6 rounded-2xl mb-4" onclick="openMemberBooking('Silver Member')">
-            <h3 class="text-lg font-bold">SILVER MEMBER</h3>
-            <p class="text-sm opacity-70">4 Qethje në muaj</p>
-            <div class="text-2xl font-bold mt-4">20€</div>
+    <div id="membership-view" class="hidden p-5">
+        <h2 class="text-xl font-bold mb-6">Zgjidh Pakon Tuaj</h2>
+        <div class="bg-slate-900 text-white p-6 rounded-3xl mb-4" onclick="openBooking('Silver Member')">
+            <h3 class="text-xl font-black italic">SILVER MEMBER</h3>
+            <p class="text-sm opacity-60">4 Qethje në muaj</p>
+            <div class="text-2xl font-bold mt-4">20.00€</div>
         </div>
-        <div class="bg-amber-500 text-white p-6 rounded-2xl mb-4" onclick="openMemberBooking('Gold Member')">
-            <h3 class="text-lg font-bold">GOLD MEMBER</h3>
-            <p class="text-sm opacity-70">Qethje & Rroje pa limit</p>
-            <div class="text-2xl font-bold mt-4">35€</div>
+        <div class="bg-amber-500 text-white p-6 rounded-3xl mb-4" onclick="openBooking('Gold Member')">
+            <h3 class="text-xl font-black italic">GOLD MEMBER</h3>
+            <p class="text-sm opacity-60">Qethje & Rroje pa limit</p>
+            <div class="text-2xl font-bold mt-4">35.00€</div>
         </div>
     </div>
 
-    <div id="view-terminet" class="hidden p-5 text-center">
-        <div id="login-form" class="py-10">
-            <div class="w-20 h-20 bg-gray-100 rounded-full mx-auto flex items-center justify-center mb-4">
-                <i class="fa-solid fa-user-lock text-gray-400 text-2xl"></i>
-            </div>
-            <p class="text-gray-500 mb-6">Kyçuni si berber për të parë terminet</p>
-            <input type="text" id="uID" placeholder="ID e berberit" class="w-full border p-4 rounded-xl mb-4 outline-none">
-            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="w-full border p-4 rounded-xl mb-6 outline-none">
-            <button onclick="loginProcess()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-bold uppercase">Kyçu</button>
+    <div id="terminet-view" class="hidden p-5">
+        <div id="login-box" class="text-center py-10">
+            <i class="fa-solid fa-user-lock text-6xl text-gray-200 mb-6"></i>
+            <h3 class="font-bold text-gray-400 mb-8">Hapësira për Berberët</h3>
+            <input type="text" id="uID" placeholder="ID e përdoruesit" class="w-full p-4 border rounded-2xl mb-4 outline-none">
+            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="w-full p-4 border rounded-2xl mb-6 outline-none">
+            <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase">Kyçu</button>
         </div>
-        <div id="admin-dashboard" class="hidden text-left">
+        <div id="staff-dash" class="hidden">
             <div class="flex justify-between items-center mb-6">
-                <h2 id="welcome-msg" class="font-bold text-lg"></h2>
+                <h2 id="staff-name" class="font-bold text-lg"></h2>
                 <button onclick="location.reload()" class="text-red-500 font-bold">Dil</button>
             </div>
-            <div id="list-terminet" class="space-y-4 pb-24"></div>
+            <div id="appointment-list" class="space-y-4"></div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <div onclick="switchPage('home')" id="nav-home" class="nav-item active">
-            <i class="fa-solid fa-house mb-1"></i><span>Ballina</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-solid fa-scissors mb-1"></i><span>Shërbimet</span>
-        </div>
-        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item">
-            <i class="fa-regular fa-clock mb-1"></i><span>Terminet</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-solid fa-address-book mb-1"></i><span>Kontakt</span>
-        </div>
+    <nav class="bottom-bar">
+        <div onclick="switchTab('home')" id="btn-home" class="nav-btn active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Ballina</span></div>
+        <div class="nav-btn"><i class="fa-solid fa-scissors text-xl mb-1"></i><span>Shërbimet</span></div>
+        <div onclick="switchTab('terminet')" id="btn-terminet" class="nav-btn"><i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span></div>
+        <div class="nav-btn"><i class="fa-solid fa-phone text-xl mb-1"></i><span>Kontakt</span></div>
     </nav>
 
     <div id="bookingModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="flex justify-between mb-6">
-                <h2 id="modalTitle" class="font-bold text-lg">Zgjidh Shërbimin</h2>
-                <button onclick="closeModal()" class="text-2xl text-gray-300">&times;</button>
+        <div class="modal-body">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modalTitle" class="font-bold text-xl">Zgjidh Shërbimin</h2>
+                <button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button>
             </div>
 
             <div id="step1">
-                <div class="option-item" onclick="selectS('Qethje', '5€')"><b>Qethje</b><p class="text-xs text-gray-400">5€ - 35 min</p></div>
-                <div class="option-item" onclick="selectS('Qethje + Rroje', '6€')"><b>Qethje + Rroje</b><p class="text-xs text-gray-400">6€ - 45 min</p></div>
-                <div class="option-item" onclick="selectS('Styler', '2€')"><b>Styler</b><p class="text-xs text-gray-400">2€ - 10 min</p></div>
-                <div class="option-item" onclick="selectS('Ngjyrosje', '10€')"><b>Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 60 min</p></div>
-                <button id="v1" disabled class="w-full bg-red-500 text-white py-4 rounded-xl mt-4 opacity-50 font-bold" onclick="showStep(2)">Vazhdo</button>
+                <div class="item-select" onclick="setS('Qethje', '5€')"><b>Qethje</b><p class="text-xs text-gray-400">5€ - 35 min</p></div>
+                <div class="item-select" onclick="setS('Qethje + Rroje', '6€')"><b>Qethje + Rroje</b><p class="text-xs text-gray-400">6€ - 45 min</p></div>
+                <div class="item-select" onclick="setS('Styler', '2€')"><b>Styler</b><p class="text-xs text-gray-400">2€ - 10 min</p></div>
+                <div class="item-select" onclick="setS('Ngjyrosje', '10€')"><b>Ngjyrosje</b><p class="text-xs text-gray-400">10€ - 60 min</p></div>
+                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
 
             <div id="step2" class="hidden">
-                <div class="option-item text-center font-bold" onclick="selectB('Agon Tahiri')">Agon Tahiri</div>
-                <div class="option-item text-center font-bold" onclick="selectB('Leonis Gashi')">Leonis Gashi</div>
-                <div class="option-item text-center font-bold" onclick="selectB('Dori')">Dori</div>
-                <div class="option-item text-center font-bold" onclick="selectB('Enisi')">Enisi</div>
-                <button id="v2" disabled class="w-full bg-red-500 text-white py-4 rounded-xl mt-4 opacity-50 font-bold" onclick="showStep(3)">Vazhdo</button>
+                <div class="item-select font-bold text-center" onclick="setB('Agon Tahiri')">Agon Tahiri</div>
+                <div class="item-select font-bold text-center" onclick="setB('Leonis Gashi')">Leonis Gashi</div>
+                <div class="item-select font-bold text-center" onclick="setB('Dori')">Dori</div>
+                <div class="item-select font-bold text-center" onclick="setB('Enisi')">Enisi</div>
+                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
             </div>
 
             <div id="step3" class="hidden">
-                <div class="flex space-x-2 overflow-x-auto mb-6" id="cal-days"></div>
-                <div class="grid grid-cols-3 gap-2 mb-6" id="time-grid"></div>
-                <input type="text" id="cName" placeholder="Emri juaj" class="w-full border p-4 rounded-xl mb-3 outline-none">
-                <input type="tel" id="cPhone" placeholder="Numri i telefonit" class="w-full border p-4 rounded-xl mb-6 outline-none">
-                <button onclick="confirm()" class="w-full bg-emerald-500 text-white py-4 rounded-xl font-bold uppercase">Konfirmo</button>
+                <div class="flex space-x-2 overflow-x-auto mb-6" id="days-list"></div>
+                <div class="time-grid mb-6" id="times-list"></div>
+                <input type="text" id="custName" placeholder="Emri juaj" class="w-full p-4 border rounded-2xl mb-4 outline-none">
+                <input type="tel" id="custPhone" placeholder="Nr. Telefonit" class="w-full p-4 border rounded-2xl mb-6 outline-none">
+                <button onclick="finishBooking()" class="w-full bg-emerald-500 text-white py-4 rounded-2xl font-bold uppercase">Konfirmo</button>
             </div>
         </div>
     </div>
 
     <script>
-        let book = { s: '', b: '', d: '24 Shkurt', t: '', type: 'Normal' };
+        let book = { s: '', b: '', d: '24 Shkurt', t: '' };
         const staff = { "Agon":"Goni30", "Leonis":"leo12", "Dori":"dori201", "Enis":"nisi99" };
 
-        function switchPage(p) {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-membership').classList.add('hidden');
-            document.getElementById('view-terminet').classList.add('hidden');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            document.getElementById('view-' + p).classList.remove('hidden');
-            document.getElementById('nav-' + p).classList.add('active');
-            if(p === 'home') document.getElementById('header-bg').classList.remove('hidden');
-            else document.getElementById('header-bg').classList.add('hidden');
+        function switchTab(tab) {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('membership-view').classList.add('hidden');
+            document.getElementById('terminet-view').classList.add('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tab + '-view').classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active');
         }
 
-        function openBooking() { 
-            book.type = 'Normal';
-            document.getElementById('bookingModal').classList.add('active'); 
-            showStep(1);
-        }
-
-        function openMemberBooking(pako) {
-            book.s = "Membership: " + pako;
-            book.type = 'Membership';
-            showStep(2);
-            document.getElementById('bookingModal').classList.add('active');
+        function openBooking(specialService = null) {
+            if(specialService) {
+                book.s = specialService;
+                document.getElementById('bookingModal').classList.add('active');
+                goStep(2); // Shkon direkt te berberi
+            } else {
+                document.getElementById('bookingModal').classList.add('active');
+                goStep(1);
+            }
         }
 
         function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
-        function showStep(n) {
+        function goStep(n) {
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step' + n).classList.remove('hidden');
-            if(n === 3) initCal();
+            
+            const titles = ["", "Zgjidh Shërbimin", "Zgjidh Berberin", "Zgjidh Kohën"];
+            document.getElementById('modalTitle').innerText = titles[n];
+            if(n === 3) initSchedule();
         }
 
-        function selectS(n, p) {
-            book.s = n;
-            document.querySelectorAll('#step1 .option-item').forEach(i => i.classList.remove('selected'));
+        function setS(s, p) {
+            book.s = s;
+            document.querySelectorAll('#step1 .item-select').forEach(i => i.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-            document.getElementById('v1').disabled = false;
-            document.getElementById('v1').classList.remove('opacity-50');
+            document.getElementById('v1').classList.add('active');
         }
 
-        function selectB(n) {
-            book.b = n;
-            document.querySelectorAll('#step2 .option-item').forEach(i => i.classList.remove('selected'));
+        function setB(b) {
+            book.b = b;
+            document.querySelectorAll('#step2 .item-select').forEach(i => i.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-            document.getElementById('v2').disabled = false;
-            document.getElementById('v2').classList.remove('opacity-50');
+            document.getElementById('v2').classList.add('active');
         }
 
-        function initCal() {
-            const cal = document.getElementById('cal-days');
-            cal.innerHTML = '';
+        function initSchedule() {
+            // Ditët
+            const days = document.getElementById('days-list');
+            days.innerHTML = '';
             ['Hën 23', 'Mar 24', 'Mër 25', 'Enj 26'].forEach((day, i) => {
                 let d = document.createElement('div');
-                d.className = `p-3 rounded-lg bg-gray-100 text-center min-w-[70px] cursor-pointer ${i===1?'bg-slate-800 text-white':''}`;
+                d.className = `p-3 rounded-xl bg-gray-100 min-w-[70px] text-center font-bold ${i===1?'bg-slate-900 text-white':''}`;
                 d.innerText = day;
                 d.onclick = function() {
-                    document.querySelectorAll('#cal-days div').forEach(x => {x.classList.remove('bg-slate-800','text-white')});
-                    this.classList.add('bg-slate-800','text-white');
+                    document.querySelectorAll('#days-list div').forEach(x => x.className = 'p-3 rounded-xl bg-gray-100 min-w-[70px] text-center font-bold');
+                    this.className = 'p-3 rounded-xl bg-slate-900 text-white min-w-[70px] text-center font-bold';
                     book.d = day;
                 };
-                cal.appendChild(d);
+                days.appendChild(d);
             });
 
-            const grid = document.getElementById('time-grid');
-            grid.innerHTML = '';
-            ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"].forEach(t => {
-                let tb = document.createElement('div');
-                tb.className = `p-3 border rounded-lg text-center cursor-pointer`;
-                tb.innerText = t;
-                tb.onclick = function() {
-                    document.querySelectorAll('#time-grid div').forEach(x => x.classList.remove('bg-slate-800','text-white'));
-                    this.classList.add('bg-slate-800','text-white');
-                    book.t = t;
-                };
-                grid.appendChild(tb);
-            });
+            // Orët (Foto 2)
+            const times = document.getElementById('times-list');
+            times.innerHTML = '';
+            const busyTimes = ["10:00", "11:30", "15:00", "17:30"]; // Shembull te zena
+            
+            for(let h=9; h<=20; h++) {
+                for(let m of ['00', '30']) {
+                    let t = `${h<10?'0'+h:h}:${m}`;
+                    let isBusy = busyTimes.includes(t);
+                    let ts = document.createElement('div');
+                    ts.className = `time-slot ${isBusy ? 'busy' : ''}`;
+                    ts.innerText = t;
+                    if(!isBusy) {
+                        ts.onclick = function() {
+                            document.querySelectorAll('.time-slot').forEach(x => x.classList.remove('selected'));
+                            this.classList.add('selected');
+                            book.t = t;
+                        };
+                    }
+                    times.appendChild(ts);
+                }
+            }
         }
 
-        function confirm() {
-            let n = document.getElementById('cName').value;
-            let p = document.getElementById('cPhone').value;
+        function finishBooking() {
+            let n = document.getElementById('custName').value;
+            let p = document.getElementById('custPhone').value;
             if(!n || !book.t) return alert("Plotësoni të dhënat!");
-            let list = JSON.parse(localStorage.getItem('db_ag') || "[]");
-            list.push({ ...book, name: n, phone: p });
-            localStorage.setItem('db_ag', JSON.stringify(list));
-            alert("U krye!");
+            
+            let all = JSON.parse(localStorage.getItem('agoni_db') || "[]");
+            all.push({ ...book, name: n, phone: p });
+            localStorage.setItem('agoni_db', JSON.stringify(all));
+            alert("Rezervimi u krye me sukses!");
             location.reload();
         }
 
-        function loginProcess() {
+        function handleLogin() {
             let id = document.getElementById('uID').value;
             let pass = document.getElementById('uPass').value;
             if(staff[id] && staff[id] === pass) {
-                document.getElementById('login-form').classList.add('hidden');
-                document.getElementById('admin-dashboard').classList.remove('hidden');
-                document.getElementById('welcome-msg').innerText = "Berberi: " + id;
-                let all = JSON.parse(localStorage.getItem('db_ag') || "[]");
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('staff-dash').classList.remove('hidden');
+                document.getElementById('staff-name').innerText = "Berberi: " + id;
+                
+                let all = JSON.parse(localStorage.getItem('agoni_db') || "[]");
                 let mine = all.filter(a => a.b.includes(id));
-                let container = document.getElementById('list-terminet');
-                container.innerHTML = mine.length ? '' : '<p class="text-gray-400 py-10">Ska terminë.</p>';
+                let list = document.getElementById('appointment-list');
+                list.innerHTML = mine.length ? '' : '<p class="text-gray-400 py-10 text-center">Nuk ka terminë.</p>';
                 mine.forEach(a => {
-                    container.innerHTML += `<div class="bg-white p-4 rounded-xl border-l-4 border-slate-800 shadow-sm">
-                        <b>${a.name}</b><br><small>${a.s} | ${a.d} @ ${a.t}</small><br><span class="text-blue-500 text-xs">${a.phone}</span>
+                    list.innerHTML += `<div class="bg-white p-5 rounded-2xl shadow-sm border-l-4 border-slate-900">
+                        <h4 class="font-bold text-lg">${a.name}</h4>
+                        <p class="text-sm text-gray-500">${a.s} | ${a.d} në orën ${a.t}</p>
+                        <a href="tel:${a.phone}" class="text-blue-500 font-bold text-xs">${a.phone}</a>
                     </div>`;
                 });
-            } else alert("Gabim!");
+            } else alert("ID ose Fjalëkalimi gabim!");
         }
     </script>
 </body>
