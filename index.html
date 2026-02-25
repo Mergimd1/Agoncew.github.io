@@ -29,7 +29,6 @@
         };
 
         window.getTerminetRealTime = function(barberName, callback) {
-            // Rregullim për emrat e saktë në databazë
             let searchName = barberName;
             if(barberName === "Agon") searchName = "Agon Tahiri";
             if(barberName === "Leonis") searchName = "Leonis Gashi";
@@ -46,7 +45,6 @@
             await deleteDoc(doc(db, "appointments", id));
         };
 
-        // FUNKSIONI I RI PËR KONTROLLIN E ORAREVE TË ZËNA
         window.getTerminePerBllokim = async function(barberName, data) {
             const q = query(collection(db, "appointments"), where("b", "==", barberName), where("d", "==", data));
             const snapshot = await getDocs(q);
@@ -300,7 +298,6 @@
             const daysContainer = document.getElementById(calId); daysContainer.innerHTML = '';
             const days = ['Mar 24', 'Mër 25', 'Enj 26', 'Pre 27', 'Sht 28'];
             
-            // Kontrolli i Firebase për bllokim orari
             const querySnapshot = await window.getTerminePerBllokim(obj.b, obj.d);
 
             days.forEach(day => {
@@ -335,7 +332,7 @@
             
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY"; 
-                const chatid = "5802987116";
+                const chatid = "-5126050565"; 
                 const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
 
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
@@ -353,7 +350,7 @@
             
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
-                const chatid = "5802987116";
+                const chatid = "-5126050565";
                 const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
 
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
