@@ -100,55 +100,12 @@
                 <div class="bg-amber-50 p-4 rounded-full mb-3 text-amber-500"><i class="fa-solid fa-crown text-2xl"></i></div>
                 <span class="text-xs font-bold uppercase tracking-wider">Membership</span>
             </div>
-            <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="switchPage('shop')">
+            <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="alert('Së shpejti...')">
                 <i class="fa-solid fa-cart-shopping text-emerald-500 text-2xl"></i>
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
             </div>
         </div>
     </main>
-
-    <div id="view-shop" class="hidden p-6 bg-gray-50 min-h-screen">
-        <div id="shop-main">
-            <h2 class="text-2xl font-black uppercase italic mb-6 tracking-tighter">Dyqani</h2>
-            <div class="bg-slate-900 p-5 rounded-[25px] flex items-center justify-between border-2 border-amber-500/30" onclick="openBrand('nishman')">
-                <div class="flex items-center space-x-4">
-                    <img src="https://i.ibb.co/LzNfC7T/1000048335.jpg" class="w-14 h-14 rounded-xl object-cover border border-white/10">
-                    <div>
-                        <h3 class="text-white font-black text-lg uppercase italic leading-none">Nish Man</h3>
-                        <p class="text-amber-500 text-[10px] font-bold uppercase mt-1 tracking-widest">Professional</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-circle-chevron-right text-amber-500 text-2xl"></i>
-            </div>
-        </div>
-
-        <div id="shop-nishman" class="hidden">
-            <div class="flex items-center mb-6">
-                <button onclick="closeBrand()" class="bg-white p-3 rounded-2xl shadow-sm mr-4"><i class="fa-solid fa-chevron-left"></i></button>
-                <h2 class="font-black text-xl uppercase italic">Nish Man Series</h2>
-            </div>
-            <div class="grid grid-cols-1 gap-4">
-                <div class="bg-white p-4 rounded-[30px] shadow-sm flex items-center space-x-4 border border-gray-100">
-                    <img src="https://i.ibb.co/DkG5W0N/1000048334.jpg" class="w-24 h-24 object-cover rounded-2xl shadow-inner">
-                    <div class="flex-1">
-                        <span class="text-[9px] font-black text-amber-600 uppercase">Styling Gel</span>
-                        <h4 class="font-black text-sm uppercase leading-tight">Sea Salt Gel Spray</h4>
-                        <p class="font-bold text-emerald-600 mt-1">5.00 €</p>
-                        <button onclick="orderViaTelegram('Sea Salt Gel Spray', '5€')" class="w-full bg-slate-900 text-white py-2.5 rounded-xl text-[10px] font-black mt-2 uppercase tracking-wider">Porosit</button>
-                    </div>
-                </div>
-                <div class="bg-white p-4 rounded-[30px] shadow-sm flex items-center space-x-4 border border-gray-100">
-                    <img src="https://i.ibb.co/VqC6WzK/1000048328.jpg" class="w-24 h-24 object-cover rounded-2xl shadow-inner">
-                    <div class="flex-1">
-                        <span class="text-[9px] font-black text-amber-600 uppercase">Premium Wax</span>
-                        <h4 class="font-black text-sm uppercase leading-tight">Spider Wax S6 Red</h4>
-                        <p class="font-bold text-emerald-600 mt-1">5.00 €</p>
-                        <button onclick="orderViaTelegram('Spider Wax S6 Red', '5€')" class="w-full bg-slate-900 text-white py-2.5 rounded-xl text-[10px] font-black mt-2 uppercase tracking-wider">Porosit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="view-membership" class="hidden p-6 bg-gray-50 min-h-screen">
         <div class="gold-card text-center">
@@ -213,6 +170,14 @@
             <div class="flex items-center space-x-4">
                 <div class="w-11 h-11 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-sm"><i class="fa-brands fa-instagram text-lg"></i></div>
                 <div><p class="text-[10px] font-bold text-gray-400 uppercase">Instagram</p><p class="font-black text-slate-800">@agonibarber</p></div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="w-11 h-11 bg-sky-100 rounded-2xl flex items-center justify-center text-sky-600 shadow-sm"><i class="fa-solid fa-globe text-lg"></i></div>
+                <div><p class="text-[10px] font-bold text-gray-400 uppercase">Web</p><p class="font-black text-slate-800 text-sm italic">www.agonicrew.com</p></div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="w-11 h-11 bg-gray-100 rounded-2xl flex items-center justify-center text-slate-700 shadow-sm"><i class="fa-solid fa-building text-lg"></i></div>
+                <div><p class="text-[10px] font-bold text-gray-400 uppercase">Adresa</p><p class="font-black text-slate-800 text-[10px] uppercase">Agonicrew, Pejë, 30000</p></div>
             </div>
         </div>
 
@@ -285,11 +250,9 @@
         let booking = { s: '', b: '', d: 'Mar 24', t: '' };
         let mBooking = { s: 'Membership Gold', b: '', d: 'Mar 24', t: '' };
         const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
-        const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY"; 
-        const chatid = "-5126050565";
 
         function switchPage(p) {
-            ['home', 'membership', 'terminet', 'kontakt', 'shop'].forEach(v => {
+            ['home', 'membership', 'terminet', 'kontakt'].forEach(v => {
                 const el = document.getElementById('view-'+v);
                 if(el) el.classList.add('hidden');
             });
@@ -298,25 +261,6 @@
             if(currentView) currentView.classList.remove('hidden');
             if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
-        }
-
-        // Funksionet e Shop
-        function openBrand(id) {
-            document.getElementById('shop-main').classList.add('hidden');
-            document.getElementById('shop-' + id).classList.remove('hidden');
-        }
-
-        function closeBrand() {
-            document.getElementById('shop-main').classList.remove('hidden');
-            document.getElementById('shop-nishman').classList.add('hidden');
-        }
-
-        function orderViaTelegram(product, price) {
-            let user = prompt("Shkruani emrin tuaj për porosinë:");
-            if(!user) return;
-            const shopMsg = `🛒 *POROSI E RE SHOP*\n──────────────\n👤 *Klienti:* ${user}\n📦 *Produkti:* ${product}\n💰 *Çmimi:* ${price}\n──────────────`;
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(shopMsg)}&parse_mode=Markdown`);
-            alert("Porosia u dërgua me sukses!");
         }
 
         function openBooking() { document.getElementById('bookingModal').classList.add('active'); goStep(1); }
@@ -353,6 +297,7 @@
         async function buildSchedule(calId, gridId, obj) {
             const daysContainer = document.getElementById(calId); daysContainer.innerHTML = '';
             const days = ['Mar 24', 'Mër 25', 'Enj 26', 'Pre 27', 'Sht 28'];
+            
             const querySnapshot = await window.getTerminePerBllokim(obj.b, obj.d);
 
             days.forEach(day => {
@@ -368,6 +313,7 @@
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
                     let isBusy = querySnapshot.some(doc => doc.t === t);
+
                     let slot = document.createElement('div');
                     slot.className = `time-slot ${isBusy ? 'busy' : ''} ${obj.t === t ? 'selected' : ''}`;
                     slot.innerText = t;
@@ -381,9 +327,14 @@
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
             if(!n || !booking.t) return alert("Ju lutem plotësoni emrin dhe orarin!");
+            
             const success = await window.saveToFirebase({ ...booking, name: n, phone: p, createdAt: new Date().toISOString() });
+            
             if(success) {
+                const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY"; 
+                const chatid = "-5126050565"; 
                 const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
+
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 alert("Rezervimi u krye me sukses!");
                 location.reload();
@@ -394,9 +345,14 @@
             let n = document.getElementById('mName').value;
             let p = document.getElementById('mPhone').value;
             if(!n || !mBooking.t) return alert("Plotësoni të dhënat!");
+            
             const success = await window.saveToFirebase({ ...mBooking, name: n, phone: p, type: 'GOLD' });
+            
             if(success) {
+                const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
+                const chatid = "-5126050565";
                 const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
+
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
                 alert("Urime! Tani jeni Gold Member.");
                 location.reload();
