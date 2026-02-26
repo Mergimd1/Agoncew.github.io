@@ -45,11 +45,15 @@
             await deleteDoc(doc(db, "appointments", id));
         };
 
+        // RREGULLIMI I ORAREVE TË ZËNA: Lexon të gjitha terminet e berberit dhe i filtron në kod
         window.getTerminePerBllokim = async function(barberName, data) {
-            const q = query(collection(db, "appointments"), where("b", "==", barberName), where("d", "==", data));
+            const q = query(collection(db, "appointments"), where("b", "==", barberName));
             const snapshot = await getDocs(q);
             const docs = [];
-            snapshot.forEach(d => docs.push(d.data()));
+            snapshot.forEach(d => {
+                const item = d.data();
+                if(item.d === data) docs.push(item);
+            });
             return docs;
         };
     </script>
@@ -82,7 +86,7 @@
         .hidden { display: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
 
-        /* KODI PER SHIRITAT (Marquee) */
+        /* CSS PER SHIRITAT */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-wrapper { margin-top: 20px; width: 100%; overflow: hidden; }
         .marquee-container { overflow: hidden; white-space: nowrap; background: #111827; color: #fbbf24; padding: 10px 0; border-top: 1px solid rgba(251, 191, 36, 0.3); }
@@ -320,7 +324,10 @@
         async function buildSchedule(calId, gridId, obj) {
             const daysContainer = document.getElementById(calId); daysContainer.innerHTML = '';
             const days = ['Mar 24', 'Mër 25', 'Enj 26', 'Pre 27', 'Sht 28'];
+            
+            // Leximi i termineve nga Firebase
             const querySnapshot = await window.getTerminePerBllokim(obj.b, obj.d);
+
             days.forEach(day => {
                 let d = document.createElement('div');
                 d.className = `p-4 rounded-2xl min-w-[85px] text-center font-bold ${obj.d === day ? 'bg-slate-900 text-white' : 'bg-gray-100'}`;
@@ -328,11 +335,14 @@
                 d.onclick = () => { obj.d = day; buildSchedule(calId, gridId, obj); };
                 daysContainer.appendChild(d);
             });
+
             const grid = document.getElementById(gridId); grid.innerHTML = '';
             for(let h=9; h<=18; h++) {
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
+                    // Kontrolli nëse ora është e zënë
                     let isBusy = querySnapshot.some(doc => doc.t === t);
+
                     let slot = document.createElement('div');
                     slot.className = `time-slot ${isBusy ? 'busy' : ''} ${obj.t === t ? 'selected' : ''}`;
                     slot.innerText = t;
@@ -346,11 +356,14 @@
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
             if(!n || !booking.t) return alert("Ju lutem plotësoni emrin dhe orarin!");
+            
             const success = await window.saveToFirebase({ ...booking, name: n, phone: p, createdAt: new Date().toISOString() });
+            
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY"; 
                 const chatid = "5802987116";
                 const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
+
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 alert("Rezervimi u krye me sukses!");
                 location.reload();
@@ -361,11 +374,14 @@
             let n = document.getElementById('mName').value;
             let p = document.getElementById('mPhone').value;
             if(!n || !mBooking.t) return alert("Plotësoni të dhënat!");
+            
             const success = await window.saveToFirebase({ ...mBooking, name: n, phone: p, type: 'GOLD' });
+            
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
                 const chatid = "5802987116";
                 const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
+
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
                 alert("Urime! Tani jeni Gold Member.");
                 location.reload();
@@ -378,7 +394,9 @@
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('staff-dash').classList.remove('hidden');
                 document.getElementById('staff-name').innerText = "Berberi: " + id;
-                window.getTerminetRealTime(id, (terminet) => { renderStaffAppointments(terminet); });
+                window.getTerminetRealTime(id, (terminet) => {
+                    renderStaffAppointments(terminet);
+                });
             } else alert("Të dhëna të gabuara!");
         }
 
