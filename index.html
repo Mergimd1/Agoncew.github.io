@@ -193,8 +193,28 @@
 
     <div id="view-kontakt" class="hidden p-8 text-center min-h-screen bg-white">
         <h2 class="font-black text-3xl uppercase italic mb-6">Agoni Barber</h2>
+        
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                <i class="fa-solid fa-bottle-droplet text-amber-500 text-2xl mb-2"></i>
+                <p class="text-[10px] font-bold uppercase">Hair Wax</p>
+                <b class="text-sm">5€</b>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                <i class="fa-solid fa-spray-can text-blue-500 text-2xl mb-2"></i>
+                <p class="text-[10px] font-bold uppercase">Beard Oil</p>
+                <b class="text-sm">7€</b>
+            </div>
+        </div>
+
         <div class="space-y-4">
-            <a href="tel:+38349721735" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg">+383 49 721 735</a>
+            <a href="tel:+38349721735" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg">
+                <i class="fa-solid fa-phone mr-2"></i>+383 49 721 735
+            </a>
+            <div class="p-4 border rounded-2xl bg-gray-50">
+                <p class="text-[10px] font-black uppercase text-gray-400 mb-1">Lokacioni</p>
+                <p class="font-bold">Rruga Mbreti Bardhyl, Pejë</p>
+            </div>
         </div>
     </div>
 
@@ -258,12 +278,12 @@
                 window.getTerminetRealTime(id, renderStaffAppointments);
                 const old = await window.getSmartRecall(id);
                 renderRecallList(old);
-            } else { alert("Të dhënat janë gabim!"); }
+            } else { alert("Te dhenat jane gabim!"); }
         }
 
         function renderRecallList(list) {
             const container = document.getElementById('recall-list');
-            if(!list.length) { container.innerHTML = '<p class="text-xs text-gray-400">Asnjë klient për momentin.</p>'; return; }
+            if(!list.length) { container.innerHTML = '<p class="text-xs text-gray-400">Asnje klient per momentin.</p>'; return; }
             container.innerHTML = list.map(c => {
                 const msg = encodeURIComponent(`Pershendetje ${c.name}, jemi Agoni Barber! Kanë kaluar 21 ditë nga qethja e fundit. A dëshiron termin?`);
                 return `<div class="bg-white p-4 rounded-2xl border min-w-[160px] text-center shadow-sm">
@@ -293,6 +313,27 @@
             if(n==3) { buildDates(); buildSchedule(); }
         }
 
+        function buildDates() {
+            const container = document.getElementById('cal-days');
+            container.innerHTML = '';
+            for(let i=0; i<7; i++) {
+                let date = new Date();
+                date.setDate(date.getDate() + i);
+                let dStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                if(i===0 && !booking.d) booking.d = dStr;
+                let dayDiv = document.createElement('div');
+                dayDiv.className = `cal-day ${booking.d === dStr ? 'selected' : ''}`;
+                dayDiv.innerHTML = `<b class="text-xs uppercase">${date.toLocaleDateString('sq', { weekday: 'short' })}</b><br><span class="text-[10px]">${dStr}</span>`;
+                dayDiv.onclick = () => {
+                    booking.d = dStr;
+                    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+                    dayDiv.classList.add('selected');
+                    buildSchedule();
+                };
+                container.appendChild(dayDiv);
+            }
+        }
+
         function setService(s, id) { 
             booking.s = s; 
             document.querySelectorAll('#step1 div').forEach(d => d.style.borderColor = '#e5e7eb');
@@ -307,34 +348,11 @@
             document.getElementById('v2').classList.add('active'); 
         }
 
-        function buildDates() {
-            const container = document.getElementById('cal-days');
-            container.innerHTML = '';
-            for(let i=0; i<7; i++) {
-                let date = new Date();
-                date.setDate(date.getDate() + i);
-                let dStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                if(i===0) booking.d = dStr;
-                let dayDiv = document.createElement('div');
-                dayDiv.className = `cal-day ${booking.d === dStr ? 'selected' : ''}`;
-                dayDiv.innerHTML = `<b class="text-xs uppercase">${date.toLocaleDateString('sq', { weekday: 'short' })}</b><br><span class="text-[10px]">${dStr}</span>`;
-                dayDiv.onclick = () => {
-                    booking.d = dStr;
-                    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-                    dayDiv.classList.add('selected');
-                    buildSchedule();
-                };
-                container.appendChild(dayDiv);
-            }
-        }
-
         async function buildSchedule() { 
             const grid = document.getElementById('time-grid');
-            grid.innerHTML = '<p class="col-span-3 text-center text-xs py-4">Duke kontrolluar oraret...</p>';
-            
+            grid.innerHTML = '<p class="col-span-3 text-center text-xs py-4">Duke kontrolluar...</p>';
             const busyList = await window.getTerminePerBllokim(booking.b, booking.d);
             const busyTimes = busyList.map(a => a.t);
-
             grid.innerHTML = '';
             ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'].forEach(t => {
                 let isBusy = busyTimes.includes(t);
@@ -355,9 +373,9 @@
         async function confirmApp() {
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t || !p) return alert("Ju lutem plotësoni të gjitha fushat!");
+            if(!n || !booking.t) return alert("Plotesoni fushat!");
             const ok = await window.saveToFirebase({ ...booking, name: n, phone: p });
-            if(ok) { alert("Termini u rezervua me sukses!"); location.reload(); }
+            if(ok) { alert("U rezervua!"); location.reload(); }
         }
 
         function mSelect(barber, el) {
@@ -369,9 +387,8 @@
         function confirmGold() {
             let n = document.getElementById('mName').value;
             let p = document.getElementById('mPhone').value;
-            if(!n || !p || !mSelectedBerber) return alert("Plotësoni të gjitha të dhënat!");
-            alert(`Faleminderit ${n}! Kërkesa juaj për Gold Member te ${mSelectedBerber} u dërgua. Do t'ju kontaktojmë së shpejti.`);
-            location.reload();
+            if(!n || !p || !mSelectedBerber) return alert("Plotesoni te dhenat!");
+            alert("Kerkesa u dergua!"); location.reload();
         }
     </script>
 </body>
