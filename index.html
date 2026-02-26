@@ -45,7 +45,7 @@
             await deleteDoc(doc(db, "appointments", id));
         };
 
-        // RREGULLIMI I ORAREVE TË ZËNA: Lexon të gjitha terminet e berberit dhe i filtron në kod
+        // RREGULLIMI I ORAREVE: I merr të gjitha terminet e berberit dhe i filtron për siguri
         window.getTerminePerBllokim = async function(barberName, data) {
             const q = query(collection(db, "appointments"), where("b", "==", barberName));
             const snapshot = await getDocs(q);
@@ -68,10 +68,7 @@
         }
         .home-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 15px; padding: 0 20px; margin-top: -30px; }
         .home-card { background: white; border-radius: 20px; padding: 25px 10px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer; }
-        .gold-card { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); color: #fbbf24; border-radius: 25px; padding: 25px; margin-bottom: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); border: 1px solid rgba(251, 191, 36, 0.3); }
         .member-input { width: 100%; padding: 15px; border: 1px solid #e5e7eb; border-radius: 15px; margin-bottom: 12px; outline: none; background: white; font-weight: bold; }
-        .berber-select { border: 1px solid #e5e7eb; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; text-align: center; background: white; transition: 0.2s; }
-        .berber-select.selected { border-color: #fbbf24; background: #fffbeb; color: #b45309; box-shadow: 0 0 0 2px #fbbf24; }
         .time-slot { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; background: white; }
         .time-slot.selected { background: #111827; color: white; border-color: #111827; }
         .time-slot.busy { background: #fee2e2 !important; color: #ef4444 !important; border-color: #fecaca !important; text-decoration: line-through; opacity: 0.6; pointer-events: none; }
@@ -86,7 +83,7 @@
         .hidden { display: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
 
-        /* CSS PER SHIRITAT */
+        /* CSS PER SHIRITAT LEVIZES */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-wrapper { margin-top: 20px; width: 100%; overflow: hidden; }
         .marquee-container { overflow: hidden; white-space: nowrap; background: #111827; color: #fbbf24; padding: 10px 0; border-top: 1px solid rgba(251, 191, 36, 0.3); }
@@ -127,92 +124,28 @@
                     <span class="marquee-item">Fëmijë 4€</span>
                 </div>
             </div>
-            <div class="marquee-container" style="background: #fbbf24; color: #111827;">
-                <div class="marquee-content" style="animation-direction: reverse;">
-                    <span class="marquee-item">Gold Member 25€</span>
-                    <span class="marquee-item">Pa Pritje</span>
-                    <span class="marquee-item">Prioritet VIP</span>
-                    <span class="marquee-item">Gold Member 25€</span>
-                </div>
-            </div>
         </div>
     </main>
 
-    <div id="view-membership" class="hidden p-6 bg-gray-50 min-h-screen">
-        <div class="gold-card text-center">
-            <i class="fa-solid fa-crown text-4xl mb-2"></i>
-            <h2 class="text-2xl font-black uppercase italic tracking-widest">Gold Member</h2>
-            <div class="grid grid-cols-2 gap-2 text-[10px] font-bold uppercase text-left mt-4 opacity-90">
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>3 Qethje / muaj</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Zbritje Produkte</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Prioritet</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Pa pritje</span></div>
-            </div>
-        </div>
-        <div class="bg-white p-5 rounded-[25px] shadow-sm">
-            <input type="text" id="mName" placeholder="Emri & Mbiemri" class="member-input">
-            <input type="tel" id="mPhone" placeholder="Numri i Telefonit" class="member-input">
-            <p class="text-[10px] font-black uppercase text-gray-400 text-center mb-3">Zgjedh Berberin Preferuar</p>
-            <div class="grid grid-cols-2 gap-2 mb-6">
-                <div class="berber-select" onclick="selectMB('Agon Tahiri', this)">Agon</div>
-                <div class="berber-select" onclick="selectMB('Leonis Gashi', this)">Leonis</div>
-                <div class="berber-select" onclick="selectMB('Dori', this)">Dori</div>
-                <div class="berber-select" onclick="selectMB('Enis', this)">Enis</div>
-            </div>
-            <div id="membership-schedule" class="hidden border-t pt-4">
-                <p class="text-[10px] font-bold text-center text-gray-400 mb-3">CAKTO TERMININ E PARË</p>
-                <div class="flex space-x-3 overflow-x-auto mb-4 pb-2 no-scrollbar" id="m-cal-days"></div>
-                <div class="grid grid-cols-3 gap-2" id="m-time-grid"></div>
-            </div>
-            <button onclick="confirmGold()" class="w-full bg-amber-500 text-white py-5 rounded-2xl font-black mt-6 uppercase tracking-widest shadow-lg">Bëhu Gold Member</button>
-        </div>
-    </div>
-
-    <div id="view-terminet" class="hidden p-6">
-        <div id="login-box" class="text-center py-10">
-            <h2 class="text-xl font-black mb-6 uppercase italic">Staff Login</h2>
-            <input type="text" id="uID" placeholder="ID (Emri)" class="member-input">
-            <input type="password" id="uPass" placeholder="Fjalëkalimi" class="member-input">
-            <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase">Kyçu</button>
-        </div>
-        <div id="staff-dash" class="hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="staff-name" class="font-bold text-xl uppercase italic"></h2>
-                <button onclick="location.reload()" class="bg-red-100 text-red-600 px-4 py-2 rounded-xl text-[10px] font-bold uppercase">Dil</button>
-            </div>
-            <div id="list-app" class="space-y-4"></div>
-        </div>
-    </div>
-
     <div id="view-kontakt" class="hidden p-6 bg-gray-50 min-h-screen">
-        <h2 class="text-center font-black text-xl uppercase italic mb-6">Kontakti & Produktet</h2>
-        
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-center">
-                <i class="fa-solid fa-bottle-droplet text-amber-500 text-2xl mb-2"></i>
-                <p class="text-[10px] font-bold uppercase">Hair Wax</p>
-                <b class="text-sm">5€</b>
+        <h2 class="text-center font-black text-xl uppercase italic mb-6">Kontakti</h2>
+        <div class="bg-white p-6 rounded-[35px] shadow-sm space-y-5 border border-gray-100">
+            <h2 class="text-center font-black text-2xl tracking-tighter uppercase italic text-slate-900">AGONI BARBER</h2>
+            
+            <div class="flex items-center space-x-4 cursor-pointer active:scale-95 transition-transform" 
+                 onclick="window.location.href='https://www.instagram.com/agonibarber/'">
+                <div class="w-11 h-11 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-sm">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase">Instagram</p>
+                    <p class="font-black text-slate-800 underline decoration-amber-500">@agonibarber</p>
+                </div>
             </div>
-            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-center">
-                <i class="fa-solid fa-spray-can text-blue-500 text-2xl mb-2"></i>
-                <p class="text-[10px] font-bold uppercase">Beard Oil</p>
-                <b class="text-sm">7€</b>
-            </div>
-        </div>
 
-        <div class="bg-white p-6 rounded-[35px] shadow-sm space-y-5 mb-5 border border-gray-100">
-            <h2 class="text-center font-black text-2xl tracking-tighter uppercase italic text-slate-900 mb-2">AGONI BARBER</h2>
-            <div class="flex items-center space-x-4">
-                <div class="w-11 h-11 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-location-dot text-lg"></i></div>
-                <div><p class="text-[10px] font-bold text-gray-400 uppercase">Lokacioni</p><p class="font-black text-slate-800">Pejë</p></div>
-            </div>
             <div class="flex items-center space-x-4" onclick="window.location.href='tel:+38349721735'">
-                <div class="w-11 h-11 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shadow-sm"><i class="fa-solid fa-phone text-lg"></i></div>
+                <div class="w-11 h-11 bg-green-100 rounded-2xl flex items-center justify-center text-green-600"><i class="fa-solid fa-phone text-lg"></i></div>
                 <div><p class="text-[10px] font-bold text-gray-400 uppercase">Telefoni</p><p class="font-black text-slate-800">+383 49 721 735</p></div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="w-11 h-11 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-sm"><i class="fa-brands fa-instagram text-lg"></i></div>
-                <div><p class="text-[10px] font-bold text-gray-400 uppercase">Instagram</p><p class="font-black text-slate-800">@agonibarber</p></div>
             </div>
         </div>
     </div>
@@ -238,18 +171,6 @@
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s2" onclick="setService('Qethje + Rroje', 's2')">
                     <div><span class="font-bold block">Qethje + Rroje</span><span class="text-[10px] font-bold text-gray-400 uppercase">35 MIN</span></div><span class="font-black">6€</span>
                 </div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s3" onclick="setService('Mjekërr', 's3')">
-                    <div><span class="font-bold block">Mjekërr</span><span class="text-[10px] font-bold text-gray-400 uppercase">15 MIN</span></div><span class="font-black">4€</span>
-                </div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s4" onclick="setService('Frizurë', 's4')">
-                    <div><span class="font-bold block">Frizurë</span><span class="text-[10px] font-bold text-gray-400 uppercase">5 MIN</span></div><span class="font-black">2€</span>
-                </div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s5" onclick="setService('Ngjyrosje', 's5')">
-                    <div><span class="font-bold block">Ngjyrosje</span><span class="text-[10px] font-bold text-gray-400 uppercase">25 MIN</span></div><span class="font-black">10€</span>
-                </div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s6" onclick="setService('Fëmijë (Nën 8 vjeç)', 's6')">
-                    <div><span class="font-bold block">Fëmijë (Nën 8 vjeç)</span></div><span class="font-black">4€</span>
-                </div>
                 <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
 
@@ -257,8 +178,6 @@
                 <div class="grid grid-cols-1 gap-3 mb-4">
                     <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
                     <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
                 </div>
                 <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
             </div>
@@ -268,18 +187,16 @@
                 <div class="grid grid-cols-3 gap-2 mb-6" id="time-grid"></div>
                 <input type="text" id="cName" placeholder="Emri juaj" class="member-input">
                 <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="member-input">
-                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg">Konfirmo</button>
+                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black uppercase">Konfirmo</button>
             </div>
         </div>
     </div>
 
     <script>
         let booking = { s: '', b: '', d: 'Mar 24', t: '' };
-        let mBooking = { s: 'Membership Gold', b: '', d: 'Mar 24', t: '' };
-        const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
 
         function switchPage(p) {
-            ['home', 'membership', 'terminet', 'kontakt'].forEach(v => {
+            ['home', 'kontakt'].forEach(v => {
                 const el = document.getElementById('view-'+v);
                 if(el) el.classList.add('hidden');
             });
@@ -299,14 +216,6 @@
             if(n==3) buildSchedule('cal-days', 'time-grid', booking);
         }
 
-        function selectMB(berber, el) {
-            mBooking.b = berber;
-            document.querySelectorAll('.berber-select').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-            document.getElementById('membership-schedule').classList.remove('hidden');
-            buildSchedule('m-cal-days', 'm-time-grid', mBooking);
-        }
-
         function setService(s, id) {
             booking.s = s;
             document.querySelectorAll('#step1 div.border-2').forEach(d => d.style.borderColor = '#e5e7eb');
@@ -324,8 +233,6 @@
         async function buildSchedule(calId, gridId, obj) {
             const daysContainer = document.getElementById(calId); daysContainer.innerHTML = '';
             const days = ['Mar 24', 'Mër 25', 'Enj 26', 'Pre 27', 'Sht 28'];
-            
-            // Leximi i termineve nga Firebase
             const querySnapshot = await window.getTerminePerBllokim(obj.b, obj.d);
 
             days.forEach(day => {
@@ -340,9 +247,7 @@
             for(let h=9; h<=18; h++) {
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
-                    // Kontrolli nëse ora është e zënë
                     let isBusy = querySnapshot.some(doc => doc.t === t);
-
                     let slot = document.createElement('div');
                     slot.className = `time-slot ${isBusy ? 'busy' : ''} ${obj.t === t ? 'selected' : ''}`;
                     slot.innerText = t;
@@ -355,66 +260,14 @@
         async function confirmApp() {
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t) return alert("Ju lutem plotësoni emrin dhe orarin!");
-            
-            const success = await window.saveToFirebase({ ...booking, name: n, phone: p, createdAt: new Date().toISOString() });
-            
+            if(!n || !booking.t) return alert("Plotësoni të gjitha!");
+            const success = await window.saveToFirebase({ ...booking, name: n, phone: p });
             if(success) {
-                const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY"; 
-                const chatid = "5802987116";
-                const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
-
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
-                alert("Rezervimi u krye me sukses!");
+                alert("Rezervimi u krye!");
                 location.reload();
             }
-        }
-
-        async function confirmGold() {
-            let n = document.getElementById('mName').value;
-            let p = document.getElementById('mPhone').value;
-            if(!n || !mBooking.t) return alert("Plotësoni të dhënat!");
-            
-            const success = await window.saveToFirebase({ ...mBooking, name: n, phone: p, type: 'GOLD' });
-            
-            if(success) {
-                const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
-                const chatid = "5802987116";
-                const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
-
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
-                alert("Urime! Tani jeni Gold Member.");
-                location.reload();
-            }
-        }
-
-        function handleLogin() {
-            let id = document.getElementById('uID').value;
-            if(users[id] === document.getElementById('uPass').value) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('staff-dash').classList.remove('hidden');
-                document.getElementById('staff-name').innerText = "Berberi: " + id;
-                window.getTerminetRealTime(id, (terminet) => {
-                    renderStaffAppointments(terminet);
-                });
-            } else alert("Të dhëna të gabuara!");
-        }
-
-        function renderStaffAppointments(mine) {
-            const container = document.getElementById('list-app');
-            container.innerHTML = mine.length ? mine.map(a => `
-                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-sm">
-                    <div class="flex justify-between items-start">
-                        <div><b>${a.name}</b><p class="text-[10px] font-bold text-gray-500 uppercase">${a.s}</p></div>
-                        <div class="text-right"><b>${a.t}</b><p class="text-[10px] text-gray-400 font-bold">${a.d}</p></div>
-                    </div>
-                    <div class="flex justify-between mt-3 pt-3 border-t">
-                        <a href="tel:${a.phone}" class="text-blue-600 font-bold">Thirr</a>
-                        <button onclick="window.deleteTerminFirebase('${a.id}')" class="text-red-500 font-bold">Fshije</button>
-                    </div>
-                </div>
-            `).join('') : `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim.</p>`;
         }
     </script>
 </body>
 </html>
+
