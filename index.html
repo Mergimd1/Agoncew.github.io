@@ -400,6 +400,8 @@
                 <h2 class="font-black uppercase mb-6 text-xl italic">Shërbimi</h2>
                 <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center" id="s1" onclick="setService('Qethje', 's1')"><span>Qethje</span><b>5€</b></div>
                 <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center" id="s2" onclick="setService('Mjekërr', 's2')"><span>Mjekërr</span><b>4€</b></div>
+                <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center" id="s3" onclick="setService('Frizurë', 's3')"><span>Frizurë</span><b>2€</b></div>
+                <div class="p-5 border-2 rounded-2xl mb-4 flex justify-between items-center" id="s4" onclick="setService('Ngjyrosje', 's4')"><span>Ngjyrosje</span><b>10€</b></div>
                 <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
             <div id="step2" class="hidden">
@@ -422,7 +424,6 @@
 
     <script>
         let booking = { s: '', b: '', d: 'Feb 26', t: '' };
-        // Leonis dhe Leonis Gashi u ndërruan me MENDIM (Password: mendi2026)
         const users = { "Agon": "Goni30", "Mendim": "mendi2026" };
 
         function switchPage(p) {
@@ -525,3 +526,4 @@
     </script>
 </body>
 </html>
+
