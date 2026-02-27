@@ -304,11 +304,11 @@
                     <span class="m-item">✂️ QETHJE 5€</span>
                     <span class="m-item">🧔 MJEKËRR 4€</span>
                     <span class="m-item">✨ FRIZURË 2€</span>
-                    <span class="m-item">🎨 NGJYROSJE 10€</span>
+                    <span class="m-item">🎨 NGJYROSJE 10-30€</span>
                     <span class="m-item">✂️ QETHJE 5€</span>
                     <span class="m-item">🧔 MJEKËRR 4€</span>
                     <span class="m-item">✨ FRIZURË 2€</span>
-                    <span class="m-item">🎨 NGJYROSJE 10€</span>
+                    <span class="m-item">🎨 NGJYROSJE 10-30€</span>
                 </div>
             </div>
             <div class="marquee-gold band-2">
@@ -430,7 +430,7 @@
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s2" onclick="setService('Qethje + Rroje', 's2')"><div><span class="font-bold block">Qethje + Rroje</span><span class="text-[10px] font-bold text-gray-400 uppercase">35 MIN</span></div><span class="font-black">6€</span></div>
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s3" onclick="setService('Mjekërr', 's3')"><div><span class="font-bold block">Mjekërr</span><span class="text-[10px] font-bold text-gray-400 uppercase">15 MIN</span></div><span class="font-black">4€</span></div>
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s4" onclick="setService('Frizurë', 's4')"><div><span class="font-bold block">Frizurë</span><span class="text-[10px] font-bold text-gray-400 uppercase">5 MIN</span></div><span class="font-black">2€</span></div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s5" onclick="setService('Ngjyrosje', 's5')"><div><span class="font-bold block">Ngjyrosje</span><span class="text-[10px] font-bold text-gray-400 uppercase">25 MIN</span></div><span class="font-black">10€</span></div>
+                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s5" onclick="setService('Ngjyrosje', 's5')"><div><span class="font-bold block">Ngjyrosje</span><span class="text-[10px] font-bold text-gray-400 uppercase">25 MIN</span></div><span class="font-black">10-30€</span></div>
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s6" onclick="setService('Fëmijë (Nën 8 vjeç)', 's6')"><div><span class="font-bold block">Fëmijë (Nën 8 vjeç)</span></div><span class="font-black">4€</span></div>
                 <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
             </div>
@@ -547,7 +547,7 @@
             const success = await window.saveToFirebase({ ...booking, name: n, phone: p, createdAt: new Date().toISOString() });
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
-                const chatid = "-1003873141211";
+                const chatid = "5802987116";
                 const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 alert("Rezervimi u krye me sukses!");
@@ -562,7 +562,7 @@
             const success = await window.saveToFirebase({ ...mBooking, name: n, phone: p, type: 'GOLD' });
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
-                const chatid = "-1003873141211";
+                const chatid = "5802987116";
                 const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
                 alert("Urime! Tani jeni Gold Member.");
