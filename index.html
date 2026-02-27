@@ -31,7 +31,8 @@
         window.getTerminetRealTime = function(barberName, callback) {
             let searchName = barberName;
             if(barberName === "Agon") searchName = "Agon Tahiri";
-            if(barberName === "Leonis") searchName = "Leonis Gashi";
+            if(barberName === "Mendim") searchName = "Mendim";
+            if(barberName === "Rejan") searchName = "Rejan";
 
             const q = query(collection(db, "appointments"), where("b", "==", searchName));
             onSnapshot(q, (snapshot) => {
@@ -146,9 +147,10 @@
             <p class="text-[10px] font-black uppercase text-gray-400 text-center mb-3">Zgjedh Berberin Preferuar</p>
             <div class="grid grid-cols-2 gap-2 mb-6">
                 <div class="berber-select" onclick="selectMB('Agon Tahiri', this)">Agon</div>
-                <div class="berber-select" onclick="selectMB('Leonis Gashi', this)">Leonis</div>
+                <div class="berber-select" onclick="selectMB('Mendim', this)">Mendim</div>
                 <div class="berber-select" onclick="selectMB('Dori', this)">Dori</div>
                 <div class="berber-select" onclick="selectMB('Enis', this)">Enis</div>
+                <div class="berber-select col-span-2" onclick="selectMB('Rejan', this)">Rejan</div>
             </div>
             <div id="membership-schedule" class="hidden border-t pt-4">
                 <p class="text-[10px] font-bold text-center text-gray-400 mb-3">CAKTO TERMININ E PARË</p>
@@ -251,9 +253,10 @@
             <div id="step2" class="hidden">
                 <div class="grid grid-cols-1 gap-3 mb-4">
                     <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b2" onclick="setB('Leonis Gashi', 'b2')">Leonis Gashi</div>
+                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b2" onclick="setB('Mendim', 'b2')">Mendim</div>
                     <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
                     <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
+                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b5" onclick="setB('Rejan', 'b5')">Rejan</div>
                 </div>
                 <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
             </div>
@@ -271,7 +274,7 @@
     <script>
         let booking = { s: '', b: '', d: 'Mar 24', t: '' };
         let mBooking = { s: 'Membership Gold', b: '', d: 'Mar 24', t: '' };
-        const users = { "Agon": "Goni30", "Leonis": "leo12", "Dori": "dori201", "Enis": "nisi99" };
+        const users = { "Agon": "Goni30", "Mendim": "mendi12", "Dori": "dori201", "Enis": "nisi99", "Rejan": "rejan77" };
 
         function switchPage(p) {
             ['home', 'membership', 'terminet', 'kontakt'].forEach(v => {
@@ -399,3 +402,4 @@
     </script>
 </body>
 </html>
+
