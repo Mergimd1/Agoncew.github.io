@@ -244,14 +244,19 @@
         .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
         .m-item { margin: 0 30px; }
         
-        /* New Instagram Ribbon Style */
-        .insta-ribbon {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        /* Ribbons Style */
+        .insta-ribbon, .location-ribbon {
             position: relative;
             overflow: hidden;
             transition: 0.3s;
         }
-        .insta-ribbon::after {
+        .insta-ribbon {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+        .location-ribbon {
+            background: linear-gradient(45deg, #4285F4 0%, #34A853 100%);
+        }
+        .insta-ribbon::after, .location-ribbon::after {
             content: '';
             position: absolute;
             top: -50%; left: -50%;
@@ -372,8 +377,9 @@
     </div>
 
     <div id="view-kontakt" class="hidden p-6 bg-gray-50 min-h-screen">
-        <h2 class="text-center font-black text-xl uppercase italic mb-6">Kontakti</h2>
+        <h2 class="text-center font-black text-xl uppercase italic mb-6">Kontakti & Lokacioni</h2>
         <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070" class="w-full h-44 object-cover rounded-[30px] mb-6 shadow-lg">
+        
         <div class="bg-white p-6 rounded-[35px] shadow-sm space-y-4 mb-5 border border-gray-100">
             <h2 class="text-center font-black text-2xl tracking-tighter uppercase italic text-slate-900 mb-2">AGONI BARBER</h2>
             
@@ -381,18 +387,28 @@
                 <div class="flex items-center space-x-3">
                     <i class="fa-brands fa-instagram text-2xl"></i>
                     <div>
-                        <p class="text-[9px] font-bold uppercase opacity-80">Na ndiqni në</p>
+                        <p class="text-[9px] font-bold uppercase opacity-80">Instagrami</p>
                         <p class="font-black tracking-widest">@AGONICREW</p>
                     </div>
                 </div>
                 <i class="fa-solid fa-chevron-right text-sm opacity-70"></i>
             </div>
 
-            <div class="flex items-center space-x-4 pt-2"><div class="w-11 h-11 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-location-dot text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Lokacioni</p><p class="font-black text-slate-800">Pejë</p></div></div>
-            <div class="flex items-center space-x-4" onclick="window.location.href='tel:+38349721735'"><div class="w-11 h-11 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shadow-sm"><i class="fa-solid fa-phone text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Telefoni</p><p class="font-black text-slate-800">+383 49 721 735</p></div></div>
-            <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-sky-100 rounded-2xl flex items-center justify-center text-sky-600 shadow-sm"><i class="fa-solid fa-globe text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Web</p><p class="font-black text-slate-800 text-sm italic">www.agonicrew.com</p></div></div>
-            <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-gray-100 rounded-2xl flex items-center justify-center text-slate-700 shadow-sm"><i class="fa-solid fa-building text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Adresa</p><p class="font-black text-slate-800 text-[10px] uppercase">Agonicrew, Pejë, 30000</p></div></div>
+            <div onclick="window.location.href='https://www.google.com/maps/search/Agonicrew+Peje'" class="location-ribbon p-4 rounded-2xl flex items-center justify-between text-white cursor-pointer shadow-lg active:scale-95 transition-all">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-location-dot text-2xl"></i>
+                    <div>
+                        <p class="text-[9px] font-bold uppercase opacity-80">Gjej lokacionin në Hartë</p>
+                        <p class="font-black tracking-widest uppercase">Pejë, Kosovë</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-map text-sm opacity-70"></i>
+            </div>
+
+            <div class="flex items-center space-x-4 pt-2" onclick="window.location.href='tel:+38349721735'"><div class="w-11 h-11 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shadow-sm"><i class="fa-solid fa-phone text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Telefoni</p><p class="font-black text-slate-800">+383 49 721 735</p></div></div>
+            <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-sky-100 rounded-2xl flex items-center justify-center text-sky-600 shadow-sm"><i class="fa-solid fa-globe text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Webi</p><p class="font-black text-slate-800 text-sm italic">www.agonicrew.com</p></div></div>
         </div>
+
         <div class="bg-white p-6 rounded-[30px] shadow-sm flex items-center justify-between border border-gray-100">
             <div class="flex items-center space-x-4"><div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-500"><i class="fa-solid fa-clock-rotate-left text-xl"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Orari i Punës</p><p class="font-black text-xl text-slate-800">09:00 - 19:00</p></div></div>
             <span class="bg-amber-100 text-amber-600 text-[10px] font-black px-3 py-1 rounded-lg uppercase">Pushimi: 13-14</span>
@@ -439,6 +455,7 @@
     </div>
 
     <script>
+        // JS Functions remain the same to ensure full 571+ lines logic
         function getDynamicDays() {
             const arr = [];
             const names = ['Die', 'Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'];
@@ -453,13 +470,7 @@
         const dynamicDays = getDynamicDays();
         let booking = { s: '', b: '', d: dynamicDays[0], t: '' };
         let mBooking = { s: 'Membership Gold', b: '', d: dynamicDays[0], t: '' };
-        const users = { 
-            "Agon": "Goni30", 
-            "Mendim": "mendi12", 
-            "Dori": "dori201", 
-            "Enis": "nisi99", 
-            "Rejan": "rejan77" 
-        };
+        const users = { "Agon": "Goni30", "Mendim": "mendi12", "Dori": "dori201", "Enis": "nisi99", "Rejan": "rejan77" };
 
         function switchPage(p) {
             ['home', 'membership', 'terminet', 'kontakt'].forEach(v => {
@@ -471,14 +482,8 @@
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
         }
 
-        function openBooking() { 
-            document.getElementById('bookingModal').classList.add('active'); 
-            goStep(1); 
-        }
-
-        function closeModal() { 
-            document.getElementById('bookingModal').classList.remove('active'); 
-        }
+        function openBooking() { document.getElementById('bookingModal').classList.add('active'); goStep(1); }
+        function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
 
         function goStep(n) {
             ['step1', 'step2', 'step3'].forEach(s => document.getElementById(s).classList.add('hidden'));
@@ -540,14 +545,11 @@
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
             if(!n || !booking.t) return alert("Ju lutem plotësoni emrin dhe orarin!");
-            
             const success = await window.saveToFirebase({ ...booking, name: n, phone: p, createdAt: new Date().toISOString() });
-            
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
                 const chatid = "5802987116";
                 const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
-                
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 alert("Rezervimi u krye me sukses!");
                 location.reload();
@@ -558,14 +560,11 @@
             let n = document.getElementById('mName').value;
             let p = document.getElementById('mPhone').value;
             if(!n || !mBooking.t) return alert("Plotësoni të dhënat!");
-            
             const success = await window.saveToFirebase({ ...mBooking, name: n, phone: p, type: 'GOLD' });
-            
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
                 const chatid = "5802987116";
                 const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
-                
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
                 alert("Urime! Tani jeni Gold Member.");
                 location.reload();
@@ -600,4 +599,3 @@
     </script>
 </body>
 </html>
-
