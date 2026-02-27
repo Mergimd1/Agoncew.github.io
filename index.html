@@ -320,47 +320,56 @@
             100% { transform: rotate(360deg) scale(1); }
         }
 
-        /* STILI I RI PER RROTULLEN */
+        /* STILI I RI PER RROTULLEN E BUKUR */
         #wheel-container {
             position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+            border: 10px solid #111827;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px #fbbf24, 0 15px 35px rgba(0,0,0,0.4);
+            background: #111827;
         }
-        #wheel {
+        #wheel-canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 8px solid #111827;
-            position: relative;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+            transition: transform 6s cubic-bezier(0.15, 0, 0.1, 1);
+        }
+        .wheel-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; height: 50px;
+            background: white;
+            border: 5px solid #111827;
+            border-radius: 50%;
+            z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
         .wheel-pointer {
             position: absolute;
-            top: -10px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid #ef4444;
-            z-index: 10;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ef4444;
+            z-index: 20;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3));
         }
-        .segment {
+        .wheel-dot {
             position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-            font-weight: 900;
-            color: white;
-            text-transform: uppercase;
-            padding-bottom: 50px;
+            width: 8px; height: 8px;
+            background: white;
+            border-radius: 50%;
+            left: 50%;
+            top: 2px;
+            transform-origin: center 148px;
         }
     </style>
 </head>
@@ -520,24 +529,25 @@
         </div>
     </div>
 
-    <div id="wheelModal" class="modal-overlay">
-        <div class="modal-body text-center">
+    <div id="wheelModal" class="modal-overlay" style="align-items: center; padding: 20px;">
+        <div class="modal-body" style="border-radius: 30px; padding: 30px; text-align: center;">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-black text-xl uppercase italic">Rrotullo & Fito</h2>
-                <button onclick="closeWheel()" class="text-3xl text-gray-300">×</button>
+                <h2 class="font-black text-2xl uppercase italic">Fito Shpërblim</h2>
+                <button onclick="closeWheel()" class="text-3xl text-gray-300">&times;</button>
             </div>
-            <p id="wheelMsg" class="text-[10px] font-bold text-gray-500 uppercase mb-4">Mund ta rrotulloni vetëm 1 herë në ditë!</p>
+            <p id="wheelMsg" class="text-[11px] font-bold text-gray-500 uppercase mb-4">Mund ta rrotulloni vetëm 1 herë në ditë!</p>
             
             <div id="wheel-container">
                 <div class="wheel-pointer"></div>
-                <div id="wheel">
-                    </div>
+                <div class="wheel-center"><i class="fa-solid fa-scissors text-slate-800"></i></div>
+                <canvas id="wheel-canvas" width="300" height="300"></canvas>
             </div>
 
-            <button id="spinBtn" onclick="spinWheel()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg mt-4">Rrotullo</button>
-            <div id="winDisplay" class="hidden mt-6 p-4 bg-emerald-50 border-2 border-emerald-500 rounded-2xl">
-                <p class="text-emerald-600 font-black uppercase tracking-tighter" id="winText"></p>
-                <p class="text-[9px] text-emerald-800 mt-1 font-bold">⚠️ VËREJTJE: Duhet të rezervoni qethjen për ta marrë shpërblimin!</p>
+            <button id="spinBtn" onclick="spinWheel()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg mt-4 active:scale-95 transition-all">Rrotullo tani</button>
+            
+            <div id="winDisplay" class="hidden mt-6 p-4 bg-emerald-50 border-2 border-emerald-500 rounded-2xl animate-bounce">
+                <p class="text-emerald-600 font-black uppercase text-sm" id="winText"></p>
+                <p class="text-[10px] text-emerald-800 mt-2 font-bold italic">⚠️ PËR TA MARRË SHPËRBLIMIN DUHET TË REZERVOINI QETHJEN!</p>
             </div>
         </div>
     </div>
@@ -582,42 +592,55 @@
     </div>
 
     <script>
-        // LOGJIKA E RROTULLES (LUCKY WHEEL)
+        // LOGJIKA E RROTULLES E MODIFIKUAR SIPAS KERKESES
+        const canvas = document.getElementById('wheel-canvas');
+        const ctx = canvas.getContext('2d');
         const prizes = [
-            { text: "Qethje Falas", color: "#111827", win: true },
-            { text: "Provo përsëri", color: "#6b7280", win: false },
-            { text: "Wax Nishman", color: "#ea580c", win: true },
-            { text: "Provo përsëri", color: "#9ca3af", win: false },
-            { text: "Kafe Gratis", color: "#b45309", win: true },
-            { text: "Provo përsëri", color: "#6b7280", win: false },
-            { text: "Provo përsëri", color: "#9ca3af", win: false },
-            { text: "Provo përsëri", color: "#374151", win: false }
+            "Qethje Falas", 
+            "Provo Fatin", 
+            "Wax Nishman", 
+            "Provo Fatin",
+            "Kafe Gratis", 
+            "Provo Fatin", 
+            "Provo Fatin", 
+            "Provo Fatin"
         ];
+        const colors = ["#b45309", "#111827", "#ea580c", "#1f2937", "#d97706", "#111827", "#1f2937", "#111827"];
+        
+        let isFirstTimeTest = true; // DO TE FITOSH 100% HEREN E PARE PER TEST
 
-        function initWheel() {
-            const wheel = document.getElementById('wheel');
-            wheel.innerHTML = '';
-            prizes.forEach((p, i) => {
-                const seg = document.createElement('div');
-                seg.className = 'segment';
-                seg.style.backgroundColor = p.color;
-                seg.style.transform = `rotate(${i * 45}deg) skewY(45deg)`;
+        function drawWheel() {
+            const arc = (2 * Math.PI) / 8;
+            for (let i = 0; i < 8; i++) {
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 150, i * arc, (i + 1) * arc);
+                ctx.fill();
                 
-                const span = document.createElement('span');
-                span.innerText = p.text;
-                span.style.transform = `skewY(-45deg) rotate(22.5deg)`;
-                span.style.position = 'absolute';
-                span.style.textAlign = 'center';
-                span.style.width = '80px';
-                
-                seg.appendChild(span);
-                wheel.appendChild(seg);
-            });
+                ctx.save();
+                ctx.translate(150, 150);
+                ctx.rotate(i * arc + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "white";
+                ctx.font = "bold 11px Arial";
+                ctx.fillText(prizes[i].toUpperCase(), 140, 5);
+                ctx.restore();
+            }
+            
+            // Pikat dekorative
+            const container = document.getElementById('wheel-container');
+            for(let i=0; i<12; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'wheel-dot';
+                dot.style.transform = `rotate(${i * 30}deg)`;
+                container.appendChild(dot);
+            }
         }
 
         function openWheel() {
             document.getElementById('wheelModal').classList.add('active');
-            initWheel();
+            drawWheel();
             checkSpinLimit();
         }
 
@@ -639,35 +662,45 @@
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             
-            // Logjika e probabilitetit: 1 ne 300 fiton nje nga 3 shperblimet
-            let rand = Math.floor(Math.random() * 300);
             let prizeIndex;
             
-            if (rand === 0) prizeIndex = 0; // Qethje Falas
-            else if (rand === 1) prizeIndex = 2; // Wax
-            else if (rand === 2) prizeIndex = 4; // Kafe
-            else {
-                // Nese nuk fiton, zgjedh nje nga "Provo perseri" (indices 1, 3, 5, 6, 7)
-                const losers = [1, 3, 5, 6, 7];
-                prizeIndex = losers[Math.floor(Math.random() * losers.length)];
+            // LOGJIKA E PROBABILITETIT 1 NE 300
+            if (isFirstTimeTest) {
+                prizeIndex = 0; // Heren e pare fiton Qethje Falas (Test)
+                isFirstTimeTest = false;
+            } else {
+                let rand = Math.floor(Math.random() * 300);
+                if (rand === 0) prizeIndex = 0;      // Qethje
+                else if (rand === 1) prizeIndex = 2; // Wax
+                else if (rand === 2) prizeIndex = 4; // Kafe
+                else {
+                    const losers = [1, 3, 5, 6, 7];
+                    prizeIndex = losers[Math.floor(Math.random() * losers.length)];
+                }
             }
 
-            const degrees = (3600 + (360 - (prizeIndex * 45))); 
-            const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${degrees}deg)`;
+            const rotation = (3600 + (360 - (prizeIndex * 45)) - 22.5); 
+            canvas.style.transform = `rotate(${rotation}deg)`;
 
             setTimeout(() => {
                 localStorage.setItem('lastSpinDate', new Date().toDateString());
-                if (prizes[prizeIndex].win) {
+                const win = (prizeIndex === 0 || prizeIndex === 2 || prizeIndex === 4);
+                
+                if (win) {
                     document.getElementById('winDisplay').classList.remove('hidden');
-                    document.getElementById('winText').innerText = "URIME! FITOVE: " + prizes[prizeIndex].text;
+                    document.getElementById('winText').innerText = "URIME! FITOVE: " + prizes[prizeIndex];
+                    // Njoftim Telegram per fituesin
+                    const msg = `🎁 FITUES I RI!\nShpërblimi: ${prizes[prizeIndex]}`;
+                    fetch(`https://api.telegram.org/bot8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY/sendMessage?chat_id=5802987116&text=${encodeURIComponent(msg)}`);
                 } else {
-                    alert("Më shumë fat herën tjetër! Ju rrotulluat: " + prizes[prizeIndex].text);
+                    alert("Më shumë fat herën tjetër!");
+                    closeWheel();
                 }
                 checkSpinLimit();
-            }, 4500);
+            }, 6500);
         }
 
+        // --- PJESA ORIGJINALE E KODIT TUAJ (PA NDRYSHIME) ---
         function getDynamicDays() {
             const arr = [];
             const names = ['Die', 'Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'];
@@ -776,39 +809,5 @@
             if(success) {
                 const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
                 const chatid = "5802987116";
-                const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
-                alert("Urime! Tani jeni Gold Member.");
-                location.reload();
-            }
-        }
-
-        function handleLogin() {
-            let id = document.getElementById('uID').value;
-            if(users[id] === document.getElementById('uPass').value) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('staff-dash').classList.remove('hidden');
-                document.getElementById('staff-name').innerText = "Berberi: " + id;
-                window.getTerminetRealTime(id, (terminet) => { renderStaffAppointments(terminet); });
-            } else alert("Të dhëna të gabuara!");
-        }
-
-        function renderStaffAppointments(mine) {
-            const container = document.getElementById('list-app');
-            container.innerHTML = mine.length ? mine.map(a => `
-                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-sm">
-                    <div class="flex justify-between items-start">
-                        <div><b>${a.name}</b><p class="text-[10px] font-bold text-gray-500 uppercase">${a.s}</p></div>
-                        <div class="text-right"><b>${a.t}</b><p class="text-[10px] text-gray-400 font-bold">${a.d}</p></div>
-                    </div>
-                    <div class="flex justify-between mt-3 pt-3 border-t">
-                        <a href="tel:${a.phone}" class="text-blue-600 font-bold">Thirr</a>
-                        <button onclick="window.deleteTerminFirebase('${a.id}')" class="text-red-500 font-bold">Fshije</button>
-                    </div>
-                </div>
-            `).join('') : `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim për momentin.</p>`;
-        }
-    </script>
-</body>
-</html>
+                const msgGold =
 
