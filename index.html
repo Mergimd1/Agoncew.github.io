@@ -394,7 +394,7 @@
                 <i class="fa-solid fa-chevron-right text-sm opacity-70"></i>
             </div>
 
-            <div onclick="window.location.href='https://www.google.com/maps/search/Agonicrew+Peje'" class="location-ribbon p-4 rounded-2xl flex items-center justify-between text-white cursor-pointer shadow-lg active:scale-95 transition-all">
+            <div onclick="window.location.href='https://www.google.com/maps/place/Agonicrew/@42.6613329,20.2917208,17z'" class="location-ribbon p-4 rounded-2xl flex items-center justify-between text-white cursor-pointer shadow-lg active:scale-95 transition-all">
                 <div class="flex items-center space-x-3">
                     <i class="fa-solid fa-location-dot text-2xl"></i>
                     <div>
@@ -424,7 +424,7 @@
 
     <div id="bookingModal" class="modal-overlay">
         <div class="modal-body">
-            <div class="flex justify-between items-center mb-6"><h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2><button onclick="closeModal()" class="text-3xl text-gray-300">&times;</button></div>
+            <div class="flex justify-between items-center mb-6"><h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2><button onclick="closeModal()" class="text-3xl text-gray-300">×</button></div>
             <div id="step1">
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s1" onclick="setService('Qethje', 's1')"><div><span class="font-bold block">Qethje</span><span class="text-[10px] font-bold text-gray-400 uppercase">30 MIN</span></div><span class="font-black">5€</span></div>
                 <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s2" onclick="setService('Qethje + Rroje', 's2')"><div><span class="font-bold block">Qethje + Rroje</span><span class="text-[10px] font-bold text-gray-400 uppercase">35 MIN</span></div><span class="font-black">6€</span></div>
@@ -455,7 +455,6 @@
     </div>
 
     <script>
-        // JS Functions remain the same to ensure full 571+ lines logic
         function getDynamicDays() {
             const arr = [];
             const names = ['Die', 'Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'];
@@ -599,3 +598,4 @@
     </script>
 </body>
 </html>
+
