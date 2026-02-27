@@ -243,9 +243,26 @@
         .band-2 { background: #fbbf24; color: #111827; }
         .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
         .m-item { margin: 0 30px; }
-        .insta-glow {
-            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-            box-shadow: 0 4px 15px rgba(214, 36, 159, 0.4);
+        
+        /* New Instagram Ribbon Style */
+        .insta-ribbon {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .insta-ribbon::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(30deg);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
         }
     </style>
 </head>
@@ -357,11 +374,22 @@
     <div id="view-kontakt" class="hidden p-6 bg-gray-50 min-h-screen">
         <h2 class="text-center font-black text-xl uppercase italic mb-6">Kontakti</h2>
         <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070" class="w-full h-44 object-cover rounded-[30px] mb-6 shadow-lg">
-        <div class="bg-white p-6 rounded-[35px] shadow-sm space-y-5 mb-5 border border-gray-100">
+        <div class="bg-white p-6 rounded-[35px] shadow-sm space-y-4 mb-5 border border-gray-100">
             <h2 class="text-center font-black text-2xl tracking-tighter uppercase italic text-slate-900 mb-2">AGONI BARBER</h2>
-            <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-location-dot text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Lokacioni</p><p class="font-black text-slate-800">Pejë</p></div></div>
+            
+            <div onclick="window.location.href='https://www.instagram.com/agonicrew'" class="insta-ribbon p-4 rounded-2xl flex items-center justify-between text-white cursor-pointer shadow-lg active:scale-95 transition-all">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-brands fa-instagram text-2xl"></i>
+                    <div>
+                        <p class="text-[9px] font-bold uppercase opacity-80">Na ndiqni në</p>
+                        <p class="font-black tracking-widest">@AGONICREW</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-sm opacity-70"></i>
+            </div>
+
+            <div class="flex items-center space-x-4 pt-2"><div class="w-11 h-11 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-location-dot text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Lokacioni</p><p class="font-black text-slate-800">Pejë</p></div></div>
             <div class="flex items-center space-x-4" onclick="window.location.href='tel:+38349721735'"><div class="w-11 h-11 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shadow-sm"><i class="fa-solid fa-phone text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Telefoni</p><p class="font-black text-slate-800">+383 49 721 735</p></div></div>
-            <div class="flex items-center space-x-4 cursor-pointer" onclick="window.location.href='https://www.instagram.com/agonicrew'"><div class="w-11 h-11 insta-glow rounded-2xl flex items-center justify-center text-white shadow-sm"><i class="fa-brands fa-instagram text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Instagram</p><p class="font-black text-slate-800">@agonicrew</p></div></div>
             <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-sky-100 rounded-2xl flex items-center justify-center text-sky-600 shadow-sm"><i class="fa-solid fa-globe text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Web</p><p class="font-black text-slate-800 text-sm italic">www.agonicrew.com</p></div></div>
             <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-gray-100 rounded-2xl flex items-center justify-center text-slate-700 shadow-sm"><i class="fa-solid fa-building text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Adresa</p><p class="font-black text-slate-800 text-[10px] uppercase">Agonicrew, Pejë, 30000</p></div></div>
         </div>
