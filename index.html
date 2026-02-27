@@ -270,7 +270,7 @@
             100% { transform: translateX(100%) rotate(30deg); }
         }
 
-        /* Stili për Rrotullo & Fito */
+        /* STILI I RI PER RROTULLEN */
         .spin-win-banner {
             background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
             color: white;
@@ -287,21 +287,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: transform 0.2s;
         }
-
-        .spin-win-banner:active {
-            transform: scale(0.95);
-        }
-
-        .spin-win-banner::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-            transform: rotate(30deg);
-            animation: shimmer 3s infinite;
-        }
-
+        .spin-win-banner:active { transform: scale(0.95); }
         .spin-icon-wrapper {
             background: rgba(255, 255, 255, 0.2);
             width: 60px;
@@ -310,17 +296,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
             animation: pulse-spin 4s infinite linear;
         }
-
         @keyframes pulse-spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        /* STILI I RI PER RROTULLEN */
         #wheel-container {
             position: relative;
             width: 280px;
@@ -341,8 +322,7 @@
             top: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 0;
-            height: 0;
+            width: 0; height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
             border-top: 30px solid #ef4444;
@@ -523,21 +503,25 @@
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-body text-center">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-black text-xl uppercase italic">Rrotullo & Fito</h2>
+                <h2 class="font-black text-xl uppercase italic text-orange-600">Lucky Wheel</h2>
                 <button onclick="closeWheel()" class="text-3xl text-gray-300">×</button>
             </div>
-            <p id="wheelMsg" class="text-[10px] font-bold text-gray-500 uppercase mb-4">Mund ta rrotulloni vetëm 1 herë në ditë!</p>
             
+            <div id="wheelSetup">
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-4">Shëno emrin për të luajtur (1 herë/ditë)</p>
+                <input type="text" id="wheelPlayerName" placeholder="Emri juaj" class="member-input text-center">
+            </div>
+
             <div id="wheel-container">
                 <div class="wheel-pointer"></div>
-                <div id="wheel">
-                    </div>
+                <div id="wheel"></div>
             </div>
 
             <button id="spinBtn" onclick="spinWheel()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg mt-4">Rrotullo</button>
+            
             <div id="winDisplay" class="hidden mt-6 p-4 bg-emerald-50 border-2 border-emerald-500 rounded-2xl">
-                <p class="text-emerald-600 font-black uppercase tracking-tighter" id="winText"></p>
-                <p class="text-[9px] text-emerald-800 mt-1 font-bold">⚠️ VËREJTJE: Duhet të rezervoni qethjen për ta marrë shpërblimin!</p>
+                <p class="text-emerald-600 font-black uppercase tracking-tighter text-lg" id="winText"></p>
+                <p class="text-[10px] text-emerald-800 mt-1 font-bold">⚠️ VËREJTJE: Duhet të rezervoni qethjen për ta marrë shpërblimin!</p>
             </div>
         </div>
     </div>
@@ -582,7 +566,7 @@
     </div>
 
     <script>
-        // LOGJIKA E RROTULLES (LUCKY WHEEL)
+        // LOGJIKA E RROTULLES
         const prizes = [
             { text: "Qethje Falas", color: "#111827", win: true },
             { text: "Provo përsëri", color: "#6b7280", win: false },
@@ -602,14 +586,12 @@
                 seg.className = 'segment';
                 seg.style.backgroundColor = p.color;
                 seg.style.transform = `rotate(${i * 45}deg) skewY(45deg)`;
-                
                 const span = document.createElement('span');
                 span.innerText = p.text;
                 span.style.transform = `skewY(-45deg) rotate(22.5deg)`;
                 span.style.position = 'absolute';
                 span.style.textAlign = 'center';
                 span.style.width = '80px';
-                
                 seg.appendChild(span);
                 wheel.appendChild(seg);
             });
@@ -621,48 +603,53 @@
             checkSpinLimit();
         }
 
-        function closeWheel() {
-            document.getElementById('wheelModal').classList.remove('active');
-        }
+        function closeWheel() { document.getElementById('wheelModal').classList.remove('active'); }
 
         function checkSpinLimit() {
             const lastSpin = localStorage.getItem('lastSpinDate');
             const today = new Date().toDateString();
             if (lastSpin === today) {
-                document.getElementById('spinBtn').disabled = true;
-                document.getElementById('spinBtn').style.opacity = "0.5";
-                document.getElementById('wheelMsg').innerText = "Keni rrotulluar sot! Provoni nesër.";
+                const btn = document.getElementById('spinBtn');
+                btn.disabled = true;
+                btn.style.opacity = "0.5";
+                btn.innerText = "Keni rrotulluar sot";
             }
         }
 
         function spinWheel() {
+            const name = document.getElementById('wheelPlayerName').value;
+            if(!name) return alert("Ju lutem shënoni emrin para se të rrotulloni!");
+            
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             
-            // Logjika e probabilitetit: 1 ne 300 fiton nje nga 3 shperblimet
             let rand = Math.floor(Math.random() * 300);
-            let prizeIndex;
+            let pIdx;
             
-            if (rand === 0) prizeIndex = 0; // Qethje Falas
-            else if (rand === 1) prizeIndex = 2; // Wax
-            else if (rand === 2) prizeIndex = 4; // Kafe
+            if (rand === 0) pIdx = 0; 
+            else if (rand === 1) pIdx = 2; 
+            else if (rand === 2) pIdx = 4; 
             else {
-                // Nese nuk fiton, zgjedh nje nga "Provo perseri" (indices 1, 3, 5, 6, 7)
                 const losers = [1, 3, 5, 6, 7];
-                prizeIndex = losers[Math.floor(Math.random() * losers.length)];
+                pIdx = losers[Math.floor(Math.random() * losers.length)];
             }
 
-            const degrees = (3600 + (360 - (prizeIndex * 45))); 
+            const degrees = (3600 + (360 - (pIdx * 45))); 
             const wheel = document.getElementById('wheel');
             wheel.style.transform = `rotate(${degrees}deg)`;
 
             setTimeout(() => {
                 localStorage.setItem('lastSpinDate', new Date().toDateString());
-                if (prizes[prizeIndex].win) {
+                if (prizes[pIdx].win) {
                     document.getElementById('winDisplay').classList.remove('hidden');
-                    document.getElementById('winText').innerText = "URIME! FITOVE: " + prizes[prizeIndex].text;
+                    document.getElementById('winText').innerText = "FITORE: " + prizes[pIdx].text;
+                    // Dergo njoftim ne Telegram
+                    const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
+                    const chatid = "5802987116";
+                    const msg = `🎁 *FITUES NË RROTULLË*\n──────────────\n👤 *Emri:* ${name}\n🏆 *Shpërblimi:* ${prizes[pIdx].text}\n──────────────\n⚠️ *Kushti:* Duhet të qethet për ta marrë!`;
+                    fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 } else {
-                    alert("Më shumë fat herën tjetër! Ju rrotulluat: " + prizes[prizeIndex].text);
+                    alert("Më shumë fat herën tjetër!");
                 }
                 checkSpinLimit();
             }, 4500);
