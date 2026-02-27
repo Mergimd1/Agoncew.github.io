@@ -269,6 +269,56 @@
             0% { transform: translateX(-100%) rotate(30deg); }
             100% { transform: translateX(100%) rotate(30deg); }
         }
+
+        /* Stili për Rrotullo & Fito */
+        .spin-win-banner {
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: white;
+            border-radius: 25px;
+            padding: 20px 25px;
+            margin: 20px 20px 80px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(234, 88, 12, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .spin-win-banner:active {
+            transform: scale(0.95);
+        }
+
+        .spin-win-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(30deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .spin-icon-wrapper {
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            animation: pulse-spin 4s infinite linear;
+        }
+
+        @keyframes pulse-spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
     </style>
 </head>
 
@@ -295,6 +345,18 @@
             <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="alert('Së shpejti...')">
                 <i class="fa-solid fa-cart-shopping text-emerald-500 text-2xl"></i>
                 <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
+            </div>
+        </div>
+
+        <div class="spin-win-banner" onclick="alert('Lojërat e fatit dhe shpërblimet po vijnë së shpejti! 🎁')">
+            <div class="z-10 relative">
+                <h3 class="font-black text-2xl uppercase italic tracking-wider drop-shadow-md">Rrotullo & Fito</h3>
+                <p class="text-[10px] font-bold uppercase opacity-90 mt-1 tracking-widest flex items-center gap-1">
+                    <i class="fa-solid fa-gift text-white"></i> Fito qethje falas!
+                </p>
+            </div>
+            <div class="spin-icon-wrapper z-10 relative">
+                <i class="fa-solid fa-dharmachakra text-3xl text-white"></i>
             </div>
         </div>
 
@@ -598,4 +660,3 @@
     </script>
 </body>
 </html>
-
