@@ -2,14 +2,16 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agoni Barber | App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agoni Barber | Official App</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, onSnapshot, query, where, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, onSnapshot, query, where, deleteDoc, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDd6wjVvh-28PODRDJ9bkSf8KKnVhmmf2A",
@@ -23,36 +25,57 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Global Firebase Functions
         window.saveToFirebase = async function(data) {
             try {
                 await addDoc(collection(db, "appointments"), data);
                 return true;
             } catch (e) {
-                console.error(e);
+                console.error("Error adding document: ", e);
                 return false;
             }
         };
 
         window.getTerminetRealTime = function(barberName, callback) {
             let searchName = barberName;
+            // Map common names
             if(barberName === "Agon") searchName = "Agon Tahiri";
-            if(barberName === "Mendim") searchName = "Mendim";
-            if(barberName === "Rejan") searchName = "Rejan";
-
-            const q = query(collection(db, "appointments"), where("b", "==", searchName));
-            onSnapshot(q, (snapshot) => {
+            
+            const q = query(
+                collection(db, "appointments"), 
+                where("b", "==", searchName)
+            );
+            
+            return onSnapshot(q, (snapshot) => {
                 const docs = [];
                 snapshot.forEach(d => docs.push({ ...d.data(), id: d.id }));
+                // Sort client-side by date and time
+                docs.sort((a, b) => {
+                    if (a.d !== b.d) return a.d.localeCompare(b.d);
+                    return a.t.localeCompare(b.t);
+                });
                 callback(docs);
             });
         };
 
         window.deleteTerminFirebase = async function(id) {
-            await deleteDoc(doc(db, "appointments", id));
+            if(confirm("A jeni të sigurt që dëshironi ta fshini këtë termin?")) {
+                try {
+                    await deleteDoc(doc(db, "appointments", id));
+                    return true;
+                } catch (e) {
+                    console.error(e);
+                    return false;
+                }
+            }
         };
 
         window.getTerminePerBllokim = async function(barberName, data) {
-            const q = query(collection(db, "appointments"), where("b", "==", barberName), where("d", "==", data));
+            const q = query(
+                collection(db, "appointments"), 
+                where("b", "==", barberName), 
+                where("d", "==", data)
+            );
             const snapshot = await getDocs(q);
             const docs = [];
             snapshot.forEach(d => docs.push(d.data()));
@@ -61,352 +84,292 @@
     </script>
 
     <style>
-        body { 
-            background-color: #f3f4f6; 
-            font-family: -apple-system, system-ui, sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-            margin: 0; 
+        :root {
+            --primary: #111827;
+            --accent: #fbbf24;
+            --bg-gray: #f3f4f6;
         }
+
+        body { 
+            background-color: var(--bg-gray); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden;
+            color: #1f2937;
+        }
+
+        /* Video/Hero Header */
         .video-header { 
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074'); 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074'); 
             background-size: cover; 
             background-position: center; 
-            height: 240px; 
+            height: 260px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
             color: white;
-            border-bottom-left-radius: 30px; 
-            border-bottom-right-radius: 30px;
+            border-bottom-left-radius: 40px; 
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
         }
+
+        /* Home Grid */
         .home-grid { 
             display: grid; 
             grid-template-cols: repeat(2, 1fr); 
-            gap: 15px; 
+            gap: 16px; 
             padding: 0 20px; 
-            margin-top: -30px; 
+            margin-top: -40px; 
+            position: relative;
+            z-index: 10;
         }
+
         .home-card { 
             background: white; 
-            border-radius: 20px; 
-            padding: 25px 10px; 
+            border-radius: 24px; 
+            padding: 24px 12px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.04); 
             cursor: pointer; 
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.8);
         }
+
+        .home-card:active { transform: scale(0.95); }
+
+        /* Membership Card */
         .gold-card { 
             background: linear-gradient(135deg, #111827 0%, #1f2937 100%); 
-            color: #fbbf24; 
-            border-radius: 25px; 
-            padding: 25px; 
+            color: var(--accent); 
+            border-radius: 28px; 
+            padding: 30px; 
             margin-bottom: 25px; 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
-            border: 1px solid rgba(251, 191, 36, 0.3); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); 
+            border: 1px solid rgba(251, 191, 36, 0.2); 
+            position: relative;
+            overflow: hidden;
         }
+
+        .gold-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(251,191,36,0.1), transparent);
+            transform: rotate(45deg); animation: shine 6s infinite;
+        }
+
+        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+
+        /* Inputs */
         .member-input { 
             width: 100%; 
-            padding: 15px; 
-            border: 1px solid #e5e7eb; 
-            border-radius: 15px; 
+            padding: 16px; 
+            border: 2px solid #f3f4f6; 
+            border-radius: 18px; 
             margin-bottom: 12px; 
             outline: none; 
-            background: white; 
-            font-weight: bold; 
+            background: #fff; 
+            font-weight: 600; 
+            transition: 0.3s;
         }
+
+        .member-input:focus { border-color: var(--accent); }
+
         .berber-select { 
-            border: 1px solid #e5e7eb; 
-            padding: 12px; 
-            border-radius: 12px; 
-            font-weight: bold; 
+            border: 2px solid #f3f4f6; 
+            padding: 14px; 
+            border-radius: 16px; 
+            font-weight: 700; 
             cursor: pointer; 
             text-align: center; 
             background: white; 
             transition: 0.2s; 
         }
+
         .berber-select.selected { 
-            border-color: #fbbf24; 
+            border-color: var(--accent); 
             background: #fffbeb; 
             color: #b45309; 
-            box-shadow: 0 0 0 2px #fbbf24; 
         }
+
+        /* Slots */
         .time-slot { 
-            padding: 12px; 
-            border: 1px solid #e5e7eb; 
-            border-radius: 12px; 
+            padding: 14px; 
+            border: 2px solid #f3f4f6; 
+            border-radius: 16px; 
             text-align: center; 
-            font-weight: bold; 
+            font-weight: 700; 
             cursor: pointer; 
             background: white; 
         }
-        .time-slot.selected { 
-            background: #111827; 
-            color: white; 
-            border-color: #111827; 
-        }
-        .time-slot.busy { 
-            background: #fee2e2 !important; 
-            color: #ef4444 !important; 
-            border-color: #fecaca !important; 
-            text-decoration: line-through; 
-            opacity: 0.6; 
-            pointer-events: none; 
-        }
+
+        .time-slot.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .time-slot.busy { background: #fee2e2 !important; color: #ef4444 !important; text-decoration: line-through; opacity: 0.5; pointer-events: none; }
+
+        /* Navigation */
         .bottom-nav { 
             position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            background: white; 
+            bottom: 0; left: 0; right: 0; 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(10px);
             display: flex; 
             justify-content: space-around; 
-            padding: 12px 5px; 
-            border-top: 1px solid #eee; 
-            z-index: 100; 
+            padding: 15px 10px 25px 10px; 
+            border-top: 1px solid rgba(0,0,0,0.05); 
+            z-index: 1000; 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
         }
+
         .nav-item { 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             color: #9ca3af; 
-            font-size: 10px; 
-            font-weight: bold; 
+            font-size: 11px; 
+            font-weight: 700; 
             cursor: pointer; 
-            flex: 1; 
+            transition: 0.3s;
         }
-        .nav-item.active { 
-            color: #111827; 
-        }
+
+        .nav-item.active { color: var(--primary); }
+
+        /* Modal */
         .modal-overlay { 
             display: none; 
             position: fixed; 
             inset: 0; 
-            background: rgba(0,0,0,0.7); 
-            z-index: 1000; 
+            background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px);
+            z-index: 2000; 
             align-items: flex-end; 
             justify-content: center; 
         }
-        .modal-overlay.active { 
-            display: flex; 
-        }
+
+        .modal-overlay.active { display: flex; }
+
         .modal-body { 
             background: white; 
             width: 100%; 
             max-width: 500px; 
-            border-radius: 30px 30px 0 0; 
-            padding: 25px; 
-            max-height: 90vh; 
+            border-top-left-radius: 35px; 
+            border-top-right-radius: 35px; 
+            padding: 30px; 
+            max-height: 92vh; 
             overflow-y: auto; 
+            animation: slideUp 0.4s ease-out;
         }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* Buttons */
         .vazhdo-btn { 
-            background: #111827; 
+            background: var(--primary); 
             color: white; 
             width: 100%; 
-            padding: 18px; 
-            border-radius: 15px; 
-            font-weight: bold; 
-            margin-top: 10px; 
+            padding: 20px; 
+            border-radius: 20px; 
+            font-weight: 800; 
+            margin-top: 15px; 
             opacity: 0.3; 
             pointer-events: none; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .vazhdo-btn.active { 
-            opacity: 1; 
-            pointer-events: auto; 
-            background: #ef4444; 
-        }
+
+        .vazhdo-btn.active { opacity: 1; pointer-events: auto; background: #ef4444; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3); }
+
         .hidden { display: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
 
-        @keyframes marquee { 
-            0% { transform: translateX(0); } 
-            100% { transform: translateX(-50%); } 
-        }
-        .marquee-fixed-bottom { 
-            position: fixed; 
-            bottom: 65px; 
-            left: 0; 
-            right: 0; 
-            z-index: 90; 
-        }
-        .marquee-gold { 
-            overflow: hidden; 
-            white-space: nowrap; 
-            padding: 8px 0; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            font-size: 11px; 
-            letter-spacing: 1px; 
-        }
-        .band-1 { background: #111827; color: #fbbf24; border-top: 1px solid rgba(251, 191, 36, 0.3); }
-        .band-2 { background: #fbbf24; color: #111827; }
-        .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
-        .m-item { margin: 0 30px; }
-        
-        /* Ribbons Style */
-        .insta-ribbon, .location-ribbon {
-            position: relative;
-            overflow: hidden;
-            transition: 0.3s;
-        }
-        .insta-ribbon {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-        }
-        .location-ribbon {
-            background: linear-gradient(45deg, #4285F4 0%, #34A853 100%);
-        }
-        .insta-ribbon::after, .location-ribbon::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(30deg);
-            animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(30deg); }
-            100% { transform: translateX(100%) rotate(30deg); }
-        }
+        /* Marquee */
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-container { position: fixed; bottom: 85px; left: 0; right: 0; z-index: 90; }
+        .marquee-gold { overflow: hidden; white-space: nowrap; padding: 10px 0; font-weight: 900; text-transform: uppercase; font-size: 11px; }
+        .band-1 { background: var(--primary); color: var(--accent); }
+        .band-2 { background: var(--accent); color: var(--primary); }
+        .marquee-content { display: inline-block; animation: marquee 25s linear infinite; }
+        .m-item { margin: 0 40px; }
 
-        /* Stili për Rrotullo & Fito */
+        /* SPIN WHEEL - FIXED FOR READABILITY */
         .spin-win-banner {
             background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-            color: white;
-            border-radius: 25px;
-            padding: 20px 25px;
-            margin: 20px 20px 80px 20px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(234, 88, 12, 0.3);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.2s;
-        }
-
-        .spin-win-banner:active {
-            transform: scale(0.95);
-        }
-
-        .spin-win-banner::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-            transform: rotate(30deg);
-            animation: shimmer 3s infinite;
+            color: white; border-radius: 26px; padding: 22px 28px; margin: 25px 20px 100px 20px;
+            position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(234, 88, 12, 0.25);
+            cursor: pointer; display: flex; align-items: center; justify-content: space-between;
         }
 
         .spin-icon-wrapper {
-            background: rgba(255, 255, 255, 0.2);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            animation: pulse-spin 4s infinite linear;
+            background: rgba(255, 255, 255, 0.25); width: 65px; height: 65px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            animation: pulse-spin 6s infinite linear;
         }
 
-        @keyframes pulse-spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
+        @keyframes pulse-spin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
 
-        /* STILI I RI PER RROTULLEN (I BUKUR DHE I VECANTE) */
-        #wheel-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 20px auto;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        #wheel-container { position: relative; width: 290px; height: 290px; margin: 25px auto; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15)); }
+        #wheel { 
+            width: 100%; height: 100%; border-radius: 50%; border: 10px solid var(--primary); 
+            position: relative; overflow: hidden; transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1); 
+            background: #fff;
         }
-        #wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid #111827;
-            position: relative;
-            overflow: hidden;
-            transition: transform 5s cubic-bezier(0.15, 0.1, 0.15, 1);
-            background: #111827;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+        #wheel::after { 
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 45px; height: 45px; background: white; border-radius: 50%; border: 5px solid var(--primary); z-index: 20; 
         }
-        #wheel::after {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 40px; height: 40px; background: white; border-radius: 50%; border: 4px solid #111827; z-index: 20;
+        .wheel-pointer { 
+            position: absolute; top: -18px; left: 50%; transform: translateX(-50%); 
+            width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; 
+            border-top: 35px solid #ef4444; z-index: 30; 
         }
-        .wheel-pointer {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 16px solid transparent;
-            border-right: 16px solid transparent;
-            border-top: 35px solid #ef4444;
-            z-index: 30;
-            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));
-        }
+        
+        /* Segments - CLEAN COLORS */
         .segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: 900;
-            color: white;
-            text-transform: uppercase;
-            padding-bottom: 55px;
-            border: 1px solid transparent; /* VIjat te tejdukshme */
-            box-sizing: border-box;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.9); /* Hije per t'u lexuar lehte teksti */
+            position: absolute; width: 50%; height: 50%; transform-origin: 100% 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #111827;
+            text-transform: uppercase; padding-bottom: 70px;
+            border: 1px solid rgba(0,0,0,0.05); /* Transparent lines */
         }
     </style>
 </head>
 
 <body class="pb-40">
-    <header id="main-header" class="video-header">
-        <h1 class="text-4xl font-black italic tracking-tighter uppercase">AGONI BARBER</h1>
-        <p class="text-[10px] tracking-[5px] opacity-90 uppercase mt-2">Pejë, Kosovë</p>
+
+    <header id="main-header" class="video-header animate__animated animate__fadeIn">
+        <h1 class="text-4xl font-black italic tracking-tighter uppercase mb-1">AGONI BARBER</h1>
+        <div class="h-1 w-12 bg-amber-400 mb-3 rounded-full"></div>
+        <p class="text-[10px] tracking-[6px] opacity-80 uppercase font-bold">Pejë, Kosovë</p>
     </header>
 
-    <main id="view-home">
+    <main id="view-home" class="animate__animated animate__fadeIn">
         <div class="home-grid">
             <div class="home-card" onclick="openBooking()">
-                <div class="bg-blue-50 p-4 rounded-full mb-3 text-blue-600">
+                <div class="bg-indigo-50 p-5 rounded-full mb-4 text-indigo-600">
                     <i class="fa-regular fa-calendar-check text-2xl"></i>
                 </div>
-                <span class="text-xs font-bold uppercase tracking-wider">Rezervo</span>
+                <span class="text-[11px] font-black uppercase tracking-widest text-gray-500">Rezervo</span>
             </div>
             <div class="home-card" onclick="switchPage('membership')">
-                <div class="bg-amber-50 p-4 rounded-full mb-3 text-amber-500">
+                <div class="bg-amber-50 p-5 rounded-full mb-4 text-amber-500">
                     <i class="fa-solid fa-crown text-2xl"></i>
                 </div>
-                <span class="text-xs font-bold uppercase tracking-wider">Membership</span>
+                <span class="text-[11px] font-black uppercase tracking-widest text-gray-500">Membership</span>
             </div>
-            <div class="home-card col-span-2 flex-row space-x-4 py-5 mt-2" onclick="alert('Së shpejti...')">
-                <i class="fa-solid fa-cart-shopping text-emerald-500 text-2xl"></i>
-                <span class="text-xs font-bold uppercase tracking-wider">Produktet Tona</span>
+            <div class="home-card col-span-2 flex-row space-x-5 py-6 mt-1" onclick="alert('Së shpejti...')">
+                <div class="bg-emerald-50 p-3 rounded-xl text-emerald-600">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                </div>
+                <span class="text-[11px] font-black uppercase tracking-widest text-gray-500">Produktet Tona</span>
             </div>
         </div>
 
         <div class="spin-win-banner" onclick="openWheel()">
             <div class="z-10 relative">
-                <h3 class="font-black text-2xl uppercase italic tracking-wider drop-shadow-md">Rrotullo & Fito</h3>
-                <p class="text-[10px] font-bold uppercase opacity-90 mt-1 tracking-widest flex items-center gap-1">
-                    <i class="fa-solid fa-gift text-white"></i> Provojeni fatin sot!
+                <h3 class="font-black text-2xl uppercase italic tracking-wide">Rrotullo & Fito</h3>
+                <p class="text-[10px] font-bold uppercase opacity-90 mt-1 tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-gift"></i> Provo fatin sot!
                 </p>
             </div>
             <div class="spin-icon-wrapper z-10 relative">
@@ -414,7 +377,7 @@
             </div>
         </div>
 
-        <div class="marquee-fixed-bottom">
+        <div class="marquee-container">
             <div class="marquee-gold band-1">
                 <div class="marquee-content">
                     <span class="m-item">✂️ QETHJE 5€</span>
@@ -424,185 +387,257 @@
                     <span class="m-item">✂️ QETHJE 5€</span>
                     <span class="m-item">🧔 MJEKËRR 4€</span>
                     <span class="m-item">✨ FRIZURË 2€</span>
-                    <span class="m-item">🎨 NGJYROSJE 10-30€</span>
                 </div>
             </div>
             <div class="marquee-gold band-2">
-                <div class="marquee-content" style="animation-direction: reverse;">
-                    <span class="m-item">👑 GOLD MEMBER</span>
+                <div class="marquee-content" style="animation-direction: reverse; animation-duration: 20s;">
+                    <span class="m-item">👑 GOLD MEMBER 25€</span>
                     <span class="m-item">🚀 PA PRITJE</span>
                     <span class="m-item">⭐ PRIORITET VIP</span>
                     <span class="m-item">💎 KLIENT EKSKLUZIV</span>
-                    <span class="m-item">👑 GOLD MEMBER</span>
+                    <span class="m-item">👑 GOLD MEMBER 25€</span>
                     <span class="m-item">🚀 PA PRITJE</span>
-                    <span class="m-item">⭐ PRIORITET VIP</span>
-                    <span class="m-item">💎 KLIENT EKSKLUZIV</span>
                 </div>
             </div>
         </div>
     </main>
 
-    <div id="view-membership" class="hidden p-6 bg-gray-50 min-h-screen">
+    <div id="view-membership" class="hidden p-6 animate__animated animate__fadeIn">
         <div class="gold-card text-center">
-            <div class="bg-amber-500 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg border-4 border-amber-300">
-                <span class="font-black text-lg">25€</span>
+            <div class="bg-amber-500 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl border-4 border-amber-300">
+                <span class="font-black text-xl">25€</span>
             </div>
-            <i class="fa-solid fa-crown text-4xl mb-2"></i>
-            <h2 class="text-2xl font-black uppercase italic tracking-widest">Gold Member</h2>
-            <div class="grid grid-cols-2 gap-2 text-[10px] font-bold uppercase text-left mt-4 opacity-90">
+            <i class="fa-solid fa-crown text-4xl mb-3"></i>
+            <h2 class="text-3xl font-black uppercase italic tracking-tighter mb-4">Gold Member</h2>
+            <div class="grid grid-cols-2 gap-3 text-[10px] font-bold uppercase text-left mt-6 opacity-90 border-t border-white/10 pt-6">
                 <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>3 Qethje / muaj</span></div>
                 <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Zbritje Produkte</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Prioritet</span></div>
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Prioritet VIP</span></div>
                 <div class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Pa pritje</span></div>
             </div>
         </div>
-        <div class="bg-white p-5 rounded-[25px] shadow-sm">
+
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100">
+            <h3 class="text-center font-black uppercase text-xs text-gray-400 mb-4 tracking-widest">Regjistrimi Gold</h3>
             <input type="text" id="mName" placeholder="Emri & Mbiemri" class="member-input">
             <input type="tel" id="mPhone" placeholder="Numri i Telefonit" class="member-input">
-            <p class="text-[10px] font-black uppercase text-gray-400 text-center mb-3">Zgjedh Berberin Preferuar</p>
-            <div class="grid grid-cols-2 gap-2 mb-6">
+            
+            <p class="text-[10px] font-black uppercase text-gray-400 text-center mb-4 mt-4">Zgjedh Berberin e Preferuar</p>
+            <div class="grid grid-cols-2 gap-3 mb-6">
                 <div class="berber-select" onclick="selectMB('Agon Tahiri', this)">Agon</div>
                 <div class="berber-select" onclick="selectMB('Mendim', this)">Mendim</div>
                 <div class="berber-select" onclick="selectMB('Dori', this)">Dori</div>
                 <div class="berber-select" onclick="selectMB('Enis', this)">Enis</div>
                 <div class="berber-select col-span-2" onclick="selectMB('Rejan', this)">Rejan</div>
             </div>
-            <div id="membership-schedule" class="hidden border-t pt-4">
-                <p class="text-[10px] font-bold text-center text-gray-400 mb-3">CAKTO TERMININ E PARË</p>
-                <div class="flex space-x-3 overflow-x-auto mb-4 pb-2 no-scrollbar" id="m-cal-days"></div>
-                <div class="grid grid-cols-3 gap-2" id="m-time-grid"></div>
+
+            <div id="membership-schedule" class="hidden border-t pt-6">
+                <p class="text-[11px] font-bold text-center text-gray-400 mb-4 uppercase tracking-widest">Cakto Terminin e Parë</p>
+                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2 no-scrollbar" id="m-cal-days"></div>
+                <div class="grid grid-cols-3 gap-3" id="m-time-grid"></div>
             </div>
-            <button onclick="confirmGold()" class="w-full bg-amber-500 text-white py-5 rounded-2xl font-black mt-6 uppercase tracking-widest shadow-lg">Bëhu Gold Member</button>
+
+            <button onclick="confirmGold()" class="w-full bg-amber-500 text-white py-5 rounded-2xl font-black mt-8 uppercase tracking-widest shadow-xl active:scale-95 transition-all">Bëhu Gold Member</button>
         </div>
     </div>
 
-    <div id="view-terminet" class="hidden p-6">
-        <div id="login-box" class="text-center py-10">
-            <h2 class="text-xl font-black mb-6 uppercase italic">Staff Login</h2>
+    <div id="view-kontakt" class="hidden p-6 animate__animated animate__fadeIn">
+        <h2 class="text-center font-black text-2xl uppercase italic mb-8">Informacione</h2>
+        
+        <div class="bg-white p-7 rounded-[35px] shadow-sm space-y-5 border border-gray-100 mb-6">
+            <div onclick="window.location.href='https://www.instagram.com/agonicrew'" class="bg-gradient-to-r from-purple-600 to-pink-500 p-5 rounded-2xl flex items-center justify-between text-white shadow-lg active:scale-95 transition-all">
+                <div class="flex items-center space-x-4">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                    <div>
+                        <p class="text-[10px] font-bold uppercase opacity-80">Ndiqni në Instagram</p>
+                        <p class="text-lg font-black tracking-widest uppercase">@agonicrew</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+
+            <div onclick="window.location.href='https://maps.app.goo.gl/YourLocation'" class="bg-slate-900 p-5 rounded-2xl flex items-center justify-between text-white shadow-lg active:scale-95 transition-all">
+                <div class="flex items-center space-x-4">
+                    <i class="fa-solid fa-map-location-dot text-3xl text-amber-400"></i>
+                    <div>
+                        <p class="text-[10px] font-bold uppercase opacity-80">Lokacioni në Hartë</p>
+                        <p class="text-lg font-black tracking-widest uppercase italic">Pejë, Kosovë</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-location-arrow"></i>
+            </div>
+
+            <div class="pt-4 space-y-4">
+                <div class="flex items-center space-x-4" onclick="window.location.href='tel:+38349721735'">
+                    <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600">
+                        <i class="fa-solid fa-phone text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">Numri i Telefonit</p>
+                        <p class="font-black text-slate-800">+383 49 721 735</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                        <i class="fa-solid fa-clock text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">Orari i Punës</p>
+                        <p class="font-black text-slate-800">Hën-Sht: 09:00 - 19:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-terminet" class="hidden p-6 animate__animated animate__fadeIn">
+        <div id="login-box" class="py-12">
+            <div class="text-center mb-10">
+                <div class="bg-slate-900 w-20 h-20 rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                    <i class="fa-solid fa-user-shield text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-black uppercase italic">Staff Login</h2>
+            </div>
             <input type="text" id="uID" placeholder="ID (Emri)" class="member-input">
             <input type="password" id="uPass" placeholder="Fjalëkalimi" class="member-input">
-            <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase">Kyçu</button>
+            <button onclick="handleLogin()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl">Kyçu në Panel</button>
         </div>
+
         <div id="staff-dash" class="hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="staff-name" class="font-bold text-xl uppercase italic"></h2>
-                <button onclick="location.reload()" class="bg-red-100 text-red-600 px-4 py-2 rounded-xl text-[10px] font-bold uppercase">Dil</button>
+            <div class="flex justify-between items-center mb-8 bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Mirëseerdhe,</p>
+                    <h2 id="staff-name" class="font-black text-xl uppercase italic text-slate-900"></h2>
+                </div>
+                <button onclick="location.reload()" class="bg-red-50 text-red-600 p-3 rounded-2xl">
+                    <i class="fa-solid fa-power-off text-xl"></i>
+                </button>
             </div>
-            <div id="list-app" class="space-y-4"></div>
-        </div>
-    </div>
-
-    <div id="view-kontakt" class="hidden p-6 bg-gray-50 min-h-screen">
-        <h2 class="text-center font-black text-xl uppercase italic mb-6">Kontakti & Lokacioni</h2>
-        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070" class="w-full h-44 object-cover rounded-[30px] mb-6 shadow-lg">
-        
-        <div class="bg-white p-6 rounded-[35px] shadow-sm space-y-4 mb-5 border border-gray-100">
-            <h2 class="text-center font-black text-2xl tracking-tighter uppercase italic text-slate-900 mb-2">AGONI BARBER</h2>
             
-            <div onclick="window.location.href='https://www.instagram.com/agonicrew'" class="insta-ribbon p-4 rounded-2xl flex items-center justify-between text-white cursor-pointer shadow-lg active:scale-95 transition-all">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-brands fa-instagram text-2xl"></i>
-                    <div>
-                        <p class="text-[9px] font-bold uppercase opacity-80">Instagrami</p>
-                        <p class="font-black tracking-widest">@AGONICREW</p>
-                    </div>
+            <div class="flex gap-2 mb-6 overflow-x-auto no-scrollbar pb-2" id="staff-date-filter">
                 </div>
-                <i class="fa-solid fa-chevron-right text-sm opacity-70"></i>
-            </div>
 
-            <div onclick="window.location.href='https://www.google.com/maps/place/Agonicrew/@42.6613329,20.2917208,17z'" class="location-ribbon p-4 rounded-2xl flex items-center justify-between text-white cursor-pointer shadow-lg active:scale-95 transition-all">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-location-dot text-2xl"></i>
-                    <div>
-                        <p class="text-[9px] font-bold uppercase opacity-80">Gjej lokacionin në Hartë</p>
-                        <p class="font-black tracking-widest uppercase">Pejë, Kosovë</p>
-                    </div>
+            <div id="list-app" class="space-y-4">
                 </div>
-                <i class="fa-solid fa-map text-sm opacity-70"></i>
-            </div>
-
-            <div class="flex items-center space-x-4 pt-2" onclick="window.location.href='tel:+38349721735'"><div class="w-11 h-11 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shadow-sm"><i class="fa-solid fa-phone text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Telefoni</p><p class="font-black text-slate-800">+383 49 721 735</p></div></div>
-            <div class="flex items-center space-x-4"><div class="w-11 h-11 bg-sky-100 rounded-2xl flex items-center justify-center text-sky-600 shadow-sm"><i class="fa-solid fa-globe text-lg"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Webi</p><p class="font-black text-slate-800 text-sm italic">www.agonicrew.com</p></div></div>
-        </div>
-
-        <div class="bg-white p-6 rounded-[30px] shadow-sm flex items-center justify-between border border-gray-100">
-            <div class="flex items-center space-x-4"><div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-500"><i class="fa-solid fa-clock-rotate-left text-xl"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Orari i Punës</p><p class="font-black text-xl text-slate-800">09:00 - 19:00</p></div></div>
-            <span class="bg-amber-100 text-amber-600 text-[10px] font-black px-3 py-1 rounded-lg uppercase">Pushimi: 13-14</span>
         </div>
     </div>
 
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-body text-center">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="font-black text-xl uppercase italic">Rrotullo & Fito</h2>
-                <button onclick="closeWheel()" class="text-3xl text-gray-300">×</button>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-black text-2xl uppercase italic tracking-tighter">Provo Fatin</h2>
+                <button onclick="closeWheel()" class="text-4xl text-gray-300 font-light">&times;</button>
             </div>
-            <p id="wheelMsg" class="text-[10px] font-bold text-gray-500 uppercase mb-4">Mund ta rrotulloni vetëm 1 herë në ditë!</p>
+            <p id="wheelMsg" class="text-[11px] font-bold text-gray-400 uppercase mb-6 tracking-widest">Mund ta rrotulloni vetëm 1 herë në ditë!</p>
             
             <div id="wheel-container">
                 <div class="wheel-pointer"></div>
-                <div id="wheel">
-                    </div>
+                <div id="wheel"></div>
             </div>
 
-            <button id="spinBtn" onclick="spinWheel()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg mt-4">Rrotullo</button>
-            <div id="winDisplay" class="hidden mt-6 p-4 bg-emerald-50 border-2 border-emerald-500 rounded-2xl">
-                <p class="text-emerald-600 font-black uppercase tracking-tighter" id="winText"></p>
+            <button id="spinBtn" onclick="spinWheel()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-2xl mt-8">Rrotullo Tani</button>
+            
+            <div id="winDisplay" class="hidden mt-8 p-6 bg-emerald-50 border-2 border-emerald-500 rounded-3xl animate__animated animate__bounceIn">
+                <i class="fa-solid fa-trophy text-emerald-500 text-3xl mb-3"></i>
+                <p class="text-emerald-700 font-black text-xl uppercase tracking-tighter" id="winText"></p>
             </div>
-            <p class="text-[10px] text-red-600 mt-4 font-black uppercase text-center tracking-wide">⚠️ VËREJTJE: Nëse je fitues, duhet patjetër kur ta fitoni shpërblimin atë ditë të vini për të qethur!</p>
+            
+            <p class="text-[11px] text-red-600 mt-8 font-black uppercase leading-relaxed px-4">
+                ⚠️ VËREJTJE: Nëse je fitues duhet patjetër kur ta fitoni shpërblimin atë ditë të vini për të qethur
+            </p>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-body">
+            <div class="flex justify-between items-center mb-8">
+                <h2 id="modalTitle" class="font-black text-2xl uppercase italic tracking-tighter">Zgjedh Shërbimin</h2>
+                <button onclick="closeModal()" class="text-4xl text-gray-300 font-light">&times;</button>
+            </div>
+            
+            <div id="step1">
+                <div class="space-y-3">
+                    <div class="p-5 border-2 rounded-2xl flex justify-between items-center cursor-pointer transition-all" id="s1" onclick="setService('Qethje', 's1')">
+                        <div><span class="font-black block text-lg">Qethje</span><span class="text-[10px] font-bold text-gray-400 uppercase">30 MINUTAT</span></div>
+                        <span class="font-black text-xl">5€</span>
+                    </div>
+                    <div class="p-5 border-2 rounded-2xl flex justify-between items-center cursor-pointer transition-all" id="s2" onclick="setService('Qethje + Rroje', 's2')">
+                        <div><span class="font-black block text-lg">Qethje + Rroje</span><span class="text-[10px] font-bold text-gray-400 uppercase">35 MINUTAT</span></div>
+                        <span class="font-black text-xl">6€</span>
+                    </div>
+                    <div class="p-5 border-2 rounded-2xl flex justify-between items-center cursor-pointer transition-all" id="s3" onclick="setService('Mjekërr', 's3')">
+                        <div><span class="font-black block text-lg">Mjekërr</span><span class="text-[10px] font-bold text-gray-400 uppercase">15 MINUTAT</span></div>
+                        <span class="font-black text-xl">4€</span>
+                    </div>
+                    <div class="p-5 border-2 rounded-2xl flex justify-between items-center cursor-pointer transition-all" id="s4" onclick="setService('Frizurë', 's4')">
+                        <div><span class="font-black block text-lg">Frizurë</span><span class="text-[10px] font-bold text-gray-400 uppercase">10 MINUTAT</span></div>
+                        <span class="font-black text-xl">2€</span>
+                    </div>
+                    <div class="p-5 border-2 rounded-2xl flex justify-between items-center cursor-pointer transition-all" id="s5" onclick="setService('Ngjyrosje', 's5')">
+                        <div><span class="font-black block text-lg">Ngjyrosje</span><span class="text-[10px] font-bold text-gray-400 uppercase">30 MINUTAT</span></div>
+                        <span class="font-black text-xl">10-30€</span>
+                    </div>
+                </div>
+                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
+            </div>
+
+            <div id="step2" class="hidden">
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="p-5 border-2 rounded-2xl text-center font-black text-lg uppercase italic" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
+                    <div class="p-5 border-2 rounded-2xl text-center font-black text-lg uppercase italic" id="b2" onclick="setB('Mendim', 'b2')">Mendim</div>
+                    <div class="p-5 border-2 rounded-2xl text-center font-black text-lg uppercase italic" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
+                    <div class="p-5 border-2 rounded-2xl text-center font-black text-lg uppercase italic" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
+                    <div class="p-5 border-2 rounded-2xl text-center font-black text-lg uppercase italic" id="b5" onclick="setB('Rejan', 'b5')">Rejan</div>
+                </div>
+                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
+            </div>
+
+            <div id="step3" class="hidden">
+                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2 no-scrollbar" id="cal-days"></div>
+                <div class="grid grid-cols-3 gap-3 mb-8" id="time-grid"></div>
+                
+                <div class="space-y-4">
+                    <input type="text" id="cName" placeholder="Emri juaj" class="member-input">
+                    <input type="tel" id="cPhone" placeholder="Numri i Telefonit" class="member-input">
+                </div>
+                
+                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl mt-6">Konfirmo Rezervimin</button>
+            </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div onclick="switchPage('home')" id="nav-home" class="nav-item active"><i class="fa-solid fa-house text-xl mb-1"></i><span>Ballina</span></div>
-        <div onclick="openBooking()" class="nav-item"><i class="fa-solid fa-scissors text-xl mb-1"></i><span>Rezervo</span></div>
-        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item"><i class="fa-regular fa-clock text-xl mb-1"></i><span>Terminet</span></div>
-        <div onclick="switchPage('kontakt')" id="nav-kontakt" class="nav-item"><i class="fa-solid fa-address-card text-xl mb-1"></i><span>Kontakt</span></div>
+        <div onclick="switchPage('home')" id="nav-home" class="nav-item active">
+            <i class="fa-solid fa-house text-2xl mb-1"></i>
+            <span>Ballina</span>
+        </div>
+        <div onclick="openBooking()" class="nav-item">
+            <div class="bg-slate-900 text-white w-14 h-14 rounded-full flex items-center justify-center -mt-10 shadow-xl border-4 border-white">
+                <i class="fa-solid fa-scissors text-xl"></i>
+            </div>
+            <span class="mt-1">Rezervo</span>
+        </div>
+        <div onclick="switchPage('terminet')" id="nav-terminet" class="nav-item">
+            <i class="fa-regular fa-clock text-2xl mb-1"></i>
+            <span>Terminet</span>
+        </div>
+        <div onclick="switchPage('kontakt')" id="nav-kontakt" class="nav-item">
+            <i class="fa-solid fa-address-card text-2xl mb-1"></i>
+            <span>Kontakt</span>
+        </div>
     </nav>
 
-    <div id="bookingModal" class="modal-overlay">
-        <div class="modal-body">
-            <div class="flex justify-between items-center mb-6"><h2 id="modalTitle" class="font-black text-xl uppercase italic">Zgjedh Shërbimin</h2><button onclick="closeModal()" class="text-3xl text-gray-300">×</button></div>
-            <div id="step1">
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s1" onclick="setService('Qethje', 's1')"><div><span class="font-bold block">Qethje</span><span class="text-[10px] font-bold text-gray-400 uppercase">30 MIN</span></div><span class="font-black">5€</span></div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s2" onclick="setService('Qethje + Rroje', 's2')"><div><span class="font-bold block">Qethje + Rroje</span><span class="text-[10px] font-bold text-gray-400 uppercase">35 MIN</span></div><span class="font-black">6€</span></div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s3" onclick="setService('Mjekërr', 's3')"><div><span class="font-bold block">Mjekërr</span><span class="text-[10px] font-bold text-gray-400 uppercase">15 MIN</span></div><span class="font-black">4€</span></div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s4" onclick="setService('Frizurë', 's4')"><div><span class="font-bold block">Frizurë</span><span class="text-[10px] font-bold text-gray-400 uppercase">5 MIN</span></div><span class="font-black">2€</span></div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s5" onclick="setService('Ngjyrosje', 's5')"><div><span class="font-bold block">Ngjyrosje</span><span class="text-[10px] font-bold text-gray-400 uppercase">25 MIN</span></div><span class="font-black">10-30€</span></div>
-                <div class="p-4 border-2 rounded-2xl mb-3 flex justify-between items-center cursor-pointer" id="s6" onclick="setService('Fëmijë (Nën 8 vjeç)', 's6')"><div><span class="font-bold block">Fëmijë (Nën 8 vjeç)</span></div><span class="font-black">4€</span></div>
-                <button id="v1" class="vazhdo-btn" onclick="goStep(2)">Vazhdo</button>
-            </div>
-            <div id="step2" class="hidden">
-                <div class="grid grid-cols-1 gap-3 mb-4">
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b1" onclick="setB('Agon Tahiri', 'b1')">Agon Tahiri</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b2" onclick="setB('Mendim', 'b2')">Mendim</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b3" onclick="setB('Dori', 'b3')">Dori</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b4" onclick="setB('Enis', 'b4')">Enis</div>
-                    <div class="p-4 border-2 rounded-2xl text-center font-bold" id="b5" onclick="setB('Rejan', 'b5')">Rejan</div>
-                </div>
-                <button id="v2" class="vazhdo-btn" onclick="goStep(3)">Vazhdo</button>
-            </div>
-            <div id="step3" class="hidden">
-                <div class="flex space-x-3 overflow-x-auto mb-6 pb-2 no-scrollbar" id="cal-days"></div>
-                <div class="grid grid-cols-3 gap-2 mb-6" id="time-grid"></div>
-                <input type="text" id="cName" placeholder="Emri juaj" class="member-input">
-                <input type="tel" id="cPhone" placeholder="Nr. Telefonit" class="member-input">
-                <button onclick="confirmApp()" class="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg">Konfirmo</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // LOGJIKA E RROTULLES (LUCKY WHEEL) - E PERMIRESUAR
+        // WHEEL CONFIG - LIGHT COLORS FOR MAX READABILITY
         const prizes = [
-            { text: "Qethje Falas", color: "#111827", win: true },
-            { text: "Provo Fatin", color: "#6b7280", win: false },
-            { text: "Wax Nishman", color: "#ea580c", win: true },
-            { text: "Provo Fatin", color: "#4b5563", win: false },
-            { text: "Kafe Gratis", color: "#b45309", win: true },
-            { text: "Provo Fatin", color: "#6b7280", win: false },
-            { text: "Provo Fatin", color: "#4b5563", win: false },
-            { text: "Provo Fatin", color: "#374151", win: false }
+            { text: "Qethje Falas", color: "#fef3c7", win: true },   // Amber 100
+            { text: "Provo Nesër", color: "#f3f4f6", win: false },  // Gray 100
+            { text: "Wax Nishman", color: "#dcfce7", win: true },   // Green 100
+            { text: "Provo Fatin", color: "#f9fafb", win: false },  // Gray 50
+            { text: "Kafe Gratis", color: "#ffedd5", win: true },   // Orange 100
+            { text: "Provo Nesër", color: "#f3f4f6", win: false },  // Gray 100
+            { text: "Pa Fat", color: "#f9fafb", win: false },       // Gray 50
+            { text: "Provo Nesër", color: "#f3f4f6", win: false }   // Gray 100
         ];
 
         function initWheel() {
@@ -620,6 +655,7 @@
                 span.style.position = 'absolute';
                 span.style.textAlign = 'center';
                 span.style.width = '85px';
+                span.style.left = '10px';
                 
                 seg.appendChild(span);
                 wheel.appendChild(seg);
@@ -629,63 +665,68 @@
         function openWheel() {
             document.getElementById('wheelModal').classList.add('active');
             initWheel();
-            checkSpinLimit();
-        }
-
-        function closeWheel() {
-            document.getElementById('wheelModal').classList.remove('active');
-        }
-
-        function checkSpinLimit() {
             const lastSpin = localStorage.getItem('lastSpinDate');
             const today = new Date().toDateString();
             if (lastSpin === today) {
                 document.getElementById('spinBtn').disabled = true;
-                document.getElementById('spinBtn').style.opacity = "0.5";
+                document.getElementById('spinBtn').style.opacity = "0.4";
                 document.getElementById('wheelMsg').innerText = "Keni rrotulluar sot! Provoni nesër.";
             }
         }
 
+        function closeWheel() { document.getElementById('wheelModal').classList.remove('active'); }
+
         function spinWheel() {
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
+            btn.style.opacity = "0.4";
             
-            // Logjika: 1 në 300 fiton. 1, 2, ose 3.
-            let rand = Math.floor(Math.random() * 300);
-            let prizeIndex;
+            // Win logic: 1 in 100 chance for major prizes
+            let rand = Math.floor(Math.random() * 100);
+            let prizeIdx;
             
-            if (rand === 0) prizeIndex = 0; // Qethje Falas
-            else if (rand === 1) prizeIndex = 2; // Wax Nishman
-            else if (rand === 2) prizeIndex = 4; // Kafe Gratis
+            if (rand === 1) prizeIdx = 0; // Qethje Falas
+            else if (rand === 5) prizeIdx = 2; // Wax
+            else if (rand === 10) prizeIdx = 4; // Kafe
             else {
-                // Provo Fatin (Indices 1, 3, 5, 6, 7)
-                const losers = [1, 3, 5, 6, 7];
-                prizeIndex = losers[Math.floor(Math.random() * losers.length)];
+                const loses = [1, 3, 5, 6, 7];
+                prizeIdx = loses[Math.floor(Math.random() * loses.length)];
             }
 
-            // Llogaritja e sakte per te ndaluar ne qender te segmentit
-            const degrees = (3600 + (360 - (prizeIndex * 45)) - 22.5); 
+            const extraDegrees = 3600; // 10 full rotations
+            const segmentDegrees = 45;
+            const stopAt = extraDegrees + (360 - (prizeIdx * segmentDegrees)) - (segmentDegrees / 2);
+            
             const wheel = document.getElementById('wheel');
-            wheel.style.transform = `rotate(${degrees}deg)`;
+            wheel.style.transform = `rotate(${stopAt}deg)`;
 
             setTimeout(() => {
                 localStorage.setItem('lastSpinDate', new Date().toDateString());
-                if (prizes[prizeIndex].win) {
+                if (prizes[prizeIdx].win) {
                     document.getElementById('winDisplay').classList.remove('hidden');
-                    document.getElementById('winText').innerText = "URIME! FITOVE: " + prizes[prizeIndex].text;
+                    document.getElementById('winText').innerText = "URIME! FITOVE: " + prizes[prizeIdx].text;
+                    
+                    // Telegram Notify Win
+                    const msg = `🎁 FITUES NE RROTE!\nShperblimi: ${prizes[prizeIdx].text}\nData: ${new Date().toLocaleString()}`;
+                    fetch(`https://api.telegram.org/bot8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY/sendMessage?chat_id=5802987116&text=${encodeURIComponent(msg)}`);
                 } else {
-                    alert("Më shumë fat herën tjetër! Ju ra: Provo Fatin Tjeter Qethje");
+                    alert("Më shumë fat herën tjetër!");
+                    closeWheel();
                 }
-                checkSpinLimit();
-            }, 5000);
+            }, 5500);
         }
 
+        // BOOKING LOGIC
         function getDynamicDays() {
             const arr = [];
             const names = ['Die', 'Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'];
-            for(let i=0; i<5; i++) {
+            for(let i=0; i<6; i++) {
                 let d = new Date();
                 d.setDate(d.getDate() + i);
+                if(d.getDay() === 0 && i === 0) { // If today is Sunday, skip
+                    d.setDate(d.getDate() + 1);
+                    i++;
+                }
                 arr.push(`${names[d.getDay()]} ${d.getDate()}`);
             }
             return arr;
@@ -694,7 +735,7 @@
         const dynamicDays = getDynamicDays();
         let booking = { s: '', b: '', d: dynamicDays[0], t: '' };
         let mBooking = { s: 'Membership Gold', b: '', d: dynamicDays[0], t: '' };
-        const users = { "Agon": "Goni30", "Mendim": "mendi12", "Dori": "dori201", "Enis": "nisi99", "Rejan": "rejan77" };
+        const staffUsers = { "Agon": "Goni30", "Mendim": "mendi12", "Dori": "dori201", "Enis": "nisi99", "Rejan": "rejan77" };
 
         function switchPage(p) {
             ['home', 'membership', 'terminet', 'kontakt'].forEach(v => {
@@ -704,6 +745,7 @@
             document.getElementById('view-'+p).classList.remove('hidden');
             if(document.getElementById('nav-'+p)) document.getElementById('nav-'+p).classList.add('active');
             document.getElementById('main-header').style.display = (p === 'home') ? 'flex' : 'none';
+            window.scrollTo(0,0);
         }
 
         function openBooking() { document.getElementById('bookingModal').classList.add('active'); goStep(1); }
@@ -713,6 +755,23 @@
             ['step1', 'step2', 'step3'].forEach(s => document.getElementById(s).classList.add('hidden'));
             document.getElementById('step'+n).classList.remove('hidden');
             if(n==3) buildSchedule('cal-days', 'time-grid', booking);
+            if(n==1) document.getElementById('modalTitle').innerText = "Zgjedh Shërbimin";
+            if(n==2) document.getElementById('modalTitle').innerText = "Zgjedh Barberin";
+            if(n==3) document.getElementById('modalTitle').innerText = "Cakto Kohën";
+        }
+
+        function setService(s, id) {
+            booking.s = s;
+            document.querySelectorAll('#step1 div.border-2').forEach(d => d.style.borderColor = '#f3f4f6');
+            document.getElementById(id).style.borderColor = '#111827';
+            document.getElementById('v1').classList.add('active');
+        }
+
+        function setB(b, id) {
+            booking.b = b;
+            document.querySelectorAll('#step2 div.border-2').forEach(d => d.style.borderColor = '#f3f4f6');
+            document.getElementById(id).style.borderColor = '#111827';
+            document.getElementById('v2').classList.add('active');
         }
 
         function selectMB(berber, el) {
@@ -723,28 +782,14 @@
             buildSchedule('m-cal-days', 'm-time-grid', mBooking);
         }
 
-        function setService(s, id) {
-            booking.s = s;
-            document.querySelectorAll('#step1 div.border-2').forEach(d => d.style.borderColor = '#e5e7eb');
-            document.getElementById(id).style.borderColor = '#111827';
-            document.getElementById('v1').classList.add('active');
-        }
-
-        function setB(b, id) {
-            booking.b = b;
-            document.querySelectorAll('#step2 div.border-2').forEach(d => d.style.borderColor = '#e5e7eb');
-            document.getElementById(id).style.borderColor = '#111827';
-            document.getElementById('v2').classList.add('active');
-        }
-
         async function buildSchedule(calId, gridId, obj) {
             const daysContainer = document.getElementById(calId);
             daysContainer.innerHTML = '';
-            const querySnapshot = await window.getTerminePerBllokim(obj.b, obj.d);
+            const busyTimes = await window.getTerminePerBllokim(obj.b, obj.d);
             
             dynamicDays.forEach(day => {
                 let d = document.createElement('div');
-                d.className = `p-4 rounded-2xl min-w-[85px] text-center font-bold ${obj.d === day ? 'bg-slate-900 text-white' : 'bg-gray-100'}`;
+                d.className = `p-4 rounded-2xl min-w-[90px] text-center font-bold transition-all ${obj.d === day ? 'bg-slate-900 text-white shadow-lg' : 'bg-gray-100 text-gray-400'}`;
                 d.innerText = day;
                 d.onclick = () => { obj.d = day; buildSchedule(calId, gridId, obj); };
                 daysContainer.appendChild(d);
@@ -755,7 +800,8 @@
             for(let h=9; h<=18; h++) {
                 for(let m of ['00', '30']) {
                     let t = `${h<10?'0'+h:h}:${m}`;
-                    let isBusy = querySnapshot.some(doc => doc.t === t);
+                    if(h === 13) continue; // Lunch break
+                    let isBusy = busyTimes.some(doc => doc.t === t);
                     let slot = document.createElement('div');
                     slot.className = `time-slot ${isBusy ? 'busy' : ''} ${obj.t === t ? 'selected' : ''}`;
                     slot.innerText = t;
@@ -768,13 +814,12 @@
         async function confirmApp() {
             let n = document.getElementById('cName').value;
             let p = document.getElementById('cPhone').value;
-            if(!n || !booking.t) return alert("Ju lutem plotësoni emrin dhe orarin!");
+            if(!n || !p || !booking.t) return alert("Plotësoni të gjitha të dhënat!");
+            
             const success = await window.saveToFirebase({ ...booking, name: n, phone: p, createdAt: new Date().toISOString() });
             if(success) {
-                const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
-                const chatid = "5802987116";
                 const msg = `✂️ *REZERVIM I RI*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${booking.b}\n📅 *Data:* ${booking.d}\n⏰ *Ora:* ${booking.t}\n──────────────\n💇‍♂️ *Shërbimi:* ${booking.s}`;
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+                fetch(`https://api.telegram.org/bot8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY/sendMessage?chat_id=5802987116&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
                 alert("Rezervimi u krye me sukses!");
                 location.reload();
             }
@@ -783,13 +828,12 @@
         async function confirmGold() {
             let n = document.getElementById('mName').value;
             let p = document.getElementById('mPhone').value;
-            if(!n || !mBooking.t) return alert("Plotësoni të dhënat!");
+            if(!n || !p || !mBooking.t) return alert("Plotësoni të dhënat për anëtarësim!");
+            
             const success = await window.saveToFirebase({ ...mBooking, name: n, phone: p, type: 'GOLD' });
             if(success) {
-                const token = "8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY";
-                const chatid = "5802987116";
-                const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi Preferuar:* ${mBooking.b}\n📅 *Termini i parë:* ${mBooking.d} në ${mBooking.t}`;
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
+                const msgGold = `👑 *ANËTAR I RI GOLD*\n──────────────\n👤 *Klienti:* ${n}\n📞 *Tel:* ${p}\n🧔 *Berberi:* ${mBooking.b}\n📅 *Termini parë:* ${mBooking.d} - ${mBooking.t}`;
+                fetch(`https://api.telegram.org/bot8608115004:AAE-jHShbQbGGI1L7Z8qYFdS-J77rsX51OY/sendMessage?chat_id=5802987116&text=${encodeURIComponent(msgGold)}&parse_mode=Markdown`);
                 alert("Urime! Tani jeni Gold Member.");
                 location.reload();
             }
@@ -797,29 +841,43 @@
 
         function handleLogin() {
             let id = document.getElementById('uID').value;
-            if(users[id] === document.getElementById('uPass').value) {
+            let pass = document.getElementById('uPass').value;
+            if(staffUsers[id] === pass) {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('staff-dash').classList.remove('hidden');
-                document.getElementById('staff-name').innerText = "Berberi: " + id;
+                document.getElementById('staff-name').innerText = id;
                 window.getTerminetRealTime(id, (terminet) => { renderStaffAppointments(terminet); });
-            } else alert("Të dhëna të gabuara!");
+            } else alert("ID ose Fjalëkalimi i gabuar!");
         }
 
         function renderStaffAppointments(mine) {
             const container = document.getElementById('list-app');
             container.innerHTML = mine.length ? mine.map(a => `
-                <div class="bg-white p-5 rounded-2xl border-l-8 border-slate-900 shadow-sm">
-                    <div class="flex justify-between items-start">
-                        <div><b>${a.name}</b><p class="text-[10px] font-bold text-gray-500 uppercase">${a.s}</p></div>
-                        <div class="text-right"><b>${a.t}</b><p class="text-[10px] text-gray-400 font-bold">${a.d}</p></div>
+                <div class="bg-white p-6 rounded-[25px] border-l-[10px] ${a.type === 'GOLD' ? 'border-amber-400' : 'border-slate-900'} shadow-sm animate__animated animate__fadeInUp">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <b class="text-lg">${a.name}</b>
+                                ${a.type === 'GOLD' ? '<span class="bg-amber-100 text-amber-600 text-[8px] px-2 py-0.5 rounded-full font-black">GOLD</span>' : ''}
+                            </div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${a.s}</p>
+                        </div>
+                        <div class="text-right">
+                            <b class="text-xl block leading-none">${a.t}</b>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase">${a.d}</p>
+                        </div>
                     </div>
-                    <div class="flex justify-between mt-3 pt-3 border-t">
-                        <a href="tel:${a.phone}" class="text-blue-600 font-bold">Thirr</a>
-                        <button onclick="window.deleteTerminFirebase('${a.id}')" class="text-red-500 font-bold">Fshije</button>
+                    <div class="flex gap-3 mt-4 pt-4 border-t border-gray-50">
+                        <a href="tel:${a.phone}" class="flex-1 bg-blue-50 text-blue-600 py-3 rounded-xl text-center font-bold text-xs uppercase">Thirr</a>
+                        <button onclick="window.deleteTerminFirebase('${a.id}')" class="flex-1 bg-red-50 text-red-500 py-3 rounded-xl text-center font-bold text-xs uppercase">Fshije</button>
                     </div>
                 </div>
-            `).join('') : `<p class="text-center text-gray-400 py-10 italic">Asnjë rezervim për momentin.</p>`;
+            `).join('') : `<div class="py-20 text-center"><i class="fa-solid fa-calendar-xmark text-4xl text-gray-200 mb-3"></i><p class="text-gray-400 italic">Asnjë termin i gjetur.</p></div>`;
         }
+
+        // Initialize Home
+        switchPage('home');
     </script>
 </body>
 </html>
+
