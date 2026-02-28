@@ -82,7 +82,7 @@
         }
         .home-grid { 
             display: grid; 
-            grid-template-cols: repeat(2, 1fr); 
+            grid-template-columns: repeat(2, 1fr); 
             gap: 15px; 
             padding: 0 20px; 
             margin-top: -30px; 
@@ -320,7 +320,7 @@
             100% { transform: rotate(360deg) scale(1); }
         }
 
-        /* STILI I RI PER RROTULLEN (I BUKUR DHE I VECANTE) */
+        /* STILI I RI PER RROTULLEN - FIX PER SHPERBLIMET */
         #wheel-container {
             position: relative;
             width: 280px;
@@ -364,13 +364,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 8px;
+            font-size: 9px; /* Madhësia e rregulluar */
             font-weight: 900;
             color: #000000;
             text-transform: uppercase;
-            padding-bottom: 55px;
-            border: 1px solid #e5e7eb;
+            padding-bottom: 40px; /* Qendërzim i rregulluar */
+            border: 1px solid #f1f5f9;
             box-sizing: border-box;
+            word-wrap: break-word; /* Mundëson thyerjen e tekstit */
+            text-align: center;
         }
     </style>
 </head>
@@ -592,16 +594,16 @@
     </div>
 
     <script>
-        // LOGJIKA E RROTULLES (LUCKY WHEEL) - E PERMIRESUAR
+        // LOGJIKA E RROTULLES - ME FIX PER SHPERBLIMET
         const prizes = [
             { text: "Qethje Falas", color: "#ffffff", win: true },
-            { text: "Provo Fatin Tjeter qethje", color: "#f8fafc", win: false },
+            { text: "Provoni Nesër", color: "#f8fafc", win: false },
             { text: "Wax Nishman", color: "#ffffff", win: true },
-            { text: "Provo Fatin Tjeter qethje", color: "#f8fafc", win: false },
-            { text: "Kafe Gratis", color: "#ffffff", win: true },
-            { text: "Provo Fatin Tjeter qethje", color: "#f8fafc", win: false },
-            { text: "Provo Fatin Tjeter qethje", color: "#ffffff", win: false },
-            { text: "Provo Fatin Tjeter qethje", color: "#f8fafc", win: false }
+            { text: "Pa Fat Sot", color: "#f8fafc", win: false },
+            { text: "Kafe Falas", color: "#ffffff", win: true },
+            { text: "Provoni Nesër", color: "#f8fafc", win: false },
+            { text: "Mjekërr Falas", color: "#ffffff", win: true },
+            { text: "Pa Fat Sot", color: "#f8fafc", win: false }
         ];
 
         function initWheel() {
@@ -618,7 +620,7 @@
                 span.style.transform = `skewY(-45deg) rotate(22.5deg)`;
                 span.style.position = 'absolute';
                 span.style.textAlign = 'center';
-                span.style.width = '85px';
+                span.style.width = '70px'; /* Gjerësia e rregulluar që të mos dalë jashtë */
                 span.style.lineHeight = '1.1';
                 
                 seg.appendChild(span);
@@ -650,16 +652,15 @@
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             
-            // Logjika e probabilitetit: 1 ne 300 fiton nje nga 3 shperblimet
             let rand = Math.floor(Math.random() * 300);
             let prizeIndex;
             
-            if (rand === 0) prizeIndex = 0; // Qethje Falas
-            else if (rand === 1) prizeIndex = 2; // Wax Nishman
-            else if (rand === 2) prizeIndex = 4; // Kafe Gratis
+            if (rand === 0) prizeIndex = 0;
+            else if (rand === 1) prizeIndex = 2;
+            else if (rand === 2) prizeIndex = 4;
+            else if (rand === 3) prizeIndex = 6;
             else {
-                // Nese nuk fiton, zgjedh nje nga "Provo Fatin" (indices 1, 3, 5, 6, 7)
-                const losers = [1, 3, 5, 6, 7];
+                const losers = [1, 3, 5, 7];
                 prizeIndex = losers[Math.floor(Math.random() * losers.length)];
             }
 
@@ -673,7 +674,7 @@
                     document.getElementById('winDisplay').classList.remove('hidden');
                     document.getElementById('winText').innerText = "URIME! FITOVE: " + prizes[prizeIndex].text;
                 } else {
-                    alert("Më shumë fat herën tjetër! Ju rrotulluat: " + prizes[prizeIndex].text);
+                    alert("Më shumë fat herën tjetër!");
                 }
                 checkSpinLimit();
             }, 5000);
